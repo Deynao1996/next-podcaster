@@ -49,11 +49,21 @@
   }
 }
 
+html {
+  color-scheme: dark;
+}
+
 @layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-60 bg-[#121212];
   }
 }
