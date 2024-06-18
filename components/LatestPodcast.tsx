@@ -8,23 +8,23 @@ type LatestPodcastProps = {
 
 const LatestPodcast = ({ i }: LatestPodcastProps) => {
   return (
-    <li className="flex justify-between items-center gap-3">
+    <li className="flex items-center justify-between gap-3">
       <div className="basis-2.5">
         <span>{i + 1}</span>
       </div>
-      <div className="flex-1 flex justify-between">
+      <div className="flex flex-1 justify-between">
         <div className="flex items-center gap-4">
           <Image
             src="/images/player1.png"
             alt="podcast"
             width={50}
             height={54}
-            className="rounded-sm"
+            className="h-[54px] w-[50px] rounded-sm"
           />
           <p>Joe Rogan</p>
         </div>
-        <div className="flex justify-between w-1/2">
-          <div className="flex items-center gap-2">
+        <div className="flex w-1/2 justify-between">
+          <div className="hidden items-center gap-2 sm:flex">
             <Image
               src={'/icons/headphone.svg'}
               alt="headphone"
@@ -47,13 +47,13 @@ const LatestPodcast = ({ i }: LatestPodcastProps) => {
             <Button
               variant="secondary"
               aria-label="options"
-              className="origin-center transition-all duration-200 hover:bg-background"
+              className="hover:bg-background origin-center transition-all duration-200"
               size="icon"
             >
               <Image
                 src={'/icons/three-dots.svg'}
                 alt="dots"
-                className="rotate-90"
+                className="w-auto rotate-90"
                 width={22}
                 height={24}
               />

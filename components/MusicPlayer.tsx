@@ -4,33 +4,33 @@ import React from 'react'
 const MusicPlayer = () => {
   return (
     <div className="sticky bottom-0 w-full">
-      <div className="bg-[#2E3036] h-1">
-        <div className="h-1 bg-white w-1/2 rounded-r-3xl"></div>
+      <div className="h-1 bg-[#2E3036]">
+        <div className="h-1 w-1/2 rounded-r-3xl bg-white"></div>
       </div>
-      <div className="h-[100px] glass px-12 py-6 flex justify-between items-center">
-        <div className="flex items-center gap-3 flex-1">
+      <div className="glass flex h-[70px] items-center justify-between px-6 py-6 sm:h-[100px] sm:px-12">
+        <div className="flex flex-1 items-center gap-3">
           <Image
             src="/images/player1.png"
             alt="player"
             width={60}
             height={60}
-            className="rounded-sm object-cover"
+            className="hidden h-[px60] w-[60px] rounded-sm object-cover sm:block"
           />
-          <div className="flex flex-col py-2 justify-center gap-1">
+          <div className="flex flex-col justify-center gap-1 py-2">
             <p>Joe Rogan</p>
-            <span className="text-sm text-muted-foreground">Joe Rogan</span>
+            <span className="text-muted-foreground text-sm">Joe Rogan</span>
           </div>
         </div>
 
-        <div className="flex items-center gap-6 flex-1 justify-center">
-          <div className="flex items-center gap-1">
+        <div className="flex flex-1 items-center justify-center gap-6">
+          <div className="hidden items-center gap-1 sm:flex">
             <Image
               src={'/icons/reverse.svg'}
               alt="reverse"
               width={24}
               height={24}
             />
-            <p className="text-sm text-muted-foreground">-15</p>
+            <p className="text-muted-foreground text-sm">-15</p>
           </div>
           <div>
             <Image
@@ -38,9 +38,10 @@ const MusicPlayer = () => {
               alt="play"
               width={55}
               height={55}
+              className="h-[40px] w-[40px] sm:h-[55px] sm:w-[55px]"
             />
           </div>
-          <div className="flex items-center gap-1">
+          <div className="hidden items-center gap-1 sm:flex">
             <Image
               src={'/icons/reverse.svg'}
               alt="reverse"
@@ -48,21 +49,21 @@ const MusicPlayer = () => {
               height={24}
               className="rotate-180"
             />
-            <p className="text-sm text-muted-foreground">15+</p>
+            <p className="text-muted-foreground text-sm">15+</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-6 flex-1 justify-end">
+        <div className="flex flex-1 items-center justify-end gap-6">
           <span className="text-muted-foreground">1:45/4:42</span>
-          <div className="flex items-center gap-3">
+          <div className="hidden items-center gap-3 sm:flex">
             <Image
               src={'/icons/mute.svg'}
               alt="volume"
               width={24}
               height={24}
             />
-            <div className="w-[90px] h-1 bg-[#2E3036] rounded-md">
-              <div className="w-1/4 h-1 bg-white rounded-md"></div>
+            <div className="h-1 w-[90px] rounded-md bg-[#2E3036]">
+              <div className="h-1 w-1/4 rounded-md bg-white"></div>
             </div>
           </div>
         </div>

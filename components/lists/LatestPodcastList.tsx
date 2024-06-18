@@ -10,7 +10,7 @@ type LatestPodcastListProps = {
 const LatestPodcastList = ({ renderTitle }: LatestPodcastListProps) => {
   return (
     <div className="mt-10">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         {renderTitle()}
         <Button asChild variant="link">
           <Link href={'/'}>See all</Link>
@@ -20,7 +20,9 @@ const LatestPodcastList = ({ renderTitle }: LatestPodcastListProps) => {
         {[...Array(4)].map((_, index) => (
           <Fragment key={index}>
             <LatestPodcast i={index} />
-            <li className="h-px bg-muted-foreground opacity-25 w-[calc(100%-0.75rem-0.625rem)] ml-auto" />
+            {index !== 4 - 1 && (
+              <li className="bg-muted-foreground ml-auto h-px w-[calc(100%-0.75rem-0.625rem)] opacity-25" />
+            )}
           </Fragment>
         ))}
       </ul>

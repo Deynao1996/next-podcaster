@@ -10,7 +10,7 @@ const TopPodcaster = () => {
           alt="player"
           width={44}
           height={44}
-          className="rounded-sm object-cover"
+          className="rounded-sm object-cover w-[44px] h-[44px]"
         />
         <div className="flex flex-col py-1">
           <p>Joe Rogan</p>

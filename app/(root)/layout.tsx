@@ -1,4 +1,5 @@
 import LeftSideBar from '@/components/LeftSideBar'
+import MobileHeader from '@/components/MobileHeader'
 import MusicPlayer from '@/components/MusicPlayer'
 import RightSideBar from '@/components/RightSideBar'
 
@@ -9,12 +10,13 @@ export default function RootLayout({
 }>) {
   return (
     <div>
+      <MobileHeader />
       <div className="flex justify-between">
-        <div className="w-fit">
+        <div className="hidden w-fit sm:block">
           <LeftSideBar />
         </div>
         <div className="flex-1">{children}</div>
-        <div className="w-[370px]">
+        <div className="hidden lg:block lg:w-[370px]">
           <RightSideBar />
         </div>
       </div>

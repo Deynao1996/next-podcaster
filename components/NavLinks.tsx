@@ -20,7 +20,7 @@ const NavLinks = () => {
           <li
             key={link.label}
             className={cn(
-              'pl-8 pr-12 leading-[50px] opacity-70 hover:opacity-100 hover:[background-color:rgba(255,255,255,0.06)] transition-all duration-200 relative',
+              'relative flex cursor-pointer items-center justify-start px-6 leading-[50px] opacity-70 transition-all duration-200 hover:opacity-100 hover:[background-color:rgba(255,255,255,0.06)] sm:justify-center sm:px-0 xl:justify-start xl:pl-8 xl:pr-12',
               {
                 'bg-nav-focus opacity-100': isActive
               }
@@ -38,7 +38,7 @@ const NavLinks = () => {
 
             <Link
               href={link.route}
-              className="flex items-center gap-5 text-white font-semibold"
+              className="flex h-12 items-center gap-5 font-semibold text-white"
             >
               <Image
                 src={link.imgURL}
@@ -46,7 +46,7 @@ const NavLinks = () => {
                 width={23}
                 height={23}
               />
-              <p>{link.label}</p>
+              <p className="block sm:hidden xl:block">{link.label}</p>
             </Link>
           </li>
         )

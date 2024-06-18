@@ -4,7 +4,7 @@ import React from 'react'
 
 const HomePage = () => {
   return (
-    <main className="pb-9 px-8 bg-secondary text-secondary-foreground">
+    <main className="bg-secondary text-secondary-foreground px-4 pb-9 sm:px-8">
       <PodcastList
         renderTitle={() => (
           <h1 className="scroll-m-20 text-xl font-semibold">

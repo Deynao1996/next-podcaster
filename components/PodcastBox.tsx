@@ -6,7 +6,7 @@ const PodcastBox = () => {
   return (
     <li className="rounded-md">
       <Link href={'/'}>
-        <div className="relative aspect-square">
+        <div className="relative aspect-auto h-64 lg:aspect-square lg:h-auto">
           <Image
             src="/images/bg-img.png"
             alt="podcast"
@@ -16,8 +16,8 @@ const PodcastBox = () => {
             sizes="(100vw)"
           />
         </div>
-        <p className="font-semibold mt-2 truncate">Joe Rogan</p>
-        <span className="mt-1 text-muted-foreground text-sm font-medium leading-none truncate">
+        <p className="mt-2 truncate font-semibold">Joe Rogan</p>
+        <span className="text-muted-foreground mt-1 truncate text-sm font-medium leading-none">
           Joe Rogan
         </span>
       </Link>
