@@ -3,5 +3,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  return <div>{children}</div>
+  return (
+    <div className="overlay bg-auth-bg flex min-h-screen w-full items-center justify-center bg-cover bg-center bg-no-repeat">
+      {children}
+    </div>
+  )
 }

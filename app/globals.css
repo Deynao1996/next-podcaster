@@ -67,3 +67,7 @@ html {
     @apply bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-60 bg-[#121212];
   }
 }
+
+.overlay {
+  border-image: linear-gradient(rgba(4, 4, 4, 0.1), rgba(0, 0, 0, 0.5)) fill 1;
+}

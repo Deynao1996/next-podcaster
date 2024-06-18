@@ -60,7 +60,8 @@ const config = {
       },
       backgroundImage: {
         'nav-focus':
-          'linear-gradient(100deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.00) 100%)'
+          'linear-gradient(100deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.00) 100%)',
+        'auth-bg': 'url("/images/bg-img.png")'
       },
       keyframes: {
         'accordion-down': {
