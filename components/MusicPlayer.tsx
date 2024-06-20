@@ -2,6 +2,7 @@ import Image from 'next/image'
 import React from 'react'
 
 const MusicPlayer = () => {
+  return
   return (
     <div className="sticky bottom-0 w-full">
       <div className="h-1 bg-[#2E3036]">

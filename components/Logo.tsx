@@ -15,8 +15,9 @@ const Logo = ({ iconWidth, iconHeight }: LogoProps) => {
         alt="logo"
         width={iconWidth}
         height={iconHeight}
+        className={`h-[${iconHeight}px] w-[${iconWidth}px]`}
       />
-      <p className="scroll-m-20 text-2xl font-bold tracking-tight hidden xl:block">
+      <p className="hidden scroll-m-20 text-2xl font-bold tracking-tight xl:block">
         Podcaster
       </p>
     </Link>

@@ -2,6 +2,8 @@ import LeftSideBar from '@/components/LeftSideBar'
 import MobileHeader from '@/components/MobileHeader'
 import MusicPlayer from '@/components/MusicPlayer'
 import RightSideBar from '@/components/RightSideBar'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 export default function RootLayout({
   children
@@ -12,8 +14,15 @@ export default function RootLayout({
     <div>
       <MobileHeader />
       <div className="flex justify-between">
-        <div className="hidden w-fit sm:block">
-          <LeftSideBar />
+        <div className="relative hidden w-fit sm:block">
+          <div className="sticky left-0 top-0 flex h-screen flex-col justify-between">
+            <LeftSideBar />
+            <div className="p-6">
+              <Button className="w-full" asChild>
+                <Link href={'/sign-in'}>Login</Link>
+              </Button>
+            </div>
+          </div>
         </div>
         <div className="flex-1">{children}</div>
         <div className="hidden lg:block lg:w-[370px]">

@@ -1,10 +1,10 @@
-import React from "react";
-import Logo from "./Logo";
-import NavLinks from "./NavLinks";
+import React from 'react'
+import Logo from './Logo'
+import NavLinks from './NavLinks'
 
 const LeftSideBar = () => {
   return (
-    <div className="sticky left-0 top-0">
+    <div>
       <div className="p-8">
         <Logo iconHeight={27} iconWidth={23} />
       </div>
@@ -12,7 +12,7 @@ const LeftSideBar = () => {
         <NavLinks />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LeftSideBar;
+export default LeftSideBar

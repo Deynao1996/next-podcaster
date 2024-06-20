@@ -13,6 +13,7 @@ import {
   SheetTrigger
 } from './ui/sheet'
 import NavLinks from './NavLinks'
+import Link from 'next/link'
 
 const MobileHeader = () => {
   return (
@@ -32,13 +33,29 @@ const MobileHeader = () => {
       </div>
       <SheetContent side={'left'}>
         <SheetHeader>
-          <div className="flex items-center gap-3 p-6">
-            <Image src="/icons/logo.svg" alt="logo" width={25} height={32} />
-            <p className="scroll-m-20 text-xl font-semibold tracking-tight">
-              Podcaster
-            </p>
+          <div className="flex h-screen flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-3 p-6">
+                <Image
+                  src="/icons/logo.svg"
+                  alt="logo"
+                  width={25}
+                  height={32}
+                  className="h-[32px] w-[25px]"
+                />
+                <p className="scroll-m-20 text-xl font-semibold tracking-tight">
+                  Podcaster
+                </p>
+              </div>
+              <NavLinks />
+            </div>
+
+            <div className="p-6">
+              <Button className="w-full" asChild>
+                <Link href={'/sign-in'}>Login</Link>
+              </Button>
+            </div>
           </div>
-          <NavLinks />
         </SheetHeader>
       </SheetContent>
     </Sheet>
