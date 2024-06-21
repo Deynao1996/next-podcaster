@@ -3,6 +3,7 @@ import MobileHeader from '@/components/MobileHeader'
 import MusicPlayer from '@/components/MusicPlayer'
 import RightSideBar from '@/components/RightSideBar'
 import { Button } from '@/components/ui/button'
+import { LogInIcon } from 'lucide-react'
 import Link from 'next/link'
 
 export default function RootLayout({
@@ -19,12 +20,15 @@ export default function RootLayout({
             <LeftSideBar />
             <div className="p-6">
               <Button className="w-full" asChild>
-                <Link href={'/sign-in'}>Login</Link>
+                <Link href={'/sign-in'}>
+                  <LogInIcon className="block h-4 w-4 xl:hidden" />
+                  <span className="hidden xl:block">Login</span>
+                </Link>
               </Button>
             </div>
           </div>
         </div>
-        <div className="flex-1">{children}</div>
+        <div className="bg-secondary flex-1">{children}</div>
         <div className="hidden lg:block lg:w-[370px]">
           <RightSideBar />
         </div>
