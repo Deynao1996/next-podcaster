@@ -6,7 +6,7 @@ import EmptyState from '../EmptyState'
 
 type PodcastListProps = {
   renderTitle: () => React.ReactNode
-  itemsLength: number
+  itemsLength?: number
 }
 
 const PodcastList = ({ renderTitle, itemsLength = 4 }: PodcastListProps) => {
