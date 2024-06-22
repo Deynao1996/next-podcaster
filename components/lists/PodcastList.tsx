@@ -7,13 +7,18 @@ import EmptyState from '../EmptyState'
 type PodcastListProps = {
   renderTitle: () => React.ReactNode
   itemsLength?: number
+  renderEmptyState?: () => React.ReactNode
 }
 
-const PodcastList = ({ renderTitle, itemsLength = 4 }: PodcastListProps) => {
+const PodcastList = ({
+  renderTitle,
+  renderEmptyState,
+  itemsLength = 4
+}: PodcastListProps) => {
   return (
     <div className="pt-9">
       {renderTitle()}
-      {!itemsLength && <EmptyState />}
+      {!itemsLength && renderEmptyState?.()}
       <ul className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {[...Array(itemsLength)].map((_, index) => (
           <PodcastBox key={index} />

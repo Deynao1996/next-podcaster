@@ -1,7 +1,15 @@
 import Image from 'next/image'
 import React from 'react'
+import { Button } from './ui/button'
+import Link from 'next/link'
 
-const EmptyState = () => {
+type EmptyStateProps = {
+  children?: React.ReactNode
+  title: string
+  subtitle?: string
+}
+
+const EmptyState = ({ children, title, subtitle }: EmptyStateProps) => {
   return (
     <div className="mx-auto mt-5 max-w-sm sm:mt-10">
       <div className="flex flex-col items-center justify-center gap-2 text-center">
@@ -12,12 +20,11 @@ const EmptyState = () => {
           height={200}
         />
         <p className="text-secondary-foreground text-2xl font-semibold">
-          No results found
+          {title}
         </p>
-        <span className="text-muted-foreground">
-          Try adjusting your search to find what you are looking for
-        </span>
+        {subtitle && <span className="text-muted-foreground">{subtitle}</span>}
       </div>
+      {children}
     </div>
   )
 }

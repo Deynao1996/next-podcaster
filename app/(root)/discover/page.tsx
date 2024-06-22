@@ -1,3 +1,4 @@
+import EmptyState from '@/components/EmptyState'
 import PodcastSearchBar from '@/components/PodcastSearchBar'
 import PodcastList from '@/components/lists/PodcastList'
 import { Button } from '@/components/ui/button'
@@ -10,6 +11,12 @@ const CreatePodcastPage = () => {
       <PodcastSearchBar />
       <PodcastList
         itemsLength={14}
+        renderEmptyState={() => (
+          <EmptyState
+            title="No results found"
+            subtitle="Try adjusting your search to find what you are looking for"
+          />
+        )}
         renderTitle={() => (
           <div className="flex items-center justify-between">
             <h6 className="scroll-m-20 text-xl font-semibold">
