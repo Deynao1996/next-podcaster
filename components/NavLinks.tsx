@@ -21,7 +21,7 @@ const NavLinks = () => {
             key={link.label}
             href={link.route}
             className={cn(
-              'relative flex h-12 cursor-pointer items-center justify-start gap-5 px-6 font-semibold leading-[50px] text-white opacity-70 transition-all duration-200 hover:opacity-100 hover:[background-color:rgba(255,255,255,0.06)] sm:justify-center sm:px-0 xl:justify-start xl:pl-8 xl:pr-12',
+              'relative flex h-12 cursor-pointer items-center justify-start gap-5 px-6 font-semibold leading-[50px] text-white opacity-70 transition-all duration-200 hover:opacity-100 hover:[background-color:rgba(255,255,255,0.06)] focus:[background-color:rgba(255,255,255,0.06)] sm:justify-center sm:px-0 xl:justify-start xl:pl-8 xl:pr-12',
               {
                 'bg-nav-focus opacity-100': isActive
               }

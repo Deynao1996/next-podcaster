@@ -12,7 +12,7 @@ const LatestPodcastList = ({ renderTitle }: LatestPodcastListProps) => {
     <div className="mt-10">
       <div className="flex items-center justify-between">
         {renderTitle()}
-        <Button asChild variant="link">
+        <Button asChild variant="link" className="p-0">
           <Link href={'/'}>See all</Link>
         </Button>
       </div>

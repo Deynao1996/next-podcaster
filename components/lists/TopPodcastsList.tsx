@@ -6,7 +6,7 @@ import TopPodcaster from '../TopPodcaster'
 const TopPodcastsList = () => {
   return (
     <div>
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between px-8">
         <h5 className="scroll-m-20 text-xl font-semibold">Top Podcasters</h5>
         <Button asChild variant="link" className="p-0">
           <Link href={'/'}>See all</Link>

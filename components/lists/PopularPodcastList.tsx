@@ -7,9 +7,9 @@ import { cn } from '@/lib/utils'
 const PopularPodcastList = () => {
   return (
     <div>
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <h4 className="scroll-m-20 text-xl font-semibold">Fans Also Like</h4>
-        <Button asChild variant="link">
+        <Button asChild variant="link" className="p-0">
           <Link href={'/'}>See all</Link>
         </Button>
       </div>
@@ -20,22 +20,22 @@ const PopularPodcastList = () => {
             alt="Popular Podcast"
             fill
             sizes="(100vw)"
-            className="aspect-square object-cover rounded-lg"
+            className="aspect-square rounded-lg object-cover"
           />
-          <div className="absolute bottom-0 h-1/4 w-full glass flex flex-col justify-center px-4 rounded-lg">
+          <div className="glass absolute bottom-0 flex h-1/4 w-full flex-col justify-center rounded-lg px-4">
             <p>Waveform</p>
-            <span className="text-sm text-muted-foreground">Joe Rogan</span>
+            <span className="text-muted-foreground text-sm">Joe Rogan</span>
           </div>
         </li>
       </ul>
 
-      <ul className="flex justify-center items-center mt-3 gap-2">
+      <ul className="mt-3 flex items-center justify-center gap-2">
         {[...Array(4)].map((_, index) => {
           const isActive = index === 0
           return (
             <li
               key={index}
-              className={cn('w-2 h-2 bg-white rounded-full cursor-pointer', {
+              className={cn('h-2 w-2 cursor-pointer rounded-full bg-white', {
                 'opacity-40': !isActive
               })}
             />
