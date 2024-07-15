@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
+import { ConvexClientProvider } from '@/providers/ConvexProvider'
 import './globals.css'
 
 const inter = Manrope({ subsets: ['latin'] })
@@ -19,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ConvexClientProvider>{children}</ConvexClientProvider>
+      </body>
     </html>
   )
 }
