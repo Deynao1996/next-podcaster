@@ -1,8 +1,8 @@
 export default {
   providers: [
     {
-      domain: 'https://moving-coral-93.clerk.accounts.dev',
-      applicationId: 'convex'
+      domain: 'https://integral-lamb-9.clerk.accounts.dev',
+      applicationID: 'convex'
     }
   ]
 }
