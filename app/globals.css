@@ -66,11 +66,28 @@ html {
   .glass {
     @apply bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-60 bg-[#121212];
   }
+  .cl-input {
+    @apply ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50
+  }
 }
 
 .overlay {
   border-image: linear-gradient(rgba(4, 4, 4, 0.1), rgba(0, 0, 0, 0.5)) fill 1;
 }
+
+.cl-providerIcon__github {
+  filter: invert(1);
+}
+
+.cl-internal-6he529 > img {
+  height: 40px;
+}
+
+.cl-formFieldInputShowPasswordIcon {
+  color: white;
+}
+
+
 
 
 

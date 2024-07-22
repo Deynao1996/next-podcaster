@@ -20,3 +20,12 @@ export const sidebarLinks = [
     label: 'My Profile'
   }
 ]
+
+export const voiceCategories = [
+  'alloy',
+  'shimmer',
+  'nova',
+  'echo',
+  'fable',
+  'onyx'
+]

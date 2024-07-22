@@ -1,15 +1,17 @@
 'use client'
 
+import GeneratePodcast from '@/components/GeneratePodcast'
+import GenerateThumbnail from '@/components/GenerateThumbnail'
 import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
-  FormDescription,
+  FormField,
   FormItem,
-  FormLabel
+  FormLabel,
+  FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -18,114 +20,143 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
-import React from 'react'
+import { voiceCategories } from '@/constants'
+import { Id } from '@/convex/_generated/dataModel'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Loader } from 'lucide-react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+
+const formSchema = z.object({
+  podcastTitle: z.string().min(2, {
+    message: 'Title must be at least 2 characters.'
+  }),
+  description: z.string().min(2, {
+    message: 'Description must be at least 2 characters.'
+  })
+})
 
 const CreatePage = () => {
+  const [imagePrompt, setImagePrompt] = useState('')
+  const [imageStorageId, setImageStorageId] = useState<Id<'_storage'> | null>(
+    null
+  )
+  const [imageUrl, setImageUrl] = useState('')
+
+  const [audioUrl, setAudioUrl] = useState('')
+  const [audioStorageId, setAudioStorageId] = useState<Id<'_storage'> | null>(
+    null
+  )
+  const [audioDuration, setAudioDuration] = useState(0)
+
+  const [voiceType, setVoiceType] = useState('')
+  const [voicePrompt, setVoicePrompt] = useState('')
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      podcastTitle: '',
+      description: ''
+    }
+  })
+
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    console.log(data)
+  }
+
   return (
     <section className="bg-secondary text-secondary-foreground px-4 py-9 sm:px-8">
       <h6 className="scroll-m-20 text-xl font-semibold">Create a Podcast</h6>
-      <form action="#" className="mt-10 flex w-full flex-col gap-7">
-        <div className="grid w-full items-center gap-1.5">
-          <Label htmlFor="email">Podcast title</Label>
-          <Input
-            type="title"
-            id="title"
-            placeholder="Create a creative podcast title"
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="mt-10 flex w-full flex-col gap-7"
+        >
+          <FormField
+            control={form.control}
+            name="podcastTitle"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Podcast title</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Create a creative podcast title"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div>
-          <span>Category</span>
-          <Select>
-            <SelectTrigger className="text-muted-foreground">
-              <SelectValue placeholder="Select category" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="m@example.com">m@example.com</SelectItem>
-              <SelectItem value="m@google.com">m@google.com</SelectItem>
-              <SelectItem value="m@support.com">m@support.com</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="grid w-full gap-1.5">
-          <Label htmlFor="description">Description</Label>
-          <Textarea
-            className="resize-none"
-            placeholder="Write a short description about the podcast"
-            id="description"
+          <FormItem>
+            <FormLabel>Select AI Voice</FormLabel>
+            <FormControl>
+              <Select onValueChange={(value) => setVoiceType(value)}>
+                <SelectTrigger className="text-muted-foreground capitalize">
+                  <SelectValue placeholder="Select voice" />
+                </SelectTrigger>
+                <SelectContent>
+                  {voiceCategories.map((category) => (
+                    <SelectItem
+                      key={category}
+                      value={category}
+                      className="capitalize"
+                    >
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormControl>
+            <FormMessage />
+            {voiceType && (
+              <audio src={`/${voiceType}.mp3`} autoPlay className="hidden" />
+            )}
+          </FormItem>
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea
+                    className="resize-none"
+                    placeholder="Write a short description about the podcast"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <Separator className="bg-background" />
-        <div className="grid w-full gap-1.5">
-          <Label htmlFor="promptAi">AI prompt to generate podcast</Label>
-          <Textarea
-            className="resize-none"
-            placeholder="Provide text to AI to generate audio"
-            id="promptAi"
+          <Separator className="bg-background" />
+          <GeneratePodcast
+            setAudioStorageId={setAudioStorageId}
+            setAudio={setAudioUrl}
+            voiceType={voiceType!}
+            audio={audioUrl}
+            voicePrompt={voicePrompt}
+            setVoicePrompt={setVoicePrompt}
+            setAudioDuration={setAudioDuration}
           />
-        </div>
-
-        <Tabs defaultValue="image">
-          <TabsList className="bg-background mb-5">
-            <TabsTrigger value="thumbnail-prompt">
-              AI prompt to generate thumbnail
-            </TabsTrigger>
-            <TabsTrigger value="image">Upload custom image</TabsTrigger>
-          </TabsList>
-          <TabsContent value="thumbnail-prompt">
-            <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="thumbnail-prompt">
-                AI prompt to generate thumbnail
-              </Label>
-              <Input
-                type="title"
-                id="thumbnail-prompt"
-                placeholder="Write a prompt to generate custom thumbnail"
-              />
-            </div>
-          </TabsContent>
-          <TabsContent value="image">
-            <div className="flex w-full items-center justify-center">
-              <label
-                htmlFor="dropzone-file"
-                className="bg-background hover:border-primary flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed"
-              >
-                <div className="flex flex-col items-center justify-center pb-6 pt-5">
-                  <svg
-                    className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 20 16"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                    />
-                  </svg>
-                  <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                    <span className="text-primary font-semibold">
-                      Click to upload
-                    </span>{' '}
-                    or drag and drop
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    SVG, PNG, JPG or GIF (MAX. 800x400px)
-                  </p>
-                </div>
-                <input id="dropzone-file" type="file" className="hidden" />
-              </label>
-            </div>
-          </TabsContent>
-        </Tabs>
-        <Button className="w-full" aria-label="Submit">
-          Submit & publish podcast
-        </Button>
-      </form>
+          <GenerateThumbnail />
+          <Button className="w-full" aria-label="Submit">
+            {isSubmitting ? (
+              <>
+                Submitting
+                <Loader size={20} className="ml-2 animate-spin" />
+              </>
+            ) : (
+              'Submit & Publish Podcast'
+            )}
+          </Button>
+        </form>
+      </Form>
     </section>
   )
 }
