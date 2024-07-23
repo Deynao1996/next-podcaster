@@ -3,6 +3,7 @@ import MobileHeader from '@/components/MobileHeader'
 import MusicPlayer from '@/components/MusicPlayer'
 import RightSideBar from '@/components/RightSideBar'
 import { Button } from '@/components/ui/button'
+import { Toaster } from '@/components/ui/toaster'
 import { LogInIcon } from 'lucide-react'
 import Link from 'next/link'
 
@@ -26,6 +27,7 @@ export default function RootLayout({
         </div>
       </div>
       <MusicPlayer />
+      <Toaster />
     </div>
   )
 }

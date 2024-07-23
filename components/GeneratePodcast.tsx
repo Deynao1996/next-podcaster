@@ -6,7 +6,7 @@ import { Loader } from 'lucide-react'
 import { useGeneratePodcast } from '@/hooks/useGeneratePodcast'
 
 const GeneratePodcast = (props: GeneratePodcastProps) => {
-  const { audio, setAudioDuration, voicePrompt } = props
+  const { audio, setAudioDuration, voicePrompt, setVoicePrompt } = props
   const { generatePodcast, isGenerating } = useGeneratePodcast(props)
 
   return (
@@ -16,11 +16,19 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
         <Textarea
           className="resize-none"
           placeholder="Provide text to AI to generate audio"
+          onChange={(e) => setVoicePrompt(e.target.value)}
           id="promptAi"
           value={voicePrompt}
         />
       </div>
-      <Button aria-label="Generate Podcast" className="mt-3" size={'sm'}>
+      <Button
+        type="button"
+        aria-label="Generate Podcast"
+        className="mt-3"
+        size={'sm'}
+        onClick={generatePodcast}
+        disabled={isGenerating}
+      >
         {isGenerating ? (
           <>
             Generating
