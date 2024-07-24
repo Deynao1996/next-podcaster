@@ -3,11 +3,11 @@ import { Textarea } from '@/components/ui/textarea'
 import { GeneratePodcastProps } from '@/types'
 import { Button } from './ui/button'
 import { Loader } from 'lucide-react'
-import { useGeneratePodcast } from '@/hooks/useGeneratePodcast'
+import { useCreatePodcast } from '@/hooks/useCreatePodcast'
 
 const GeneratePodcast = (props: GeneratePodcastProps) => {
   const { audio, setAudioDuration, voicePrompt, setVoicePrompt } = props
-  const { generatePodcast, isGenerating } = useGeneratePodcast(props)
+  const { createPodcast, isGenerating } = useCreatePodcast(props)
 
   return (
     <div>
@@ -26,7 +26,7 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
         aria-label="Generate Podcast"
         className="mt-3"
         size={'sm'}
-        onClick={generatePodcast}
+        onClick={createPodcast}
         disabled={isGenerating}
       >
         {isGenerating ? (
@@ -42,6 +42,7 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
         <audio
           src={audio}
           controls
+          className="mt-2"
           autoPlay
           onLoadedMetadata={(e) => setAudioDuration(e.currentTarget.duration)}
         />

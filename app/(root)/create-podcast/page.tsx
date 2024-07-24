@@ -100,7 +100,7 @@ const CreatePage = () => {
                   <SelectValue placeholder="Select voice" />
                 </SelectTrigger>
                 <SelectContent>
-                  {voiceCategories.map((category) => (
+                  {voiceCategories.map(({ voice: category }) => (
                     <SelectItem
                       key={category}
                       value={category}
