@@ -5,6 +5,8 @@ import { action } from './_generated/server'
 import { v } from 'convex/values'
 import { DEFAULT_VOICE_ID, voiceCategories } from '@/constants'
 
+//TODO Check init function
+
 export const generateAudioAction = action({
   args: { input: v.string(), voice: v.string() },
   handler: async (_, { input, voice }) => {

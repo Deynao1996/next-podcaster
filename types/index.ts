@@ -10,3 +10,11 @@ export interface GeneratePodcastProps {
   setVoicePrompt: Dispatch<SetStateAction<string>>
   setAudioDuration: Dispatch<SetStateAction<number>>
 }
+
+export interface GenerateThumbnailProps {
+  setImageUrl: Dispatch<SetStateAction<string>>
+  imageUrl: string
+  setImageStorageId: Dispatch<SetStateAction<Id<'_storage'> | null>>
+  imagePrompt: string
+  setImagePrompt: Dispatch<SetStateAction<string>>
+}

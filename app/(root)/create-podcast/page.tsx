@@ -144,7 +144,13 @@ const CreatePage = () => {
             setVoicePrompt={setVoicePrompt}
             setAudioDuration={setAudioDuration}
           />
-          <GenerateThumbnail />
+          <GenerateThumbnail
+            setImageUrl={setImageUrl}
+            imageUrl={imageUrl}
+            imagePrompt={imagePrompt}
+            setImageStorageId={setImageStorageId}
+            setImagePrompt={setImagePrompt}
+          />
           <Button className="w-full" aria-label="Submit">
             {isSubmitting ? (
               <>

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^5.2.4",
+    "@google/generative-ai": "^0.15.0",
     "@hookform/resolvers": "^3.6.0",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
@@ -19,6 +20,8 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
+    "@xixixao/uploadstuff": "^0.0.5",
+    "@zeldafan0225/ai_horde": "^5.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "convex": "^1.13.0",

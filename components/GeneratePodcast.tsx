@@ -24,7 +24,7 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
       <Button
         type="button"
         aria-label="Generate Podcast"
-        className="mt-3"
+        className="mt-2"
         size={'sm'}
         onClick={createPodcast}
         disabled={isGenerating}

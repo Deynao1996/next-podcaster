@@ -1,4 +1,13 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'mellow-seahorse-745.convex.cloud'
+      }
+    ]
+  }
+}
 
-export default nextConfig;
+export default nextConfig
