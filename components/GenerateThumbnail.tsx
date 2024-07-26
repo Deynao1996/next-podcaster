@@ -6,7 +6,7 @@ import { Textarea } from './ui/textarea'
 import { Button } from './ui/button'
 import { Loader } from 'lucide-react'
 import { useToast } from './ui/use-toast'
-import { useAction, useMutation } from 'convex/react'
+import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { useUploadFiles } from '@xixixao/uploadstuff/react'
 import { cn } from '@/lib/utils'
@@ -52,7 +52,11 @@ const GenerateThumbnail = ({
     }
   }
 
-  const generateImage = () => ({})
+  function generateImage() {
+    //TODO Implement generate image from Stable Diffusion
+
+    toast({ title: 'Functionality coming soon' })
+  }
 
   async function uploadImage(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault()
@@ -100,7 +104,7 @@ const GenerateThumbnail = ({
           className="mt-2"
           size={'sm'}
           onClick={() => generateImage()}
-          disabled={isThumbnailGenerating}
+          disabled={true}
         >
           {isThumbnailGenerating ? (
             <>
@@ -113,11 +117,11 @@ const GenerateThumbnail = ({
         </Button>
       </TabsContent>
       <TabsContent value="image">
-        <div className="flex w-full items-center justify-center">
+        <div className="flex w-full flex-wrap items-center justify-center gap-1">
           <label
             htmlFor="dropzone-file"
             className={cn(
-              'bg-background flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed',
+              'bg-background flex h-64 w-full min-w-[281px] flex-1 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed',
               {
                 'hover:border-primary': !isThumbnailGenerating
               }
@@ -165,16 +169,16 @@ const GenerateThumbnail = ({
               onChange={uploadImage}
             />
           </label>
+          {imageUrl && (
+            <Image
+              src={imageUrl}
+              alt="Thumbnail"
+              width={256}
+              height={256}
+              className="h-64 w-64 rounded-lg object-cover"
+            />
+          )}
         </div>
-        {imageUrl && (
-          <Image
-            src={imageUrl}
-            alt="Thumbnail"
-            width={200}
-            height={200}
-            className="mx-auto mt-4 h-[200px] w-[200px] object-cover"
-          />
-        )}
       </TabsContent>
     </Tabs>
   )

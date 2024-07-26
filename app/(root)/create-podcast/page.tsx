@@ -21,10 +21,14 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
+import { useToast } from '@/components/ui/use-toast'
 import { voiceCategories } from '@/constants'
+import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from 'convex/react'
 import { Loader } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -39,21 +43,22 @@ const formSchema = z.object({
 })
 
 const CreatePage = () => {
+  const { toast } = useToast()
+  const router = useRouter()
+  const createPodcast = useMutation(api.podcasts.createPodcast)
+
   const [imagePrompt, setImagePrompt] = useState('')
   const [imageStorageId, setImageStorageId] = useState<Id<'_storage'> | null>(
     null
   )
   const [imageUrl, setImageUrl] = useState('')
-
   const [audioUrl, setAudioUrl] = useState('')
   const [audioStorageId, setAudioStorageId] = useState<Id<'_storage'> | null>(
     null
   )
   const [audioDuration, setAudioDuration] = useState(0)
-
   const [voiceType, setVoiceType] = useState('')
   const [voicePrompt, setVoicePrompt] = useState('')
-
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -64,8 +69,50 @@ const CreatePage = () => {
     }
   })
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data)
+  function handleCreateErrorPodcast(error: unknown) {
+    console.log(error)
+    setIsSubmitting(false)
+    toast({
+      variant: 'destructive',
+      title: 'Error creating podcast'
+    })
+  }
+
+  function validateMedia() {
+    if (!imageUrl || !audioUrl) {
+      toast({ title: 'Missing image or audio url', variant: 'destructive' })
+      throw new Error('Missing image or audio url')
+    }
+  }
+
+  function handleCreateSuccessPodcast() {
+    setIsSubmitting(false)
+    toast({ title: 'Podcast created' })
+    router.push('/')
+  }
+
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setIsSubmitting(true)
+    validateMedia()
+
+    try {
+      await createPodcast({
+        podcastTitle: data.podcastTitle,
+        podcastDescription: data.description,
+        audioUrl,
+        imageUrl,
+        voiceType,
+        imagePrompt,
+        voicePrompt,
+        views: 0,
+        audioDuration,
+        audioStorageId,
+        imageStorageId
+      })
+      handleCreateSuccessPodcast()
+    } catch (error) {
+      handleCreateErrorPodcast(error)
+    }
   }
 
   return (
@@ -95,7 +142,10 @@ const CreatePage = () => {
           <FormItem>
             <FormLabel>Select AI Voice</FormLabel>
             <FormControl>
-              <Select onValueChange={(value) => setVoiceType(value)}>
+              <Select
+                onValueChange={(value) => setVoiceType(value)}
+                defaultValue="susan"
+              >
                 <SelectTrigger className="text-muted-foreground capitalize">
                   <SelectValue placeholder="Select voice" />
                 </SelectTrigger>

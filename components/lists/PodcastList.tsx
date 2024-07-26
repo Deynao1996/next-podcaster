@@ -1,27 +1,29 @@
 import React from 'react'
 import PodcastBox from '../PodcastBox'
-import EmptyState from '../EmptyState'
+import { PodcastListProps } from '@/types'
+import { api } from '@/convex/_generated/api'
+import { useQuery } from 'convex/react'
 
-//TODO Add hover effect
+//TODO Check loading state
 
-type PodcastListProps = {
-  renderTitle: () => React.ReactNode
-  itemsLength?: number
-  renderEmptyState?: () => React.ReactNode
+const queryFns = {
+  trending: api.podcasts.getTrendingPodcasts
 }
 
 const PodcastList = ({
   renderTitle,
   renderEmptyState,
-  itemsLength = 4
+  label
 }: PodcastListProps) => {
+  const podcasts = useQuery(queryFns[label])
+
   return (
     <div className="pt-9">
       {renderTitle()}
-      {!itemsLength && renderEmptyState?.()}
+      {podcasts?.length === 0 && renderEmptyState?.()}
       <ul className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {[...Array(itemsLength)].map((_, index) => (
-          <PodcastBox key={index} />
+        {podcasts?.map((podcast) => (
+          <PodcastBox key={podcast._id} {...podcast} />
         ))}
       </ul>
     </div>

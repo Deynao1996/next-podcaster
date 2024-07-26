@@ -1,15 +1,24 @@
+import { PodcastBoxProps } from '@/types'
 import { ExternalLink } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-const PodcastBox = () => {
+//TODO Check description overflow
+//TODO Check console warnings
+
+const PodcastBox = ({
+  imageUrl,
+  podcastDescription,
+  podcastTitle,
+  _id
+}: PodcastBoxProps) => {
   return (
     <li className="rounded-md">
       <Link href={'/'} className="group">
         <div className="relative aspect-auto h-64 overflow-hidden rounded-md group-hover:shadow-lg lg:aspect-square lg:h-auto">
           <Image
-            src="/images/bg-img.png"
+            src={imageUrl}
             alt="podcast"
             fill
             priority
@@ -18,9 +27,9 @@ const PodcastBox = () => {
           />
           <ExternalLink className="text-primary absolute right-2 top-2 opacity-0 transition-all duration-200 group-hover:opacity-90" />
         </div>
-        <p className="mt-2 truncate font-semibold">Joe Rogan</p>
-        <span className="text-muted-foreground mt-1 truncate text-sm font-medium leading-none">
-          Joe Rogan
+        <p className="mt-2 truncate font-semibold">{podcastTitle}</p>
+        <span className="text-muted-foreground mt-1 line-clamp-2 text-sm font-medium leading-5">
+          {podcastDescription}
         </span>
       </Link>
     </li>

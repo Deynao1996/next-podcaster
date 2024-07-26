@@ -8,6 +8,7 @@ const HomePage = () => {
   return (
     <main className="bg-secondary text-secondary-foreground px-4 pb-9 sm:px-8">
       <PodcastList
+        label="trending"
         renderTitle={() => (
           <h1 className="scroll-m-20 text-xl font-semibold">
             Trending Podcasts
@@ -20,6 +21,7 @@ const HomePage = () => {
         )}
       />
       <PodcastList
+        label="trending"
         renderTitle={() => (
           <h3 className="scroll-m-20 text-xl font-semibold">
             Popular Podcasts

@@ -1,5 +1,5 @@
 export const DEFAULT_VOICE_ID =
-  's3://peregrine-voices/oliver_narrative2_parrot_saad/manifest.json'
+  's3://voice-cloning-zero-shot/f6594c50-e59b-492c-bac2-047d57f8bdd8/susanadvertisingsaad/manifest.json'
 
 export const sidebarLinks = [
   {

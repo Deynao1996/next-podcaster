@@ -5,18 +5,16 @@ import { action } from './_generated/server'
 import { v } from 'convex/values'
 import { DEFAULT_VOICE_ID, voiceCategories } from '@/constants'
 
-//TODO Check init function
+PlayHT.init({
+  apiKey: process.env.PLAYHT_SECRET_KEY as string,
+  userId: process.env.PLAYHT_USER_ID as string,
+  defaultVoiceId: DEFAULT_VOICE_ID,
+  defaultVoiceEngine: 'PlayHT2.0'
+})
 
 export const generateAudioAction = action({
   args: { input: v.string(), voice: v.string() },
   handler: async (_, { input, voice }) => {
-    PlayHT.init({
-      apiKey: process.env.PLAYHT_SECRET_KEY as string,
-      userId: process.env.PLAYHT_USER_ID as string,
-      defaultVoiceId: DEFAULT_VOICE_ID,
-      defaultVoiceEngine: 'PlayHT2.0'
-    })
-
     const voiceId =
       voiceCategories.find((v) => v.voice === voice)?.voiceId ||
       DEFAULT_VOICE_ID
@@ -30,6 +28,9 @@ export const generateAudioAction = action({
       speed: 0.8
     })
     const { audioUrl } = generated
-    return audioUrl
+    const audioResponse = await fetch(audioUrl)
+    const buffer = await audioResponse.arrayBuffer()
+
+    return buffer
   }
 })
