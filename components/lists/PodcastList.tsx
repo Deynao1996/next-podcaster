@@ -7,15 +7,17 @@ import { useQuery } from 'convex/react'
 //TODO Check loading state
 
 const queryFns = {
-  trending: api.podcasts.getTrendingPodcasts
+  trending: api.podcasts.getTrendingPodcasts,
+  similar: api.podcasts.getPodcastByVoiceType
 }
 
 const PodcastList = ({
   renderTitle,
   renderEmptyState,
-  label
+  label,
+  queryParams = {}
 }: PodcastListProps) => {
-  const podcasts = useQuery(queryFns[label])
+  const podcasts = useQuery(queryFns[label], queryParams)
 
   return (
     <div className="pt-9">

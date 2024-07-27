@@ -13,9 +13,15 @@ const PodcastBox = ({
   podcastTitle,
   _id
 }: PodcastBoxProps) => {
+  function handleIncreaseViews() {}
+
   return (
     <li className="rounded-md">
-      <Link href={'/'} className="group">
+      <Link
+        href={`/podcasts/${_id}`}
+        className="group"
+        onClick={handleIncreaseViews}
+      >
         <div className="relative aspect-auto h-64 overflow-hidden rounded-md group-hover:shadow-lg lg:aspect-square lg:h-auto">
           <Image
             src={imageUrl}

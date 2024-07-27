@@ -78,7 +78,11 @@ const CreatePage = () => {
     })
   }
 
-  function validateMedia() {
+  function validateStateValues() {
+    if (!voiceType) {
+      toast({ title: 'Missing voice type', variant: 'destructive' })
+      throw new Error('Missing voice type')
+    }
     if (!imageUrl || !audioUrl) {
       toast({ title: 'Missing image or audio url', variant: 'destructive' })
       throw new Error('Missing image or audio url')
@@ -92,8 +96,8 @@ const CreatePage = () => {
   }
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    validateStateValues()
     setIsSubmitting(true)
-    validateMedia()
 
     try {
       await createPodcast({
@@ -142,10 +146,7 @@ const CreatePage = () => {
           <FormItem>
             <FormLabel>Select AI Voice</FormLabel>
             <FormControl>
-              <Select
-                onValueChange={(value) => setVoiceType(value)}
-                defaultValue="susan"
-              >
+              <Select onValueChange={(value) => setVoiceType(value)}>
                 <SelectTrigger className="text-muted-foreground capitalize">
                   <SelectValue placeholder="Select voice" />
                 </SelectTrigger>
