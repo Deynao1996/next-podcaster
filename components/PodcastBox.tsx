@@ -22,7 +22,7 @@ const PodcastBox = ({
         className="group"
         onClick={handleIncreaseViews}
       >
-        <div className="relative aspect-auto h-64 overflow-hidden rounded-md group-hover:shadow-lg lg:aspect-square lg:h-auto">
+        <div className="relative aspect-auto h-64 overflow-hidden rounded-lg group-hover:shadow-lg lg:aspect-square lg:h-auto">
           <Image
             src={imageUrl}
             alt="podcast"

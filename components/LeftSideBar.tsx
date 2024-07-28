@@ -6,11 +6,15 @@ import NavLinks from './NavLinks'
 import { Button } from './ui/button'
 import Link from 'next/link'
 import { LogInIcon } from 'lucide-react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { SignedIn, SignedOut, useClerk } from '@clerk/nextjs'
 
 const LeftSideBar = () => {
+  const { signOut } = useClerk()
   const pathname = usePathname()
+  const router = useRouter()
   const isDiscoverPage = pathname.startsWith('/discover')
+  const isHomePage = pathname === '/'
 
   return (
     <div className="flex h-full flex-col justify-between">
@@ -22,14 +26,25 @@ const LeftSideBar = () => {
           <NavLinks />
         </div>
       </div>
-      {isDiscoverPage && (
+      {(isDiscoverPage || isHomePage) && (
         <div className="p-6">
-          <Button className="w-full" asChild>
-            <Link href={'/sign-in'}>
+          <SignedIn>
+            <Button
+              className="w-full font-bold"
+              onClick={() => signOut(() => router.push('/'))}
+            >
               <LogInIcon className="block h-4 w-4 xl:hidden" />
-              <span className="hidden xl:block">Login</span>
-            </Link>
-          </Button>
+              <span className="hidden xl:block">Logout</span>
+            </Button>
+          </SignedIn>
+          <SignedOut>
+            <Button className="w-full font-bold" asChild>
+              <Link href={'/sign-in'}>
+                <LogInIcon className="block h-4 w-4 xl:hidden" />
+                <span className="hidden xl:block">Login</span>
+              </Link>
+            </Button>
+          </SignedOut>
         </div>
       )}
     </div>

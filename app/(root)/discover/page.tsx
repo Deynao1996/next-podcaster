@@ -1,3 +1,5 @@
+'use client'
+
 import EmptyState from '@/components/EmptyState'
 import PodcastSearchBar from '@/components/PodcastSearchBar'
 import PodcastList from '@/components/lists/PodcastList'
@@ -10,7 +12,7 @@ const CreatePodcastPage = () => {
     <section className="bg-secondary text-secondary-foreground px-4 py-9 sm:px-8">
       <PodcastSearchBar />
       <PodcastList
-        itemsLength={14}
+        label="trending"
         renderEmptyState={() => (
           <EmptyState
             title="No results found"
