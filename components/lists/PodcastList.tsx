@@ -3,12 +3,15 @@ import PodcastBox from '../PodcastBox'
 import { PodcastListProps } from '@/types'
 import { api } from '@/convex/_generated/api'
 import { useQuery } from 'convex/react'
+import LoadingSpinner from '../LoadingSpinner'
 
 //TODO Check loading state
 
 const queryFns = {
   trending: api.podcasts.getTrendingPodcasts,
-  similar: api.podcasts.getPodcastByVoiceType
+  similar: api.podcasts.getPodcastByVoiceType,
+  discover: api.podcasts.getPodcastBySearch,
+  user: api.podcasts.getPodcastByUserId
 }
 
 const PodcastList = ({
@@ -18,6 +21,8 @@ const PodcastList = ({
   queryParams = {}
 }: PodcastListProps) => {
   const podcasts = useQuery(queryFns[label], queryParams)
+
+  if (!podcasts) return <LoadingSpinner />
 
   return (
     <div className="pt-9">

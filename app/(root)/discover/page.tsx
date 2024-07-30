@@ -5,14 +5,18 @@ import PodcastSearchBar from '@/components/PodcastSearchBar'
 import PodcastList from '@/components/lists/PodcastList'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import React from 'react'
 
-const CreatePodcastPage = () => {
+const CreatePodcastPage = ({
+  searchParams: { search }
+}: {
+  searchParams: { search: string }
+}) => {
   return (
     <section className="bg-secondary text-secondary-foreground px-4 py-9 sm:px-8">
       <PodcastSearchBar />
       <PodcastList
-        label="trending"
+        label="discover"
+        queryParams={{ search: search || '' }}
         renderEmptyState={() => (
           <EmptyState
             title="No results found"
@@ -22,7 +26,14 @@ const CreatePodcastPage = () => {
         renderTitle={() => (
           <div className="flex items-center justify-between">
             <h6 className="scroll-m-20 text-xl font-semibold">
-              Discover Community Podcasts
+              {search ? (
+                <span>
+                  Search results for:{' '}
+                  <span className="text-muted-foreground">{search}</span>
+                </span>
+              ) : (
+                'Discover Community Podcasts'
+              )}
             </h6>
             <Button variant={'outline'}>
               <Image

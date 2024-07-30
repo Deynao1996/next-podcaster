@@ -1,28 +1,30 @@
 export const DEFAULT_VOICE_ID =
   's3://voice-cloning-zero-shot/f6594c50-e59b-492c-bac2-047d57f8bdd8/susanadvertisingsaad/manifest.json'
 
-export const sidebarLinks = [
-  {
-    imgURL: '/icons/home.svg',
-    route: '/',
-    label: 'Home'
-  },
-  {
-    imgURL: '/icons/discover.svg',
-    route: '/discover',
-    label: 'Discover'
-  },
-  {
-    imgURL: '/icons/microphone.svg',
-    route: '/create-podcast',
-    label: 'Create Podcast'
-  },
-  {
-    imgURL: '/icons/profile.svg',
-    route: '/profile',
-    label: 'My Profile'
-  }
-]
+export const sidebarLinks = (currentUserId?: string) => {
+  return [
+    {
+      imgURL: '/icons/home.svg',
+      route: '/',
+      label: 'Home'
+    },
+    {
+      imgURL: '/icons/discover.svg',
+      route: '/discover',
+      label: 'Discover'
+    },
+    {
+      imgURL: '/icons/microphone.svg',
+      route: '/create-podcast',
+      label: 'Create Podcast'
+    },
+    {
+      imgURL: '/icons/profile.svg',
+      route: currentUserId ? `/profile/${currentUserId}` : '/profile',
+      label: 'My Profile'
+    }
+  ]
+}
 
 export const voiceCategories = [
   {

@@ -1,22 +1,43 @@
+'use client'
+
 import EmptyState from '@/components/EmptyState'
 import PodcastList from '@/components/lists/PodcastList'
+import LoadingSpinner from '@/components/LoadingSpinner'
 import { Button } from '@/components/ui/button'
+import { api } from '@/convex/_generated/api'
+import { useQuery } from 'convex/react'
+import { User } from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
 import React from 'react'
 
-const ProfilePage = () => {
+const ProfilePage = ({
+  params: { userId }
+}: {
+  params: { userId: string }
+}) => {
+  const currentUser = useQuery(api.users.getUserById, {
+    clerkId: userId
+  })
+
+  if (!currentUser) return <LoadingSpinner />
+
   return (
     <section className="bg-secondary text-secondary-foreground px-4 py-9 sm:px-8">
       <h6 className="scroll-m-20 text-xl font-semibold">Podcaster Profile</h6>
       <div className="mt-5 flex flex-col gap-5 sm:flex-row">
         <div className="relative aspect-square h-[250px]">
-          <Image
-            src="/images/bg-img.png"
-            alt="profile"
-            fill
-            className="rounded-sm object-cover"
-          />
+          {currentUser.imageUrl ? (
+            <Image
+              src={currentUser.imageUrl}
+              alt="profile"
+              fill
+              className="rounded-sm object-cover"
+            />
+          ) : (
+            <div className="border-muted-foreground rounded-md border p-2">
+              <User className="h-full w-full" />
+            </div>
+          )}
         </div>
         <div className="flex flex-col justify-between py-4">
           <div className="flex flex-col gap-5">
@@ -30,7 +51,7 @@ const ProfilePage = () => {
               />
               <p className="text-muted-foreground text-sm">Verified Creator</p>
             </div>
-            <h6 className="text-2xl font-bold">Marvin James</h6>
+            <h6 className="text-2xl font-bold">{currentUser.name}</h6>
             <div className="flex items-center gap-1">
               <Image
                 src="/icons/headphone.svg"
@@ -56,27 +77,14 @@ const ProfilePage = () => {
         </div>
       </div>
       <PodcastList
+        label="user"
+        queryParams={{ userId: currentUser.clerkId }}
         renderEmptyState={() => (
-          <EmptyState title="You have not created any podcasts yet">
-            <div className="mt-5 flex items-center justify-center">
-              <Button className="w-full max-w-[300px]" asChild>
-                <Link href={'/create-podcast'}>
-                  <Image
-                    src={'/icons/microphone.svg'}
-                    alt="microphone"
-                    width={24}
-                    height={24}
-                    className="mr-2 h-[`24px] w-[24px]"
-                  />
-                  Create a Podcast
-                </Link>
-              </Button>
-            </div>
-          </EmptyState>
+          <EmptyState title="User doesn't create any podcasts yet" />
         )}
         renderTitle={() => (
           <div className="flex items-center justify-between">
-            <h6 className="scroll-m-20 text-xl font-semibold">All Podcasts</h6>
+            <h6 className="scroll-m-20 text-xl font-semibold">User Podcasts</h6>
             <Button variant={'outline'}>
               <Image
                 src="/icons/filter-lines.svg"
@@ -92,7 +100,6 @@ const ProfilePage = () => {
             </Button>
           </div>
         )}
-        itemsLength={8}
       />
     </section>
   )

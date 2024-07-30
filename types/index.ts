@@ -1,12 +1,11 @@
 import { Id } from '@/convex/_generated/dataModel'
 import { Dispatch, SetStateAction } from 'react'
-import { ConvexAuthState } from 'convex/react'
 import { EmptyObject } from 'react-hook-form'
 
-type PodcastLabels = 'trending' | 'similar'
+type PodcastLabels = 'trending' | 'similar' | 'discover' | 'user'
 
 type PodcastParams = {
-  [key: string]: Id<'podcasts'>
+  [key: string]: string
 }
 
 type PodcastQueryParams = EmptyObject | 'skip' | undefined | PodcastParams
@@ -58,4 +57,35 @@ export interface PodcastDetailPlayerProps {
   audioStorageId: Id<'_storage'> | null
   authorImageUrl?: string
   authorId: string
+}
+
+export interface TopPodcasterProps {
+  name: string
+  totalPodcasts: number
+  imageUrl?: string
+  clerkId: string
+  totalViews: number
+}
+
+export interface PopularPodcastProps extends TopPodcasterProps {
+  podcast: {
+    podcastTitle: string
+    pocastId: Id<'podcasts'>
+  }[]
+  _id: Id<'users'>
+  _creationTime: number
+  email: string
+}
+
+export interface AudioProps {
+  title: string
+  audioUrl: string
+  imageUrl: string
+  author: string
+  podcastId: Id<'podcasts'>
+}
+
+export interface AudioContextType {
+  audio: AudioProps | null
+  setAudio: React.Dispatch<React.SetStateAction<AudioProps | null>>
 }

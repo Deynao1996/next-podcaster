@@ -1,7 +1,5 @@
 'use client'
 
-import { api } from '@/convex/_generated/api'
-import { useQuery } from 'convex/react'
 import Image from 'next/image'
 import {
   Carousel,
@@ -11,13 +9,18 @@ import {
 import DotActionButtons from './DotActionButtons'
 import Link from 'next/link'
 import Autoplay from 'embla-carousel-autoplay'
+import LoadingSpinner from './LoadingSpinner'
+import { PopularPodcastProps } from '@/types'
 
-const PopularPodcastSlider = () => {
-  const popularPodcasts = useQuery(api.users.getTopUserByPodcastCount)
-
+const PopularPodcastSlider = ({
+  popularPodcasts
+}: {
+  popularPodcasts: PopularPodcastProps[]
+}) => {
   return (
     <Carousel
       className="mt-4"
+      opts={{ loop: true }}
       plugins={[
         Autoplay({
           delay: 10000
@@ -25,7 +28,7 @@ const PopularPodcastSlider = () => {
       ]}
     >
       <CarouselContent>
-        {popularPodcasts?.map((item) => {
+        {popularPodcasts.map((item) => {
           const topUserPodcast = item.podcast[0]
           return (
             topUserPodcast && (

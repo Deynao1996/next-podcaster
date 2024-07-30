@@ -32,12 +32,7 @@ const RightSideBar = () => {
           />
         </Link>
       </SignedIn>
-      <div className="px-8">
-        <PopularPodcastList />
-      </div>
-      <div className="mt-10">
-        <TopPodcastsList />
-      </div>
+      <PopularPodcastList />
     </section>
   )
 }

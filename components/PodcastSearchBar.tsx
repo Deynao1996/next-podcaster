@@ -1,10 +1,23 @@
-import React from 'react'
-import { Button } from './ui/button'
-import { CircleX } from 'lucide-react'
+import { useDebounce } from '@/hooks/useDebounce'
+import { usePathname, useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
 
 const PodcastSearchBar = () => {
+  const [search, setSearch] = useState('')
+  const router = useRouter()
+  const pathname = usePathname()
+  const debouncedValue = useDebounce(search, 500)
+
+  useEffect(() => {
+    if (debouncedValue) {
+      router.push(`/discover?search=${debouncedValue}`)
+    } else if (!debouncedValue && pathname === '/discover') {
+      router.push('/discover')
+    }
+  }, [router, debouncedValue, pathname])
+
   return (
-    <form className="w-full">
+    <div className="w-full">
       <label
         htmlFor="default-search"
         className="sr-only mb-2 text-sm font-medium text-white"
@@ -35,9 +48,12 @@ const PodcastSearchBar = () => {
           className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring block w-full rounded-md border py-3 pl-10 pr-5 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           placeholder="Type here to search"
           required
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
+          onLoad={() => setSearch('')}
         />
       </div>
-    </form>
+    </div>
   )
 }
 

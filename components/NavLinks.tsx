@@ -2,17 +2,20 @@
 
 import { sidebarLinks } from '@/constants'
 import { cn } from '@/lib/utils'
+import { useUser } from '@clerk/nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 
 const NavLinks = () => {
+  const { user } = useUser()
   const pathname = usePathname()
+  const navLinks = sidebarLinks(user?.id)
 
   return (
     <div className="flex flex-col gap-3">
-      {sidebarLinks.map((link) => {
+      {navLinks.map((link) => {
         const isActive =
           pathname === link.route || pathname.startsWith(`${link.route}/`)
 

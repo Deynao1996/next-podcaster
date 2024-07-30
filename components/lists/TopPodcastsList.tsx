@@ -2,8 +2,14 @@ import React from 'react'
 import { Button } from '../ui/button'
 import Link from 'next/link'
 import TopPodcaster from '../TopPodcaster'
+import { PopularPodcastProps } from '@/types'
+import { Id } from '@/convex/_generated/dataModel'
 
-const TopPodcastsList = () => {
+const TopPodcastsList = ({
+  popularPodcasts
+}: {
+  popularPodcasts: PopularPodcastProps[]
+}) => {
   return (
     <div>
       <div className="flex items-center justify-between px-8">
@@ -13,9 +19,18 @@ const TopPodcastsList = () => {
         </Button>
       </div>
       <ul className="mt-5 space-y-3">
-        {[...Array(4)].map((_, index) => (
-          <TopPodcaster key={index} />
-        ))}
+        {popularPodcasts.map(
+          ({ clerkId, imageUrl, name, totalPodcasts, totalViews }) => (
+            <TopPodcaster
+              key={clerkId}
+              imageUrl={imageUrl}
+              name={name}
+              totalPodcasts={totalPodcasts}
+              clerkId={clerkId}
+              totalViews={totalViews}
+            />
+          )
+        )}
       </ul>
     </div>
   )

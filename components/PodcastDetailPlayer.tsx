@@ -14,6 +14,7 @@ import { useMutation } from 'convex/react'
 import LoadingSpinner from './LoadingSpinner'
 import Link from 'next/link'
 import { api } from '@/convex/_generated/api'
+import { useAudio } from '@/providers/AudioProvider'
 
 const PodcastDetailPlayer = ({
   audioUrl,
@@ -28,7 +29,7 @@ const PodcastDetailPlayer = ({
   authorId
 }: PodcastDetailPlayerProps) => {
   const router = useRouter()
-  // const { setAudio } = useAudio();
+  const { setAudio } = useAudio()
   const { toast } = useToast()
   const [isDeleting, setIsDeleting] = useState(false)
   const deletePodcast = useMutation(api.podcasts.deletePodcast)
@@ -59,13 +60,13 @@ const PodcastDetailPlayer = ({
   }
 
   function handlePlay() {
-    // setAudio({
-    //   title: podcastTitle,
-    //   audioUrl,
-    //   imageUrl,
-    //   author,
-    //   podcastId,
-    // });
+    setAudio({
+      title: podcastTitle,
+      audioUrl,
+      imageUrl,
+      author,
+      podcastId
+    })
   }
 
   if (!imageUrl || !authorImageUrl) return <LoadingSpinner />
@@ -77,7 +78,7 @@ const PodcastDetailPlayer = ({
         alt="player"
         width={250}
         height={250}
-        className="h-[250px] flex-1 rounded-sm object-cover"
+        className="aspect-square h-[250px] flex-1 rounded-sm object-cover"
       />
       <div className="flex min-w-[240px] flex-[3] flex-col justify-between sm:py-3">
         <div>

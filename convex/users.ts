@@ -30,10 +30,15 @@ export const getTopUserByPodcastCount = query({
           .collect()
 
         const sortedPodcasts = podcasts.sort((a, b) => b.views - a.views)
+        const totalViews = sortedPodcasts.reduce(
+          (acc, podcast) => acc + podcast.views,
+          0
+        )
 
         return {
           ...u,
           totalPodcasts: podcasts.length,
+          totalViews,
           podcast: sortedPodcasts.map((p) => ({
             podcastTitle: p.podcastTitle,
             pocastId: p._id
@@ -42,7 +47,9 @@ export const getTopUserByPodcastCount = query({
       })
     )
 
-    return userData.sort((a, b) => b.totalPodcasts - a.totalPodcasts)
+    return userData
+      .sort((a, b) => b.totalPodcasts - a.totalPodcasts)
+      .slice(0, 4)
   }
 })
 

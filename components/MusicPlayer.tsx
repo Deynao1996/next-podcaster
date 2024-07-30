@@ -1,25 +1,130 @@
+'use client'
+
+import { cn, formatTime } from '@/lib/utils'
+import { useAudio } from '@/providers/AudioProvider'
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { Progress } from './ui/progress'
 
 const MusicPlayer = () => {
-  return
+  const audioRef = useRef<HTMLAudioElement>(null)
+  const { audio } = useAudio()
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [isMuted, setIsMuted] = useState(false)
+
+  const playerValue = (currentTime / duration) * 100
+
+  function togglePause() {
+    if (audioRef.current?.paused) {
+      audioRef.current?.play()
+      setIsPlaying(true)
+    } else {
+      audioRef.current?.pause()
+      setIsPlaying(false)
+    }
+  }
+
+  function toggleMute() {
+    if (audioRef.current) {
+      audioRef.current.muted = !isMuted
+      setIsMuted((prev) => !prev)
+    }
+  }
+
+  function forward() {
+    if (
+      audioRef.current &&
+      audioRef.current.currentTime &&
+      audioRef.current.duration &&
+      audioRef.current.currentTime + 5 < audioRef.current.duration
+    ) {
+      audioRef.current.currentTime += 5
+    }
+  }
+
+  function rewind() {
+    if (audioRef.current && audioRef.current.currentTime - 5 > 0) {
+      audioRef.current.currentTime -= 5
+    } else if (audioRef.current) {
+      audioRef.current.currentTime = 0
+    }
+  }
+
+  function handleLoadedMetadata() {
+    if (audioRef.current) {
+      setDuration(audioRef.current.duration)
+    }
+  }
+
+  function handleAudioEnded() {
+    setIsPlaying(false)
+  }
+
+  useEffect(() => {
+    const updateCurrentTime = () => {
+      if (audioRef.current) {
+        setCurrentTime(audioRef.current.currentTime)
+      }
+    }
+
+    const audioElement = audioRef.current
+    if (audioElement) {
+      audioElement.addEventListener('timeupdate', updateCurrentTime)
+
+      return () => {
+        audioElement.removeEventListener('timeupdate', updateCurrentTime)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    const audioElement = audioRef.current
+    if (audio?.audioUrl) {
+      if (audioElement) {
+        audioElement.play().then(() => {
+          setIsPlaying(true)
+        })
+      }
+    } else {
+      audioElement?.pause()
+      setIsPlaying(true)
+    }
+  }, [audio])
+
   return (
-    <div className="sticky bottom-0 w-full">
-      <div className="h-1 bg-[#2E3036]">
-        <div className="h-1 w-1/2 rounded-r-3xl bg-white"></div>
-      </div>
+    <div
+      className={cn('sticky bottom-0 w-full', {
+        hidden: !audio?.audioUrl || audio?.audioUrl === ''
+      })}
+    >
+      <Progress
+        value={playerValue}
+        className="h-1 rounded-none bg-[#2E3036]"
+        max={duration}
+      />
       <div className="glass flex h-[70px] items-center justify-between px-6 py-6 sm:h-[100px] sm:px-12">
+        <audio
+          ref={audioRef}
+          src={audio?.audioUrl}
+          className="hidden"
+          onLoadedMetadata={handleLoadedMetadata}
+          onEnded={handleAudioEnded}
+        />
         <div className="flex flex-1 items-center gap-3">
           <Image
-            src="/images/player1.png"
+            src={audio?.imageUrl || '/images/player1.png'}
             alt="player"
             width={60}
             height={60}
-            className="hidden h-[px60] w-[60px] rounded-sm object-cover sm:block"
+            className="hidden aspect-square w-[60px] rounded-sm object-cover sm:block"
           />
           <div className="flex flex-col justify-center gap-1 py-2">
-            <p>Joe Rogan</p>
-            <span className="text-muted-foreground text-sm">Joe Rogan</span>
+            <p className="font-semibold">{audio?.title}</p>
+            <span className="text-muted-foreground min-w-24 truncate text-sm">
+              {audio?.author}
+            </span>
           </div>
         </div>
 
@@ -29,17 +134,20 @@ const MusicPlayer = () => {
               src={'/icons/reverse.svg'}
               alt="reverse"
               width={24}
+              onClick={rewind}
+              className="cursor-pointer"
               height={24}
             />
-            <p className="text-muted-foreground text-sm">-15</p>
+            <p className="text-muted-foreground text-sm">-5</p>
           </div>
           <div>
             <Image
-              src={'/icons/play-gray.svg'}
+              src={isPlaying ? '/icons/Pause.svg' : '/icons/Play.svg'}
               alt="play"
               width={55}
               height={55}
-              className="h-[40px] w-[40px] sm:h-[55px] sm:w-[55px]"
+              className="h-[40px] w-[40px] cursor-pointer sm:h-[55px] sm:w-[55px]"
+              onClick={togglePause}
             />
           </div>
           <div className="hidden items-center gap-1 sm:flex">
@@ -47,21 +155,24 @@ const MusicPlayer = () => {
               src={'/icons/reverse.svg'}
               alt="reverse"
               width={24}
+              onClick={forward}
               height={24}
-              className="rotate-180"
+              className="rotate-180 cursor-pointer"
             />
-            <p className="text-muted-foreground text-sm">15+</p>
+            <p className="text-muted-foreground text-sm">5+</p>
           </div>
         </div>
 
         <div className="flex flex-1 items-center justify-end gap-6">
-          <span className="text-muted-foreground">1:45/4:42</span>
+          <span className="text-muted-foreground">{formatTime(duration)}</span>
           <div className="hidden items-center gap-3 sm:flex">
             <Image
-              src={'/icons/mute.svg'}
+              src={isMuted ? '/icons/unmute.svg' : '/icons/mute.svg'}
               alt="volume"
+              onClick={toggleMute}
               width={24}
               height={24}
+              className="cursor-pointer"
             />
             <div className="h-1 w-[90px] rounded-md bg-[#2E3036]">
               <div className="h-1 w-1/4 rounded-md bg-white"></div>
