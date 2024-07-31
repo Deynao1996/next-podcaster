@@ -1,28 +1,68 @@
 import Image from 'next/image'
 import React from 'react'
 import { Button } from './ui/button'
+import { LatestPodcastProps } from '@/types'
+import { formatTime } from '@/lib/utils'
+import Link from 'next/link'
+import {
+  Calendar,
+  Pause,
+  Play,
+  PlayCircle,
+  Square,
+  StopCircle,
+  Timer
+} from 'lucide-react'
+import { useAudio } from '@/providers/AudioProvider'
 
-type LatestPodcastProps = {
-  i: number
-}
+const LatestPodcast = ({
+  i,
+  audioDuration,
+  author,
+  imageUrl,
+  podcastTitle,
+  views,
+  _id,
+  _creationTime,
+  audioUrl
+}: LatestPodcastProps) => {
+  const { audio, setAudio, isPlaying, setIsPlaying } = useAudio()
+  const isCurrentPodcastPlaying = audio?.podcastId === _id && isPlaying
 
-const LatestPodcast = ({ i }: LatestPodcastProps) => {
+  function togglePlay() {
+    if (isCurrentPodcastPlaying) {
+      setAudio(null)
+    } else {
+      setAudio({
+        title: podcastTitle,
+        audioUrl,
+        imageUrl,
+        author,
+        podcastId: _id
+      })
+      setIsPlaying(true)
+    }
+  }
+
   return (
-    <li className="flex items-center justify-between gap-3">
+    <li className="relative flex items-center justify-between gap-3">
       <div className="basis-2.5">
         <span>{i + 1}</span>
       </div>
       <div className="flex flex-1 justify-between">
-        <div className="flex items-center gap-4">
+        <Link href={`/podcasts/${_id}`} className="flex items-center gap-4">
           <Image
-            src="/images/player1.png"
+            src={imageUrl}
             alt="podcast"
             width={50}
             height={54}
             className="h-[54px] w-[50px] rounded-sm"
           />
-          <p>Joe Rogan</p>
-        </div>
+          <div className="flex flex-col justify-center">
+            <span className="truncate font-semibold">{podcastTitle}</span>
+            <p className="text-muted-foreground text-sm">{author}</p>
+          </div>
+        </Link>
         <div className="flex w-1/2 justify-between">
           <div className="hidden items-center gap-2 sm:flex">
             <Image
@@ -32,31 +72,31 @@ const LatestPodcast = ({ i }: LatestPodcastProps) => {
               height={20}
               className="object-cover"
             />
-            <p className="text-sm">450,228</p>
+            <p className="text-sm">{views}</p>
           </div>
           <div className="flex items-center gap-2">
-            <Image
-              src={'/icons/watch.svg'}
-              alt="timer"
-              width={24}
-              height={24}
-            />
-            <p className="text-sm">1:04:27</p>
+            <Timer className="h-5 w-5" />
+            <p className="text-sm">{formatTime(audioDuration)}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Calendar className="h-5 w-5" />
+            <p className="text-sm">
+              {new Date(_creationTime).toLocaleDateString('en-US')}
+            </p>
           </div>
           <div className="flex items-center justify-center">
             <Button
               variant="secondary"
-              aria-label="options"
+              aria-label={isCurrentPodcastPlaying ? 'Pause' : 'Play'}
               className="hover:bg-background origin-center transition-all duration-200"
               size="icon"
+              onClick={togglePlay}
             >
-              <Image
-                src={'/icons/three-dots.svg'}
-                alt="dots"
-                className="w-auto rotate-90"
-                width={22}
-                height={24}
-              />
+              {isCurrentPodcastPlaying ? (
+                <Square className="h-5 w-5 fill-white" />
+              ) : (
+                <Play className="h-5 w-5" />
+              )}
             </Button>
           </div>
         </div>

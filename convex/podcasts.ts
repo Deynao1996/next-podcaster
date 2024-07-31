@@ -56,6 +56,13 @@ export const getTrendingPodcasts = query({
   }
 })
 
+export const getLatestPodcasts = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query('podcasts').order('desc').take(10)
+  }
+})
+
 export const getPodcastById = query({
   args: { podcastId: v.id('podcasts') },
   handler: async (ctx, args) => {
@@ -69,7 +76,6 @@ export const getPodcastByVoiceType = query({
   },
   handler: async (ctx, args) => {
     const podcast = await ctx.db.get(args.podcastId)
-    console.log(podcast)
 
     return await ctx.db
       .query('podcasts')
@@ -149,5 +155,20 @@ export const getPodcastByUserId = query({
       .query('podcasts')
       .filter((q) => q.eq(q.field('authorId'), args.userId))
       .collect()
+  }
+})
+
+export const increaseViews = mutation({
+  args: {
+    podcastId: v.id('podcasts')
+  },
+  handler: async (ctx, args) => {
+    const podcast = await ctx.db.get(args.podcastId)
+    if (!podcast) {
+      throw new ConvexError('Podcast not found')
+    }
+    return await ctx.db.patch(args.podcastId, {
+      views: podcast?.views + 1
+    })
   }
 })

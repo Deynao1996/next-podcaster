@@ -16,6 +16,7 @@ export const useAudio = () => {
 
 const AudioProvider = ({ children }: { children: React.ReactNode }) => {
   const [audio, setAudio] = useState<AudioProps | null>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
   const pathname = usePathname()
 
   useEffect(() => {
@@ -23,7 +24,7 @@ const AudioProvider = ({ children }: { children: React.ReactNode }) => {
   }, [])
 
   return (
-    <AudioContext.Provider value={{ audio, setAudio }}>
+    <AudioContext.Provider value={{ audio, setAudio, isPlaying, setIsPlaying }}>
       {children}
     </AudioContext.Provider>
   )

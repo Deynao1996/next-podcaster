@@ -88,4 +88,18 @@ export interface AudioProps {
 export interface AudioContextType {
   audio: AudioProps | null
   setAudio: React.Dispatch<React.SetStateAction<AudioProps | null>>
+  isPlaying: boolean
+  setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export interface LatestPodcastProps {
+  i: number
+  imageUrl: string
+  author: string
+  views: number
+  audioDuration: number
+  podcastTitle: string
+  _id: Id<'podcasts'>
+  _creationTime: number
+  audioUrl: string
 }

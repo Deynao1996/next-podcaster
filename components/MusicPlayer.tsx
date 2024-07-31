@@ -5,13 +5,18 @@ import { useAudio } from '@/providers/AudioProvider'
 import Image from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
 import { Progress } from './ui/progress'
+import { usePathname } from 'next/navigation'
+import { useMutation } from 'convex/react'
+import { api } from '@/convex/_generated/api'
 
 const MusicPlayer = () => {
+  const pathName = usePathname()
   const audioRef = useRef<HTMLAudioElement>(null)
-  const { audio } = useAudio()
+  const increaseViews = useMutation(api.podcasts.increaseViews)
+
+  const { audio, setAudio, isPlaying, setIsPlaying } = useAudio()
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
 
   const playerValue = (currentTime / duration) * 100
@@ -58,8 +63,17 @@ const MusicPlayer = () => {
     }
   }
 
-  function handleAudioEnded() {
-    setIsPlaying(false)
+  async function handleAudioEnded() {
+    if (audio?.podcastId) {
+      try {
+        await increaseViews({
+          podcastId: audio.podcastId
+        })
+      } catch (error) {
+        console.log(error)
+      }
+      setIsPlaying(false)
+    }
   }
 
   useEffect(() => {
@@ -92,6 +106,12 @@ const MusicPlayer = () => {
       setIsPlaying(true)
     }
   }, [audio])
+
+  useEffect(() => {
+    if (pathName === '/create-podcast') {
+      setAudio(null)
+    }
+  }, [pathName])
 
   return (
     <div
