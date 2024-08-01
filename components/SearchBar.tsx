@@ -1,8 +1,9 @@
 import { useDebounce } from '@/hooks/useDebounce'
+import { SearchBarProps } from '@/types'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
-const PodcastSearchBar = () => {
+const SearchBar = ({ href }: SearchBarProps) => {
   const [search, setSearch] = useState('')
   const router = useRouter()
   const pathname = usePathname()
@@ -10,9 +11,9 @@ const PodcastSearchBar = () => {
 
   useEffect(() => {
     if (debouncedValue) {
-      router.push(`/discover?search=${debouncedValue}`)
-    } else if (!debouncedValue && pathname === '/discover') {
-      router.push('/discover')
+      router.push(`/${href}?search=${debouncedValue}`)
+    } else if (!debouncedValue && pathname === `/${href}`) {
+      router.push(`/${href}`)
     }
   }, [router, debouncedValue, pathname])
 
@@ -57,4 +58,4 @@ const PodcastSearchBar = () => {
   )
 }
 
-export default PodcastSearchBar
+export default SearchBar

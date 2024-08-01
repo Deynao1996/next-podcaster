@@ -18,38 +18,52 @@ export const getUserById = query({
 })
 
 export const getTopUserByPodcastCount = query({
-  args: {},
+  args: {
+    search: v.string(),
+    length: v.optional(v.number())
+  },
   handler: async (ctx, args) => {
-    const user = await ctx.db.query('users').collect()
+    let user
+    if (args.search === '') {
+      user = await ctx.db.query('users').collect()
+    } else {
+      user = await ctx.db
+        .query('users')
+        .withSearchIndex('search_name', (q) => q.search('name', args.search))
+        .collect()
+    }
 
-    const userData = await Promise.all(
-      user.map(async (u) => {
-        const podcasts = await ctx.db
-          .query('podcasts')
-          .filter((q) => q.eq(q.field('authorId'), u.clerkId))
-          .collect()
+    if (user.length > 0) {
+      const userData = await Promise.all(
+        user.map(async (u) => {
+          const podcasts = await ctx.db
+            .query('podcasts')
+            .filter((q) => q.eq(q.field('authorId'), u.clerkId))
+            .collect()
 
-        const sortedPodcasts = podcasts.sort((a, b) => b.views - a.views)
-        const totalViews = sortedPodcasts.reduce(
-          (acc, podcast) => acc + podcast.views,
-          0
-        )
+          const sortedPodcasts = podcasts.sort((a, b) => b.views - a.views)
+          const totalViews = sortedPodcasts.reduce(
+            (acc, podcast) => acc + podcast.views,
+            0
+          )
 
-        return {
-          ...u,
-          totalPodcasts: podcasts.length,
-          totalViews,
-          podcast: sortedPodcasts.map((p) => ({
-            podcastTitle: p.podcastTitle,
-            pocastId: p._id
-          }))
-        }
-      })
-    )
+          return {
+            ...u,
+            totalPodcasts: podcasts.length,
+            totalViews,
+            podcast: sortedPodcasts.map((p) => ({
+              podcastTitle: p.podcastTitle,
+              pocastId: p._id
+            }))
+          }
+        })
+      )
 
-    return userData
-      .sort((a, b) => b.totalPodcasts - a.totalPodcasts)
-      .slice(0, 4)
+      return userData
+        .sort((a, b) => b.totalViews - a.totalViews)
+        .slice(0, args.length ? args.length : userData.length)
+    }
+    return []
   }
 })
 
@@ -119,5 +133,27 @@ export const deleteUser = internalMutation({
     }
 
     await ctx.db.delete(user._id)
+  }
+})
+
+export const getUserBySearch = query({
+  args: {
+    search: v.string()
+  },
+  handler: async (ctx, args) => {
+    if (args.search === '') {
+      return await ctx.db.query('users').order('desc').collect()
+    }
+
+    const nameSearch = await ctx.db
+      .query('users')
+      .withSearchIndex('search_name', (q) => q.search('name', args.search))
+      .take(10)
+
+    if (nameSearch.length > 0) {
+      return nameSearch
+    } else {
+      return []
+    }
   }
 })

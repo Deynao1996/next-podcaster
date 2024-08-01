@@ -10,7 +10,10 @@ import { api } from '@/convex/_generated/api'
 import LoadingSpinner from '../LoadingSpinner'
 
 const PopularPodcastList = () => {
-  const popularPodcasts = useQuery(api.users.getTopUserByPodcastCount)
+  const popularPodcasts = useQuery(api.users.getTopUserByPodcastCount, {
+    search: '',
+    length: 4
+  })
 
   if (!popularPodcasts) return <LoadingSpinner />
 
@@ -20,7 +23,7 @@ const PopularPodcastList = () => {
         <div className="flex items-center justify-between">
           <h4 className="scroll-m-20 text-xl font-semibold">Fans Also Like</h4>
           <Button asChild variant="link" className="p-0">
-            <Link href={'/'}>See all</Link>
+            <Link href={'/discover'}>See all</Link>
           </Button>
         </div>
         <PopularPodcastSlider popularPodcasts={popularPodcasts} />

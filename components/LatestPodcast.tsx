@@ -50,7 +50,10 @@ const LatestPodcast = ({
         <span>{i + 1}</span>
       </div>
       <div className="flex flex-1 justify-between">
-        <Link href={`/podcasts/${_id}`} className="flex items-center gap-4">
+        <Link
+          href={`/podcasts/${_id}`}
+          className="group flex items-center gap-4"
+        >
           <Image
             src={imageUrl}
             alt="podcast"
@@ -62,6 +65,7 @@ const LatestPodcast = ({
             <span className="truncate font-semibold">{podcastTitle}</span>
             <p className="text-muted-foreground text-sm">{author}</p>
           </div>
+          <div className="pointer-events-none absolute h-full w-full focus-visible:[background-color:rgba(255,255,255,0.06)] group-hover:[background-color:rgba(255,255,255,0.06)]" />
         </Link>
         <div className="flex w-1/2 justify-between">
           <div className="hidden items-center gap-2 sm:flex">

@@ -1,7 +1,7 @@
 'use client'
 
 import EmptyState from '@/components/EmptyState'
-import PodcastSearchBar from '@/components/PodcastSearchBar'
+import SearchBar from '@/components/SearchBar'
 import PodcastList from '@/components/lists/PodcastList'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
@@ -13,7 +13,7 @@ const CreatePodcastPage = ({
 }) => {
   return (
     <section className="bg-secondary text-secondary-foreground px-4 py-9 sm:px-8">
-      <PodcastSearchBar />
+      <SearchBar href="discover" />
       <PodcastList
         label="discover"
         queryParams={{ search: search || '' }}

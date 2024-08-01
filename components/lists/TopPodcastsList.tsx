@@ -15,7 +15,7 @@ const TopPodcastsList = ({
       <div className="flex items-center justify-between px-8">
         <h5 className="scroll-m-20 text-xl font-semibold">Top Podcasters</h5>
         <Button asChild variant="link" className="p-0">
-          <Link href={'/'}>See all</Link>
+          <Link href={'/discover/podcasters'}>See all</Link>
         </Button>
       </div>
       <ul className="mt-5 space-y-3">

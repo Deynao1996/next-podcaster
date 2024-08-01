@@ -103,3 +103,7 @@ export interface LatestPodcastProps {
   _creationTime: number
   audioUrl: string
 }
+
+export interface SearchBarProps {
+  href: 'discover' | 'discover/podcasters'
+}

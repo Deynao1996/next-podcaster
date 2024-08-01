@@ -27,5 +27,5 @@ export default defineSchema({
     imageUrl: v.optional(v.string()),
     clerkId: v.string(),
     name: v.string()
-  })
+  }).searchIndex('search_name', { searchField: 'name' })
 })
