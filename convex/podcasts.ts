@@ -20,7 +20,8 @@ export const createPodcast = mutation({
     views: v.number(),
     audioDuration: v.number(),
     audioStorageId: v.union(v.id('_storage'), v.null()),
-    imageStorageId: v.union(v.id('_storage'), v.null())
+    imageStorageId: v.union(v.id('_storage'), v.null()),
+    transcription: v.string()
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity()
@@ -155,6 +156,19 @@ export const getPodcastByUserId = query({
       .query('podcasts')
       .filter((q) => q.eq(q.field('authorId'), args.userId))
       .collect()
+  }
+})
+
+export const getRandomPodcastByUserId = query({
+  args: {
+    userId: v.string()
+  },
+  handler: async (ctx, args) => {
+    const podcast = await ctx.db
+      .query('podcasts')
+      .filter((q) => q.eq(q.field('authorId'), args.userId))
+      .collect()
+    return podcast[Math.floor(Math.random() * podcast.length)]
   }
 })
 

@@ -59,7 +59,7 @@ const LatestPodcast = ({
             alt="podcast"
             width={50}
             height={54}
-            className="h-[54px] w-[50px] rounded-sm"
+            className="h-[54px] w-[50px] rounded-sm object-cover"
           />
           <div className="flex flex-col justify-center">
             <span className="truncate font-semibold">{podcastTitle}</span>

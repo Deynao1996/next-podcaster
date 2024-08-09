@@ -4,22 +4,51 @@ import EmptyState from '@/components/EmptyState'
 import PodcastList from '@/components/lists/PodcastList'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import { Button } from '@/components/ui/button'
+import { useToast } from '@/components/ui/use-toast'
 import { api } from '@/convex/_generated/api'
+import { useAudio } from '@/providers/AudioProvider'
+import { AudioProps } from '@/types'
 import { useQuery } from 'convex/react'
-import { User } from 'lucide-react'
+import { Play, Square, User } from 'lucide-react'
 import Image from 'next/image'
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 
 const ProfilePage = ({
   params: { userId }
 }: {
   params: { userId: string }
 }) => {
+  const { toast } = useToast()
   const currentUser = useQuery(api.users.getUserById, {
     clerkId: userId
   })
+  const randomPodcast = useQuery(api.podcasts.getRandomPodcastByUserId, {
+    userId
+  })
+  const { setAudio, isPlaying, audio } = useAudio()
 
   if (!currentUser) return <LoadingSpinner />
+
+  function handlePlayRandomPodcast() {
+    if (!randomPodcast) {
+      return toast({
+        title: 'No podcast found',
+        description: 'User has not uploaded any podcast yet.'
+      })
+    }
+
+    if (isPlaying && audio) {
+      setAudio(null)
+    } else {
+      setAudio({
+        audioUrl: randomPodcast.audioUrl,
+        podcastId: randomPodcast._id,
+        author: randomPodcast.author,
+        title: randomPodcast.podcastTitle,
+        imageUrl: randomPodcast.imageUrl
+      })
+    }
+  }
 
   return (
     <section className="bg-secondary text-secondary-foreground px-4 py-9 sm:px-8">
@@ -64,15 +93,22 @@ const ProfilePage = ({
               <p className="font-light">monthly listeners</p>
             </div>
           </div>
-          <Button size={'lg'} className="mt-4">
-            <Image
-              src="/icons/play.svg"
-              alt="play"
-              width={20}
-              height={20}
-              className="mr-2 h-[20px] w-[20px]"
-            />
-            Play a random podcast
+          <Button
+            size={'lg'}
+            className="mt-4 gap-2 font-semibold"
+            onClick={handlePlayRandomPodcast}
+          >
+            {isPlaying && !!audio ? (
+              <>
+                <Square className="h-5 w-5 fill-white" />
+                <p>Stop playing</p>
+              </>
+            ) : (
+              <>
+                <Play className="h-5 w-5" />
+                <p>Play a random podcast</p>
+              </>
+            )}
           </Button>
         </div>
       </div>

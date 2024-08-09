@@ -59,6 +59,7 @@ const CreatePage = () => {
   const [audioDuration, setAudioDuration] = useState(0)
   const [voiceType, setVoiceType] = useState('')
   const [voicePrompt, setVoicePrompt] = useState('')
+  const [transcription, setTranscription] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -111,7 +112,8 @@ const CreatePage = () => {
         views: 0,
         audioDuration,
         audioStorageId,
-        imageStorageId
+        imageStorageId,
+        transcription
       })
       handleCreateSuccessPodcast()
     } catch (error) {
@@ -194,6 +196,8 @@ const CreatePage = () => {
             voicePrompt={voicePrompt}
             setVoicePrompt={setVoicePrompt}
             setAudioDuration={setAudioDuration}
+            setTranscription={setTranscription}
+            transcription={transcription}
           />
           <GenerateThumbnail
             setImageUrl={setImageUrl}

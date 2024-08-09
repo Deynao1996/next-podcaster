@@ -10,42 +10,50 @@ export const useCreatePodcast = ({
   setAudio,
   voicePrompt,
   voiceType,
-  setAudioStorageId
+  setAudioStorageId,
+  setTranscription
 }: GeneratePodcastProps) => {
   const generatePodcast = useAction(api.playht.generateAudioAction)
+  const generateTranscription = useAction(api.gemini.generateTranscription)
   const getAudioUrl = useMutation(api.podcasts.getUrl)
-  const generateUploadUrl = useMutation(api.files.generateUploadUrl);
+  const generateUploadUrl = useMutation(api.files.generateUploadUrl)
+
   const { startUpload } = useUploadFiles(generateUploadUrl)
 
   const [isGenerating, setIsGenerating] = useState(false)
   const { toast } = useToast()
 
-  function failVoicePrompt() {
+  function alertUser(title: string, isDestructive?: boolean) {
     toast({
-      title: 'Please provide a voice type to generate a podcast'
+      title,
+      variant: isDestructive ? 'destructive' : 'default'
     })
     setIsGenerating(false)
   }
 
-  function successCreatingPodcast() {
-    toast({
-      title: 'Podcast created successfully'
-    })
-    setIsGenerating(false)
-  }
+  async function createTranscription() {
+    setIsGenerating(true)
+    setTranscription('')
+    if (!voicePrompt) {
+      return alertUser('Please provide a text prompt to generate a podcast')
+    }
 
-  function failCreatingPodcast() {
-    toast({
-      title: 'Error creating podcast',
-      variant: 'destructive'
-    })
-    setIsGenerating(false)
+    try {
+      const res = await generateTranscription({
+        prompt: voicePrompt
+      })
+      setTranscription(res)
+      alertUser('Transcription created successfully')
+    } catch (error) {
+      alertUser('Error creating podcast', true)
+    }
   }
 
   async function createPodcast() {
     setIsGenerating(true)
     setAudio('')
-    if (!voicePrompt) return failVoicePrompt()
+    if (!voicePrompt)
+      return alertUser('Please provide a voice type to generate a podcast')
 
     try {
       const res = await generatePodcast({
@@ -64,14 +72,15 @@ export const useCreatePodcast = ({
 
       const audioUrl = await getAudioUrl({ storageId })
       setAudio(audioUrl!)
-      successCreatingPodcast()
+      alertUser('Podcast created successfully')
     } catch (error) {
-      failCreatingPodcast()
+      alertUser('Error creating podcast', true)
     }
   }
 
   return {
     isGenerating,
-    createPodcast
+    createPodcast,
+    createTranscription
   }
 }

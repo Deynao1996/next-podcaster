@@ -15,6 +15,7 @@ import LoadingSpinner from './LoadingSpinner'
 import Link from 'next/link'
 import { api } from '@/convex/_generated/api'
 import { useAudio } from '@/providers/AudioProvider'
+import { Loader, Play, Square } from 'lucide-react'
 
 const PodcastDetailPlayer = ({
   audioUrl,
@@ -29,12 +30,14 @@ const PodcastDetailPlayer = ({
   authorId
 }: PodcastDetailPlayerProps) => {
   const router = useRouter()
-  const { setAudio } = useAudio()
+  const { setAudio, isPlaying, audio } = useAudio()
   const { toast } = useToast()
   const [isDeleting, setIsDeleting] = useState(false)
   const deletePodcast = useMutation(api.podcasts.deletePodcast)
 
   function handleDeleteSuccess() {
+    setAudio(null)
+    setIsDeleting(false)
     toast({
       title: 'Podcast deleted'
     })
@@ -42,6 +45,7 @@ const PodcastDetailPlayer = ({
   }
 
   function handleDeleteError(error: unknown) {
+    setIsDeleting(false)
     console.error('Error deleting podcast', error)
     toast({
       title: 'Error deleting podcast',
@@ -52,6 +56,7 @@ const PodcastDetailPlayer = ({
   async function handleDelete() {
     if (!imageStorageId || !audioStorageId) return
     try {
+      setIsDeleting(true)
       await deletePodcast({ podcastId, imageStorageId, audioStorageId })
       handleDeleteSuccess()
     } catch (error) {
@@ -60,13 +65,17 @@ const PodcastDetailPlayer = ({
   }
 
   function handlePlay() {
-    setAudio({
-      title: podcastTitle,
-      audioUrl,
-      imageUrl,
-      author,
-      podcastId
-    })
+    if (isPlaying && audio) {
+      setAudio(null)
+    } else {
+      setAudio({
+        title: podcastTitle,
+        audioUrl,
+        imageUrl,
+        author,
+        podcastId
+      })
+    }
   }
 
   if (!imageUrl || !authorImageUrl) return <LoadingSpinner />
@@ -80,7 +89,7 @@ const PodcastDetailPlayer = ({
         height={250}
         className="aspect-square h-[250px] flex-1 rounded-sm object-cover"
       />
-      <div className="flex min-w-[240px] flex-[3] flex-col justify-between sm:py-3">
+      <div className="flex min-w-[240px] flex-[3] flex-col sm:py-3">
         <div>
           <h6 className="text-2xl font-bold">{podcastTitle}</h6>
           <Link
@@ -94,45 +103,34 @@ const PodcastDetailPlayer = ({
               height={30}
               className="h-[30px] w-[30px] rounded-full object-cover"
             />
-            <p className="text-muted-foreground text-sm">Cristopher Solits</p>
+            <p className="text-muted-foreground text-sm">{author}</p>
           </Link>
           <div className="mt-2 flex items-center gap-3"></div>
         </div>
-        <div className="mt-10 flex items-center gap-2">
-          <Button variant={'link'} size={'icon'}>
-            <Image
-              src={'/icons/reverse.svg'}
-              alt="reverse"
-              width={24}
-              height={24}
-              className="h-[24px] w-[24px]"
-            />
+        {isDeleting ? (
+          <Button disabled className="mt-4 max-w-56 font-semibold" size={'sm'}>
+            Deleting
+            <Loader size={20} className="ml-2 animate-spin" />
           </Button>
-          <Button variant={'link'} className="p-0" onClick={handlePlay}>
-            <Image
-              src={'/icons/play-gray.svg'}
-              alt="play"
-              width={60}
-              height={60}
-              className="h-[60px] w-[60px]"
-            />
+        ) : (
+          <Button
+            size={'sm'}
+            className="mt-4 max-w-56 gap-2 font-semibold"
+            onClick={handlePlay}
+          >
+            {isPlaying && !!audio ? (
+              <>
+                <Square className="h-5 w-5 fill-white" />
+                <p>Stop playing</p>
+              </>
+            ) : (
+              <>
+                <Play className="h-5 w-5" />
+                <p>Play podcast</p>
+              </>
+            )}
           </Button>
-          <Button variant={'link'} size={'icon'}>
-            <Image
-              src={'/icons/reverse.svg'}
-              alt="reverse"
-              width={24}
-              height={24}
-              className="h-[24px] w-[24px] rotate-180"
-            />
-          </Button>
-        </div>
-        <div className="mt-5 flex flex-col gap-1 px-2">
-          <span className="text-muted-foreground">1:45/4:42</span>
-          <div className="h-1 bg-[#2E3036]">
-            <div className="h-1 w-1/2 rounded-3xl bg-white"></div>
-          </div>
-        </div>
+        )}
       </div>
       <div className="flex flex-1 items-start justify-end">
         {isOwner && (
@@ -147,17 +145,10 @@ const PodcastDetailPlayer = ({
               />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem className="gap-3">
-                <Image
-                  src={'/icons/edit.svg'}
-                  alt="edit"
-                  width={16}
-                  height={16}
-                  className="h-[16px] w-[16px]"
-                />
-                <p>Edit</p>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="gap-3">
+              <DropdownMenuItem
+                className="cursor-pointer gap-3"
+                onClick={handleDelete}
+              >
                 <Image
                   src={'/icons/delete.svg'}
                   alt="delete"
