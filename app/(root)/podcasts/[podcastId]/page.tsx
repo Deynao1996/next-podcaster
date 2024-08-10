@@ -54,7 +54,7 @@ const DetailsPage = ({ params: { podcastId } }: DetailsPageProps) => {
       <div className="mt-6 font-bold">Prompt for AI:</div>
       <p className="font-light leading-7">{currentPodcast?.voicePrompt}</p>
       <div className="mt-6 font-bold">Transcription:</div>
-      <p className="font-light leading-7">Lorem ipsum dolor sit amet.</p>
+      <p className="font-light leading-7">{currentPodcast?.transcription}</p>
       <div className="mt-6 font-bold">Thumbnail prompt:</div>
       <p className="text-muted-foreground font-light leading-7">
         /* Functionality to be added */

@@ -159,7 +159,7 @@ export const getPodcastByUserId = query({
   }
 })
 
-export const getRandomPodcastByUserId = query({
+export const getPopularPodcastByUserId = query({
   args: {
     userId: v.string()
   },
@@ -168,7 +168,10 @@ export const getRandomPodcastByUserId = query({
       .query('podcasts')
       .filter((q) => q.eq(q.field('authorId'), args.userId))
       .collect()
-    return podcast[Math.floor(Math.random() * podcast.length)]
+    return podcast.reduce(
+      (max, obj) => (obj.views > max.views ? obj : max),
+      podcast[0]
+    )
   }
 })
 

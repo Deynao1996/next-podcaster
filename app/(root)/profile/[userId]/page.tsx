@@ -22,7 +22,7 @@ const ProfilePage = ({
   const currentUser = useQuery(api.users.getUserById, {
     clerkId: userId
   })
-  const randomPodcast = useQuery(api.podcasts.getRandomPodcastByUserId, {
+  const popularPodcast = useQuery(api.podcasts.getPopularPodcastByUserId, {
     userId
   })
   const { setAudio, isPlaying, audio } = useAudio()
@@ -30,7 +30,7 @@ const ProfilePage = ({
   if (!currentUser) return <LoadingSpinner />
 
   function handlePlayRandomPodcast() {
-    if (!randomPodcast) {
+    if (!popularPodcast) {
       return toast({
         title: 'No podcast found',
         description: 'User has not uploaded any podcast yet.'
@@ -41,11 +41,11 @@ const ProfilePage = ({
       setAudio(null)
     } else {
       setAudio({
-        audioUrl: randomPodcast.audioUrl,
-        podcastId: randomPodcast._id,
-        author: randomPodcast.author,
-        title: randomPodcast.podcastTitle,
-        imageUrl: randomPodcast.imageUrl
+        audioUrl: popularPodcast.audioUrl,
+        podcastId: popularPodcast._id,
+        author: popularPodcast.author,
+        title: popularPodcast.podcastTitle,
+        imageUrl: popularPodcast.imageUrl
       })
     }
   }
@@ -106,7 +106,7 @@ const ProfilePage = ({
             ) : (
               <>
                 <Play className="h-5 w-5" />
-                <p>Play a random podcast</p>
+                <p>Play a popular podcast</p>
               </>
             )}
           </Button>

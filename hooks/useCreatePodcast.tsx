@@ -11,7 +11,8 @@ export const useCreatePodcast = ({
   voicePrompt,
   voiceType,
   setAudioStorageId,
-  setTranscription
+  setTranscription,
+  transcription
 }: GeneratePodcastProps) => {
   const generatePodcast = useAction(api.playht.generateAudioAction)
   const generateTranscription = useAction(api.gemini.generateTranscription)
@@ -52,13 +53,15 @@ export const useCreatePodcast = ({
   async function createPodcast() {
     setIsGenerating(true)
     setAudio('')
-    if (!voicePrompt)
+    if (!voiceType)
       return alertUser('Please provide a voice type to generate a podcast')
+    if (!transcription)
+      return alertUser('Please generate a transcription first')
 
     try {
       const res = await generatePodcast({
         voice: voiceType,
-        input: voicePrompt
+        input: transcription
       })
 
       const blob = new Blob([res], { type: 'audio/mpeg' })

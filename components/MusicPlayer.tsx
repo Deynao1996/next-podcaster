@@ -8,6 +8,7 @@ import { Progress } from './ui/progress'
 import { usePathname } from 'next/navigation'
 import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
+import { Slider } from './ui/slider'
 
 const MusicPlayer = () => {
   const pathName = usePathname()
@@ -115,8 +116,8 @@ const MusicPlayer = () => {
 
   return (
     <div
-      className={cn('sticky bottom-0 w-full', {
-        hidden: !audio?.audioUrl || audio?.audioUrl === ''
+      className={cn('sticky bottom-0 w-full transition-all duration-300', {
+        '-bottom-full': !audio?.audioUrl || audio?.audioUrl === ''
       })}
     >
       <Progress
@@ -194,9 +195,12 @@ const MusicPlayer = () => {
               height={24}
               className="cursor-pointer"
             />
-            <div className="h-1 w-[90px] rounded-md bg-[#2E3036]">
-              <div className="h-1 w-1/4 rounded-md bg-white"></div>
-            </div>
+            <Slider
+              className="w-[90px] cursor-pointer"
+              defaultValue={[33]}
+              max={100}
+              step={1}
+            />
           </div>
         </div>
       </div>
