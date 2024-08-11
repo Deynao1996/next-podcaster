@@ -109,3 +109,8 @@ export interface LatestPodcastProps {
 export interface SearchBarProps {
   href: 'discover' | 'discover/podcasters'
 }
+
+export interface ImageUploaderProps extends GenerateThumbnailProps {
+  isThumbnailGenerating: boolean
+  setIsThumbnailGenerating: React.Dispatch<React.SetStateAction<boolean>>
+}

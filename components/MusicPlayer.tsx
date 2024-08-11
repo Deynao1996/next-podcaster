@@ -133,9 +133,12 @@ const MusicPlayer = () => {
 
   return (
     <div
-      className={cn('sticky bottom-0 w-full transition-all duration-300', {
-        '-bottom-full': !audio?.audioUrl || audio?.audioUrl === ''
-      })}
+      className={cn(
+        'sticky bottom-0 block w-full transition-all duration-300',
+        {
+          hidden: !audio?.audioUrl || audio?.audioUrl === ''
+        }
+      )}
     >
       <Progress
         onClick={handleSkipValue}
