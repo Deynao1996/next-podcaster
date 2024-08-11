@@ -8,17 +8,21 @@ import { Progress } from './ui/progress'
 import { usePathname } from 'next/navigation'
 import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
-import { Slider } from './ui/slider'
+import VolumeControl from './VolumeControl'
+import { createPortal } from 'react-dom'
+import { Card } from './ui/card'
+import PlayerHoverTimeLabel from './PlayerHoverTimeLabel'
 
 const MusicPlayer = () => {
   const pathName = usePathname()
   const audioRef = useRef<HTMLAudioElement>(null)
+  const hoverTimeRef = useRef<HTMLDivElement>(null)
   const increaseViews = useMutation(api.podcasts.increaseViews)
 
   const { audio, setAudio, isPlaying, setIsPlaying } = useAudio()
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
-  const [isMuted, setIsMuted] = useState(false)
+  const [isTimeLineHovered, setIsTimeLineHovered] = useState(false)
 
   const playerValue = (currentTime / duration) * 100
 
@@ -32,10 +36,14 @@ const MusicPlayer = () => {
     }
   }
 
-  function toggleMute() {
-    if (audioRef.current) {
-      audioRef.current.muted = !isMuted
-      setIsMuted((prev) => !prev)
+  function moveTimeBoxByX(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    if (hoverTimeRef.current) {
+      const isLeftPartScreen = e.screenX > document.body.clientWidth / 6
+      const boxWidth = hoverTimeRef.current.clientWidth
+      const transformedValue = isLeftPartScreen
+        ? e.screenX - boxWidth
+        : e.screenX
+      hoverTimeRef.current.style.left = `${transformedValue}px`
     }
   }
 
@@ -61,6 +69,15 @@ const MusicPlayer = () => {
   function handleLoadedMetadata() {
     if (audioRef.current) {
       setDuration(audioRef.current.duration)
+    }
+  }
+
+  function handleSkipValue(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    if (audioRef.current) {
+      const onClickedValue = (e.screenX / document.body.clientWidth) * 100
+      const difference = onClickedValue - playerValue
+      const skippedValue = (difference * duration) / 100
+      audioRef.current!.currentTime += skippedValue
     }
   }
 
@@ -121,9 +138,18 @@ const MusicPlayer = () => {
       })}
     >
       <Progress
+        onClick={handleSkipValue}
         value={playerValue}
-        className="h-1 rounded-none bg-[#2E3036]"
+        onMouseMove={moveTimeBoxByX}
+        onMouseEnter={() => setIsTimeLineHovered(true)}
+        onMouseLeave={() => setIsTimeLineHovered(false)}
+        className="z-10 h-1 cursor-pointer rounded-none bg-[#2E3036]"
         max={duration}
+      />
+      <PlayerHoverTimeLabel
+        ref={hoverTimeRef}
+        duration={duration}
+        isTimeLineHovered={isTimeLineHovered}
       />
       <div className="glass flex h-[70px] items-center justify-between px-6 py-6 sm:h-[100px] sm:px-12">
         <audio
@@ -186,22 +212,7 @@ const MusicPlayer = () => {
 
         <div className="flex flex-1 items-center justify-end gap-6">
           <span className="text-muted-foreground">{formatTime(duration)}</span>
-          <div className="hidden items-center gap-3 sm:flex">
-            <Image
-              src={isMuted ? '/icons/unmute.svg' : '/icons/mute.svg'}
-              alt="volume"
-              onClick={toggleMute}
-              width={24}
-              height={24}
-              className="cursor-pointer"
-            />
-            <Slider
-              className="w-[90px] cursor-pointer"
-              defaultValue={[33]}
-              max={100}
-              step={1}
-            />
-          </div>
+          <VolumeControl audioRef={audioRef} />
         </div>
       </div>
     </div>
