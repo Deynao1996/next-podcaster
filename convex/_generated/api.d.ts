@@ -14,6 +14,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as blurhash from "../blurhash.js";
 import type * as files from "../files.js";
 import type * as gemini from "../gemini.js";
 import type * as http from "../http.js";
@@ -30,6 +31,7 @@ import type * as users from "../users.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  blurhash: typeof blurhash;
   files: typeof files;
   gemini: typeof gemini;
   http: typeof http;

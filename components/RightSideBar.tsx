@@ -14,7 +14,7 @@ const RightSideBar = () => {
     <section className="sticky left-0 top-0 py-9">
       <SignedIn>
         <Link
-          href={`profile/${user?.id}`}
+          href={`/profile/${user?.id}`}
           className="link-hover-effect mb-10 flex items-center justify-between px-8 py-3 hover:[background-color:rgba(255,255,255,0.06)]"
         >
           <div className="flex items-center gap-3">

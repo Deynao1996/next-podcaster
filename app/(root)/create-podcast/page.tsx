@@ -26,7 +26,7 @@ import { voiceCategories } from '@/constants'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from 'convex/react'
+import { useAction, useMutation } from 'convex/react'
 import { Loader } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -46,6 +46,7 @@ const CreatePage = () => {
   const { toast } = useToast()
   const router = useRouter()
   const createPodcast = useMutation(api.podcasts.createPodcast)
+  const createBlurHash = useAction(api.blurhash.encodeImageToBlurhash)
 
   const [imagePrompt, setImagePrompt] = useState('')
   const [imageStorageId, setImageStorageId] = useState<Id<'_storage'> | null>(
@@ -71,7 +72,6 @@ const CreatePage = () => {
   })
 
   function handleCreateErrorPodcast(error: unknown) {
-    console.log(error)
     setIsSubmitting(false)
     toast({
       variant: 'destructive',
@@ -101,6 +101,7 @@ const CreatePage = () => {
     setIsSubmitting(true)
 
     try {
+      const blurhash = await createBlurHash({ imageUrl })
       await createPodcast({
         podcastTitle: data.podcastTitle,
         podcastDescription: data.description,
@@ -113,7 +114,8 @@ const CreatePage = () => {
         audioDuration,
         audioStorageId,
         imageStorageId,
-        transcription
+        transcription,
+        blurhash
       })
       handleCreateSuccessPodcast()
     } catch (error) {
@@ -206,7 +208,11 @@ const CreatePage = () => {
             setImageStorageId={setImageStorageId}
             setImagePrompt={setImagePrompt}
           />
-          <Button className="w-full" aria-label="Submit">
+          <Button
+            className="w-full"
+            aria-label="Submit"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? (
               <>
                 Submitting

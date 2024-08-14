@@ -1,5 +1,6 @@
 import { ConvexError, v } from 'convex/values'
-import { mutation, query } from './_generated/server'
+import { action, mutation, query } from './_generated/server'
+import { internal } from './_generated/api'
 
 export const getUrl = mutation({
   args: { storageId: v.id('_storage') },
@@ -18,6 +19,7 @@ export const createPodcast = mutation({
     imagePrompt: v.string(),
     voicePrompt: v.string(),
     views: v.number(),
+    blurhash: v.string(),
     audioDuration: v.number(),
     audioStorageId: v.union(v.id('_storage'), v.null()),
     imageStorageId: v.union(v.id('_storage'), v.null()),

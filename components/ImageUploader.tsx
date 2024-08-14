@@ -155,6 +155,7 @@ const ImageUploader = ({
           <input
             id="dropzone-file"
             type="file"
+            accept="image/png, image/jpeg"
             className="hidden"
             onChange={uploadImage}
           />

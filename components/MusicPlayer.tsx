@@ -21,7 +21,7 @@ const MusicPlayer = () => {
 
   const { audio, setAudio, isPlaying, setIsPlaying } = useAudio()
   const [currentTime, setCurrentTime] = useState(0)
-  const [duration, setDuration] = useState(0)
+  const [duration, setDuration] = useState(0.1)
   const [isTimeLineHovered, setIsTimeLineHovered] = useState(false)
 
   const playerValue = (currentTime / duration) * 100
@@ -179,16 +179,18 @@ const MusicPlayer = () => {
         </div>
 
         <div className="flex flex-1 items-center justify-center gap-6">
-          <div className="hidden items-center gap-1 sm:flex">
+          <div className="group hidden items-center gap-1 sm:flex">
             <Image
               src={'/icons/reverse.svg'}
               alt="reverse"
               width={24}
               onClick={rewind}
-              className="cursor-pointer"
+              className="cursor-pointer group-hover:opacity-65"
               height={24}
             />
-            <p className="text-muted-foreground text-sm">-5</p>
+            <p className="text-muted-foreground text-sm group-hover:text-white">
+              -5
+            </p>
           </div>
           <div>
             <Image
@@ -196,20 +198,22 @@ const MusicPlayer = () => {
               alt="play"
               width={55}
               height={55}
-              className="h-[40px] w-[40px] cursor-pointer sm:h-[55px] sm:w-[55px]"
+              className="h-[40px] w-[40px] cursor-pointer transition-opacity hover:opacity-65 sm:h-[55px] sm:w-[55px]"
               onClick={togglePause}
             />
           </div>
-          <div className="hidden items-center gap-1 sm:flex">
+          <div className="group hidden items-center gap-1 sm:flex">
             <Image
               src={'/icons/reverse.svg'}
               alt="reverse"
               width={24}
               onClick={forward}
               height={24}
-              className="rotate-180 cursor-pointer"
+              className="rotate-180 cursor-pointer group-hover:opacity-65"
             />
-            <p className="text-muted-foreground text-sm">5+</p>
+            <p className="text-muted-foreground text-sm group-hover:text-white">
+              5+
+            </p>
           </div>
         </div>
 

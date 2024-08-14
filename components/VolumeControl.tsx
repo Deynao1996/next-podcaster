@@ -44,7 +44,7 @@ const VolumeControl = ({
         onClick={toggleMute}
         width={24}
         height={24}
-        className="cursor-pointer"
+        className="cursor-pointer transition-opacity hover:opacity-65"
       />
       <Slider
         className="w-[90px] cursor-pointer"

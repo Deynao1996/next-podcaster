@@ -9,13 +9,12 @@ import { api } from '@/convex/_generated/api'
 import { DetailsPageProps } from '@/types'
 import { useUser } from '@clerk/nextjs'
 import { useQuery } from 'convex/react'
+import { Mic } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
 //TODO Check all aria labels
-//TODO Check Image warnings
-//TODO Restyle login default page
 
 const DetailsPage = ({ params: { podcastId } }: DetailsPageProps) => {
   const { user } = useUser()
@@ -73,13 +72,7 @@ const DetailsPage = ({ params: { podcastId } }: DetailsPageProps) => {
             <div className="mt-5 flex items-center justify-center">
               <Button className="w-full max-w-[300px]" asChild>
                 <Link href={'/create-podcast'}>
-                  <Image
-                    src={'/icons/microphone.svg'}
-                    alt="microphone"
-                    width={24}
-                    height={24}
-                    className="mr-2 h-[`24px] w-[24px]"
-                  />
+                  <Mic className="mr-2 h-[`24px] w-[24px]" />
                   Create a Podcast
                 </Link>
               </Button>

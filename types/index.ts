@@ -42,6 +42,7 @@ export interface PodcastBoxProps {
   podcastTitle: string
   podcastDescription: string
   imageUrl: string
+  blurhash: string
 }
 
 export interface DetailsPageProps {
@@ -113,4 +114,9 @@ export interface SearchBarProps {
 export interface ImageUploaderProps extends GenerateThumbnailProps {
   isThumbnailGenerating: boolean
   setIsThumbnailGenerating: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export interface CustomSkeletonProps {
+  type: 'podcasts'
+  count?: number
 }

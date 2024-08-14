@@ -91,7 +91,7 @@ const PodcastDetailPlayer = ({
       />
       <div className="flex min-w-[240px] flex-[3] flex-col sm:py-3">
         <div>
-          <h6 className="text-2xl font-bold">{podcastTitle}</h6>
+          <h6 className="text-2xl font-bold capitalize">{podcastTitle}</h6>
           <Link
             className="mt-2 flex items-center gap-3"
             href={`/profile/${authorId}`}
