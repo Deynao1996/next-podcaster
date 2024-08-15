@@ -118,7 +118,15 @@ export interface ImageUploaderProps extends GenerateThumbnailProps {
   setIsThumbnailGenerating: React.Dispatch<React.SetStateAction<boolean>>
 }
 
+type SkeletonType =
+  | 'podcasts'
+  | 'latest'
+  | 'user'
+  | 'slider'
+  | 'top-podcasters'
+  | 'profile'
+
 export interface CustomSkeletonProps {
-  type: 'podcasts'
+  type: SkeletonType
   count?: number
 }

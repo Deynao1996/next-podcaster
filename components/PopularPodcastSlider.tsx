@@ -9,14 +9,16 @@ import {
 import DotActionButtons from './DotActionButtons'
 import Link from 'next/link'
 import Autoplay from 'embla-carousel-autoplay'
-import LoadingSpinner from './LoadingSpinner'
 import { PopularPodcastProps } from '@/types'
+import CustomSkeleton from './CustomSkeleton'
 
 const PopularPodcastSlider = ({
   popularPodcasts
 }: {
-  popularPodcasts: PopularPodcastProps[]
+  popularPodcasts?: PopularPodcastProps[]
 }) => {
+  if (!popularPodcasts) return <CustomSkeleton type="slider" />
+
   return (
     <Carousel
       className="mt-4"
@@ -39,8 +41,7 @@ const PopularPodcastSlider = ({
                       src={item.imageUrl}
                       alt="Popular Podcast"
                       fill
-                      priority
-                      sizes="(max-width: 768px) 100vw, 50vw"
+                      sizes="(max-width: 768px) 100vw, 400px"
                       className="aspect-square rounded-lg object-cover"
                     />
                   )}

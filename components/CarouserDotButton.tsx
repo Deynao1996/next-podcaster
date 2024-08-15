@@ -59,9 +59,10 @@ type DotButtonProps = {
 
 export const DotButton: React.FC<DotButtonProps> = ({ selected, onClick }) => {
   return (
-    <button
-      type="button"
+    <div
       onClick={onClick}
+      role="button"
+      aria-label="Select slide"
       className={cn(
         'bg-muted size-2.5 cursor-pointer rounded-full transition-all duration-500',
         {

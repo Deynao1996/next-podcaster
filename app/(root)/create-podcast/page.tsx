@@ -151,7 +151,10 @@ const CreatePage = () => {
             <FormLabel>Select AI Voice</FormLabel>
             <FormControl>
               <Select onValueChange={(value) => setVoiceType(value)}>
-                <SelectTrigger className="text-muted-foreground capitalize">
+                <SelectTrigger
+                  className="text-muted-foreground capitalize"
+                  aria-label="Select voice"
+                >
                   <SelectValue placeholder="Select voice" />
                 </SelectTrigger>
                 <SelectContent>

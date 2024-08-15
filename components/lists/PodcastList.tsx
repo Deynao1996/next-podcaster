@@ -1,9 +1,7 @@
-import React, { useEffect } from 'react'
 import PodcastBox from '../PodcastBox'
 import { PodcastListProps } from '@/types'
 import { api } from '@/convex/_generated/api'
 import { useQuery } from 'convex/react'
-import LoadingSpinner from '../LoadingSpinner'
 import CustomSkeleton from '../CustomSkeleton'
 
 const queryFns = {

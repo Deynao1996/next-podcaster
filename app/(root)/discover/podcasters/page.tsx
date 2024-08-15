@@ -1,13 +1,10 @@
 'use client'
 
 import EmptyState from '@/components/EmptyState'
-import LoadingSpinner from '@/components/LoadingSpinner'
 import SearchBar from '@/components/SearchBar'
-import PodcastList from '@/components/lists/PodcastList'
-import { Button } from '@/components/ui/button'
 import { api } from '@/convex/_generated/api'
 import { useQuery } from 'convex/react'
-import { ExternalLink, Headphones, User } from 'lucide-react'
+import { ExternalLink, Headphones, Loader, User } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -40,7 +37,9 @@ const PodcastersPage = ({
         />
       )}
       {!users ? (
-        <LoadingSpinner />
+        <div className="flex h-screen w-full items-center justify-center">
+          <Loader className="text-primary animate-spin" size={40} />
+        </div>
       ) : (
         <ul className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {users.map((user) => (

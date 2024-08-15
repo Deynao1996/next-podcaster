@@ -11,7 +11,6 @@ import { PodcastDetailPlayerProps } from '@/types'
 import { useRouter } from 'next/navigation'
 import { useToast } from './ui/use-toast'
 import { useMutation } from 'convex/react'
-import LoadingSpinner from './LoadingSpinner'
 import Link from 'next/link'
 import { api } from '@/convex/_generated/api'
 import { useAudio } from '@/providers/AudioProvider'
@@ -81,7 +80,7 @@ const PodcastDetailPlayer = ({
     }
   }
 
-  if (!imageUrl || !authorImageUrl) return <LoadingSpinner />
+  if (!imageUrl || !authorImageUrl) return
 
   return (
     <div className="mt-8 flex flex-wrap justify-between gap-8">

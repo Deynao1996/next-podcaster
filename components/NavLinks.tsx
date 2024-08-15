@@ -46,7 +46,7 @@ const NavLinks = ({ withSheetClose }: { withSheetClose?: boolean }) => {
               )}
               <Image
                 src={link.imgURL}
-                alt={link.label}
+                alt={`Navigation icon to ${link.label}`}
                 width={23}
                 height={23}
               />

@@ -7,15 +7,12 @@ import PopularPodcastSlider from '../PopularPodcastSlider'
 import TopPodcastsList from './TopPodcastsList'
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
-import LoadingSpinner from '../LoadingSpinner'
 
 const PopularPodcastList = () => {
   const popularPodcasts = useQuery(api.users.getTopUserByPodcastCount, {
     search: '',
     length: 4
   })
-
-  if (!popularPodcasts) return <LoadingSpinner />
 
   return (
     <div>

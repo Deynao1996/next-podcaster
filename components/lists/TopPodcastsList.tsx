@@ -3,12 +3,12 @@ import { Button } from '../ui/button'
 import Link from 'next/link'
 import TopPodcaster from '../TopPodcaster'
 import { PopularPodcastProps } from '@/types'
-import { Id } from '@/convex/_generated/dataModel'
+import CustomSkeleton from '../CustomSkeleton'
 
 const TopPodcastsList = ({
   popularPodcasts
 }: {
-  popularPodcasts: PopularPodcastProps[]
+  popularPodcasts?: PopularPodcastProps[]
 }) => {
   return (
     <div>
@@ -18,20 +18,24 @@ const TopPodcastsList = ({
           <Link href={'/discover/podcasters'}>See all</Link>
         </Button>
       </div>
-      <ul className="mt-5 space-y-3">
-        {popularPodcasts.map(
-          ({ clerkId, imageUrl, name, totalPodcasts, totalViews }) => (
-            <TopPodcaster
-              key={clerkId}
-              imageUrl={imageUrl}
-              name={name}
-              totalPodcasts={totalPodcasts}
-              clerkId={clerkId}
-              totalViews={totalViews}
-            />
-          )
-        )}
-      </ul>
+      {!popularPodcasts ? (
+        <CustomSkeleton type="top-podcasters" count={2} />
+      ) : (
+        <ul className="mt-5 space-y-3">
+          {popularPodcasts.map(
+            ({ clerkId, imageUrl, name, totalPodcasts, totalViews }) => (
+              <TopPodcaster
+                key={clerkId}
+                imageUrl={imageUrl}
+                name={name}
+                totalPodcasts={totalPodcasts}
+                clerkId={clerkId}
+                totalViews={totalViews}
+              />
+            )
+          )}
+        </ul>
+      )}
     </div>
   )
 }
