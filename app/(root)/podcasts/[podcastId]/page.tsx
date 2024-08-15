@@ -36,7 +36,7 @@ const DetailsPage = ({ params: { podcastId } }: DetailsPageProps) => {
             alt="headphone"
             width={24}
             height={24}
-            className="h-[24px] w-[24px]"
+            className="size-6"
           />
           <p>{currentPodcast?.views}</p>
         </div>

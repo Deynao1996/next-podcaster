@@ -72,14 +72,16 @@ export const createUser = internalMutation({
     clerkId: v.string(),
     name: v.string(),
     email: v.string(),
-    imageUrl: v.optional(v.string())
+    imageUrl: v.optional(v.string()),
+    blurhash: v.optional(v.string())
   },
   handler: async (ctx, args) => {
     await ctx.db.insert('users', {
       clerkId: args.clerkId,
       name: args.name,
       email: args.email,
-      imageUrl: args.imageUrl
+      imageUrl: args.imageUrl,
+      blurhash: args.blurhash
     })
   }
 })
@@ -88,7 +90,8 @@ export const updateUser = internalMutation({
   args: {
     clerkId: v.string(),
     imageUrl: v.string(),
-    email: v.string()
+    email: v.string(),
+    blurhash: v.string()
   },
   async handler(ctx, args) {
     const user = await ctx.db

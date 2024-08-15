@@ -16,6 +16,7 @@ import Link from 'next/link'
 import { api } from '@/convex/_generated/api'
 import { useAudio } from '@/providers/AudioProvider'
 import { Loader, Play, Square } from 'lucide-react'
+import { blurHashToDataURL } from '@/lib/blurhash'
 
 const PodcastDetailPlayer = ({
   audioUrl,
@@ -27,9 +28,11 @@ const PodcastDetailPlayer = ({
   audioStorageId,
   isOwner,
   authorImageUrl,
-  authorId
+  authorId,
+  blurhash
 }: PodcastDetailPlayerProps) => {
   const router = useRouter()
+  const blurDataUrl = blurHashToDataURL(blurhash)
   const { setAudio, isPlaying, audio } = useAudio()
   const { toast } = useToast()
   const [isDeleting, setIsDeleting] = useState(false)
@@ -85,6 +88,8 @@ const PodcastDetailPlayer = ({
       <Image
         src={imageUrl}
         alt="player"
+        placeholder="blur"
+        blurDataURL={blurDataUrl}
         width={250}
         height={250}
         className="aspect-square h-[250px] flex-1 rounded-sm object-cover"
@@ -141,7 +146,7 @@ const PodcastDetailPlayer = ({
                 alt="options"
                 width={24}
                 height={24}
-                className="h-[24px] w-[24px]"
+                className="size-6"
               />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
@@ -154,7 +159,7 @@ const PodcastDetailPlayer = ({
                   alt="delete"
                   width={16}
                   height={16}
-                  className="h-[16px] w-[16px]"
+                  className="size-4"
                 />
                 <p>Delete</p>
               </DropdownMenuItem>

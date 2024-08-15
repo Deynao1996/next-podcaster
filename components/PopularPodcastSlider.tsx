@@ -39,7 +39,8 @@ const PopularPodcastSlider = ({
                       src={item.imageUrl}
                       alt="Popular Podcast"
                       fill
-                      sizes="450px"
+                      priority
+                      sizes="(max-width: 768px) 100vw, 400px"
                       className="aspect-square rounded-lg object-cover"
                     />
                   )}

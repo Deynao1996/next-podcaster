@@ -61,6 +61,7 @@ const ProfilePage = ({
               alt="profile"
               fill
               className="rounded-sm object-cover"
+              sizes="(max-width: 768px) 100px, 400px"
             />
           ) : (
             <div className="border-muted-foreground rounded-md border p-2">
@@ -76,7 +77,7 @@ const ProfilePage = ({
                 alt="player"
                 width={16}
                 height={16}
-                className="h-[16px] w-[16px]"
+                className="size-4"
               />
               <p className="text-muted-foreground text-sm">Verified Creator</p>
             </div>
@@ -87,7 +88,7 @@ const ProfilePage = ({
                 alt="headphone"
                 width={16}
                 height={16}
-                className="mr-2 h-[16px] w-[16px]"
+                className="mr-2 size-4"
               />
               <span className="font-semibold">450,228</span>
               <p className="font-light">monthly listeners</p>

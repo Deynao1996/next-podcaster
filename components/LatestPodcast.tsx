@@ -14,6 +14,7 @@ import {
   Timer
 } from 'lucide-react'
 import { useAudio } from '@/providers/AudioProvider'
+import { blurHashToDataURL } from '@/lib/blurhash'
 
 const LatestPodcast = ({
   i,
@@ -24,9 +25,11 @@ const LatestPodcast = ({
   views,
   _id,
   _creationTime,
-  audioUrl
+  audioUrl,
+  blurhash
 }: LatestPodcastProps) => {
   const { audio, setAudio, isPlaying, setIsPlaying } = useAudio()
+  const blurDataUrl = blurHashToDataURL(blurhash)
   const isCurrentPodcastPlaying = audio?.podcastId === _id && isPlaying
 
   function togglePlay() {
@@ -57,9 +60,10 @@ const LatestPodcast = ({
           <Image
             src={imageUrl}
             alt="podcast"
+            placeholder="blur"
+            blurDataURL={blurDataUrl}
             width={50}
             height={54}
-            sizes="150px"
             className="h-[54px] w-[50px] rounded-sm object-cover"
           />
           <div className="flex flex-col justify-center">

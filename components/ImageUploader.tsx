@@ -166,7 +166,7 @@ const ImageUploader = ({
             alt="Thumbnail"
             width={256}
             height={256}
-            className="h-64 w-64 rounded-lg object-cover"
+            className="size-64 rounded-lg object-cover"
           />
         )}
       </div>

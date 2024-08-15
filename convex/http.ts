@@ -16,17 +16,31 @@ const handleClerkWebhook = httpAction(async (ctx, request) => {
   }
   switch (event.type) {
     case 'user.created':
+      let blurhash = await ctx.runAction(
+        internal.blurhash.internalImageToBlurhash,
+        {
+          imageUrl: event.data.image_url
+        }
+      )
       await ctx.runMutation(internal.users.createUser, {
         clerkId: event.data.id,
         email: event.data.email_addresses[0].email_address,
         imageUrl: event.data.image_url,
+        blurhash: blurhash,
         name: event.data.first_name as string
       })
       break
     case 'user.updated':
+      blurhash = await ctx.runAction(
+        internal.blurhash.internalImageToBlurhash,
+        {
+          imageUrl: event.data.image_url
+        }
+      )
       await ctx.runMutation(internal.users.updateUser, {
         clerkId: event.data.id,
         imageUrl: event.data.image_url,
+        blurhash,
         email: event.data.email_addresses[0].email_address
       })
       break

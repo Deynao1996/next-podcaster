@@ -27,6 +27,7 @@ export default defineSchema({
   users: defineTable({
     email: v.string(),
     imageUrl: v.optional(v.string()),
+    blurhash: v.optional(v.string()),
     clerkId: v.string(),
     name: v.string()
   }).searchIndex('search_name', { searchField: 'name' })

@@ -15,7 +15,7 @@ const PodcastBox = ({
   const blurDataUrl = blurHashToDataURL(blurhash)
 
   return (
-    <li className="rounded-xl p-1 transition-all hover:[background-color:rgba(255,255,255,0.06)]">
+    <li className="rounded-xl p-1 pb-5 transition-all hover:[background-color:rgba(255,255,255,0.06)]">
       <Link href={`/podcasts/${_id}`}>
         <div className="relative aspect-auto h-64 overflow-hidden rounded-lg lg:aspect-square lg:h-auto">
           <Image
@@ -25,7 +25,7 @@ const PodcastBox = ({
             placeholder="blur"
             blurDataURL={blurDataUrl}
             className="object-cover"
-            sizes="400px"
+            sizes="(max-width: 768px) 100vw, 400px"
           />
           <ExternalLink className="text-primary absolute right-2 top-2 opacity-0 transition-all duration-200 group-hover:opacity-90" />
         </div>

@@ -60,6 +60,7 @@ export interface PodcastDetailPlayerProps {
   audioStorageId: Id<'_storage'> | null
   authorImageUrl?: string
   authorId: string
+  blurhash: string
 }
 
 export interface TopPodcasterProps {
@@ -105,6 +106,7 @@ export interface LatestPodcastProps {
   _id: Id<'podcasts'>
   _creationTime: number
   audioUrl: string
+  blurhash: string
 }
 
 export interface SearchBarProps {
