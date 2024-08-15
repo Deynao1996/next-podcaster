@@ -154,7 +154,7 @@ const MusicPlayer = () => {
         duration={duration}
         isTimeLineHovered={isTimeLineHovered}
       />
-      <div className="glass flex h-[70px] items-center justify-between px-6 py-6 sm:h-[100px] sm:px-12">
+      <div className="glass flex h-[70px] items-center justify-between px-2 py-6 sm:h-[100px] sm:px-12">
         <audio
           ref={audioRef}
           src={audio?.audioUrl}
@@ -162,13 +162,13 @@ const MusicPlayer = () => {
           onLoadedMetadata={handleLoadedMetadata}
           onEnded={handleAudioEnded}
         />
-        <div className="flex flex-1 items-center gap-3">
+        <div className="flex flex-[2] items-center gap-3 sm:flex-1">
           <Image
             src={audio?.imageUrl || '/images/player1.png'}
             alt="player"
             width={60}
             height={60}
-            className="hidden aspect-square w-[60px] rounded-sm object-cover sm:block"
+            className="aspect-square w-[60px] rounded-sm object-cover"
           />
           <div className="flex flex-col justify-center gap-1 py-2">
             <p className="font-semibold">{audio?.title}</p>
@@ -178,7 +178,7 @@ const MusicPlayer = () => {
           </div>
         </div>
 
-        <div className="flex flex-1 items-center justify-center gap-6">
+        <div className="flex flex-1 items-center justify-end gap-6 sm:justify-center">
           <div className="group hidden items-center gap-1 sm:flex">
             <Image
               src={'/icons/reverse.svg'}
@@ -217,7 +217,7 @@ const MusicPlayer = () => {
           </div>
         </div>
 
-        <div className="flex flex-1 items-center justify-end gap-6">
+        <div className="hidden flex-1 items-center justify-end gap-6 sm:flex">
           <span className="text-muted-foreground">{formatTime(duration)}</span>
           <VolumeControl audioRef={audioRef} />
         </div>

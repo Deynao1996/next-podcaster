@@ -54,7 +54,7 @@ const PodcastersPage = ({
                       fill
                       priority
                       className="object-cover transition-all duration-1000 group-hover:rotate-2 group-hover:scale-110"
-                      sizes="(max-width: 768px) 100vw, 500px"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   ) : (
                     <div className="border-muted-foreground rounded-md border p-2">

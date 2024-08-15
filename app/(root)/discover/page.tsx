@@ -3,8 +3,6 @@
 import EmptyState from '@/components/EmptyState'
 import SearchBar from '@/components/SearchBar'
 import PodcastList from '@/components/lists/PodcastList'
-import { Button } from '@/components/ui/button'
-import Image from 'next/image'
 
 const CreatePodcastPage = ({
   searchParams: { search }
@@ -12,7 +10,7 @@ const CreatePodcastPage = ({
   searchParams: { search: string }
 }) => {
   return (
-    <section className="bg-secondary text-secondary-foreground px-4 py-9 sm:px-8">
+    <section className="bg-secondary text-secondary-foreground min-h-svh px-4 py-9 sm:px-8">
       <SearchBar href="discover" />
       <PodcastList
         label="discover"

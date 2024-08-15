@@ -61,7 +61,7 @@ const ProfilePage = ({
               alt="profile"
               fill
               className="rounded-sm object-cover"
-              sizes="(max-width: 768px) 100px, 400px"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           ) : (
             <div className="border-muted-foreground rounded-md border p-2">

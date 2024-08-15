@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import Logo from './Logo'
 import Image from 'next/image'
@@ -6,16 +8,19 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
-  SheetFooter,
   SheetHeader,
-  SheetTitle,
   SheetTrigger
 } from './ui/sheet'
 import NavLinks from './NavLinks'
 import Link from 'next/link'
+import { SignedIn, SignedOut, useClerk } from '@clerk/nextjs'
+import { LogInIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 const MobileHeader = () => {
+  const { signOut } = useClerk()
+  const router = useRouter()
+
   return (
     <Sheet>
       <div className="flex items-center justify-between p-4 sm:hidden">
@@ -33,7 +38,7 @@ const MobileHeader = () => {
       </div>
       <SheetContent side={'left'}>
         <SheetHeader>
-          <div className="flex h-screen flex-col justify-between">
+          <div className="flex h-svh flex-col justify-between">
             <div>
               <div className="flex items-center gap-3 p-6">
                 <Image
@@ -47,13 +52,23 @@ const MobileHeader = () => {
                   Podcaster
                 </p>
               </div>
-              <NavLinks />
+              <NavLinks withSheetClose />
             </div>
 
             <div className="p-6">
-              <Button className="w-full" asChild>
-                <Link href={'/sign-in'}>Login</Link>
-              </Button>
+              <SignedIn>
+                <Button
+                  className="w-full font-bold"
+                  onClick={() => signOut(() => router.push('/'))}
+                >
+                  Logout
+                </Button>
+              </SignedIn>
+              <SignedOut>
+                <Button className="w-full font-bold" asChild>
+                  <Link href={'/sign-in'}>Login</Link>
+                </Button>
+              </SignedOut>
             </div>
           </div>
         </SheetHeader>

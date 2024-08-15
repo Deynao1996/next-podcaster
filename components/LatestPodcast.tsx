@@ -62,17 +62,19 @@ const LatestPodcast = ({
             alt="podcast"
             placeholder="blur"
             blurDataURL={blurDataUrl}
-            width={50}
+            width={54}
             height={54}
-            className="h-[54px] w-[50px] rounded-sm object-cover"
+            className="aspect-square rounded-sm object-cover"
           />
           <div className="flex flex-col justify-center">
-            <span className="truncate font-semibold">{podcastTitle}</span>
+            <span className="w-full truncate font-semibold sm:max-w-48">
+              {podcastTitle}
+            </span>
             <p className="text-muted-foreground text-sm">{author}</p>
           </div>
           <div className="pointer-events-none absolute h-full w-full focus-visible:[background-color:rgba(255,255,255,0.06)] group-hover:[background-color:rgba(255,255,255,0.06)]" />
         </Link>
-        <div className="flex w-1/2 justify-between">
+        <div className="flex w-1/2 justify-end sm:justify-between">
           <div className="hidden items-center gap-2 sm:flex">
             <Image
               src={'/icons/headphone.svg'}
@@ -83,11 +85,11 @@ const LatestPodcast = ({
             />
             <p className="text-sm">{views}</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="hidden items-center gap-2 sm:flex">
             <Timer className="h-5 w-5" />
             <p className="text-sm">{formatTime(audioDuration)}</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 max-md:hidden">
             <Calendar className="h-5 w-5" />
             <p className="text-sm">
               {new Date(_creationTime).toLocaleDateString('en-US')}

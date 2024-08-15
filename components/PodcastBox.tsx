@@ -25,7 +25,7 @@ const PodcastBox = ({
             placeholder="blur"
             blurDataURL={blurDataUrl}
             className="object-cover"
-            sizes="(max-width: 768px) 100vw, 400px"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           <ExternalLink className="text-primary absolute right-2 top-2 opacity-0 transition-all duration-200 group-hover:opacity-90" />
         </div>

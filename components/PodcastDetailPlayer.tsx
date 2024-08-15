@@ -137,7 +137,7 @@ const PodcastDetailPlayer = ({
           </Button>
         )}
       </div>
-      <div className="flex flex-1 items-start justify-end">
+      <div className="flex items-start justify-end">
         {isOwner && (
           <DropdownMenu>
             <DropdownMenuTrigger>

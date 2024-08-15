@@ -14,8 +14,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-//TODO Check all aria labels
-
 const DetailsPage = ({ params: { podcastId } }: DetailsPageProps) => {
   const { user } = useUser()
   const currentPodcast = useQuery(api.podcasts.getPodcastById, {

@@ -40,7 +40,7 @@ const PopularPodcastSlider = ({
                       alt="Popular Podcast"
                       fill
                       priority
-                      sizes="(max-width: 768px) 100vw, 400px"
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className="aspect-square rounded-lg object-cover"
                     />
                   )}

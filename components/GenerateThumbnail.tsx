@@ -28,16 +28,12 @@ const GenerateThumbnail = ({
   return (
     <Tabs defaultValue="image">
       <TabsList className="bg-background mb-5">
-        <TabsTrigger value="thumbnail-prompt">
-          AI prompt to generate thumbnail
-        </TabsTrigger>
+        <TabsTrigger value="thumbnail-prompt">AI prompt</TabsTrigger>
         <TabsTrigger value="image">Upload custom image</TabsTrigger>
       </TabsList>
       <TabsContent value="thumbnail-prompt">
         <div className="grid w-full items-center gap-1.5">
-          <Label htmlFor="thumbnail-prompt">
-            AI prompt to generate thumbnail
-          </Label>
+          <Label htmlFor="thumbnail-prompt truncate">AI prompt</Label>
           <Textarea
             className="resize-none"
             placeholder="Write a prompt to generate custom thumbnail"
