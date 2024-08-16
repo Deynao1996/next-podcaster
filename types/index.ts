@@ -130,3 +130,15 @@ export interface CustomSkeletonProps {
   type: SkeletonType
   count?: number
 }
+
+export interface PricingCardProps {
+  isYearly?: boolean
+  title: string
+  monthlyPrice?: number
+  yearlyPrice?: number
+  description: string
+  features: string[]
+  actionLabel: string
+  popular?: boolean
+  exclusive?: boolean
+}
