@@ -34,13 +34,15 @@ export const sidebarLinks = (currentUserId?: string) => {
 export const plans = [
   {
     title: 'Basic',
-    monthlyPrice: 10,
-    yearlyPrice: 100,
+    monthlyPrice: 0,
+    yearlyPrice: 0,
     description: 'Essential features you need to get started',
     features: [
-      'Example Feature Number 1',
-      'Example Feature Number 2',
-      'Example Feature Number 3'
+      { text: '50 podcast tokens per month' },
+      { text: 'Free of charge' },
+      { text: 'Access to one default voice', isDisadvantage: true },
+      { text: 'Basic support', isDisadvantage: true },
+      { text: 'Ads may be included', isDisadvantage: true }
     ],
     actionLabel: 'Get Started'
   },
@@ -50,24 +52,28 @@ export const plans = [
     yearlyPrice: 250,
     description: 'Perfect for owners of small & medium businessess',
     features: [
-      'Example Feature Number 1',
-      'Example Feature Number 2',
-      'Example Feature Number 3'
+      { text: '500 podcast tokens per month' },
+      { text: 'Access to all available voices' },
+      { text: 'Higher priority support' },
+      { text: '500 podcast tokens per month' },
+      { text: 'Moderate price tier', isDisadvantage: true }
     ],
-    actionLabel: 'Get Started',
+    actionLabel: 'Upgrade to Pro',
     popular: true
   },
   {
-    title: 'Enterprise',
-    price: 'Custom',
+    title: 'Unlimited',
+    monthlyPrice: 75,
+    yearlyPrice: 750,
     description: 'Dedicated support and infrastructure to fit your needs',
     features: [
-      'Example Feature Number 1',
-      'Example Feature Number 2',
-      'Example Feature Number 3',
-      'Super Exclusive Feature'
+      { text: 'Unlimited podcast tokens' },
+      { text: 'Access to all voices' },
+      { text: 'Premium support' },
+      { text: 'No ads' },
+      { text: 'Early access to new features' }
     ],
-    actionLabel: 'Contact Sales',
+    actionLabel: 'Go Unlimited',
     exclusive: true
   }
 ]

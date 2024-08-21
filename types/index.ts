@@ -137,8 +137,12 @@ export interface PricingCardProps {
   monthlyPrice?: number
   yearlyPrice?: number
   description: string
-  features: string[]
+  features: {
+    text: string
+    isDisadvantage?: boolean
+  }[]
   actionLabel: string
   popular?: boolean
   exclusive?: boolean
+  userId: string
 }

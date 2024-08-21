@@ -6,6 +6,7 @@ import { plans } from '@/constants'
 import PricingCard from '@/components/PricingCard'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { useUser } from '@clerk/nextjs'
 
 type PricingSwitchProps = {
   onSwitch: (value: string) => void
@@ -38,6 +39,7 @@ const PricingSwitch = ({ onSwitch }: PricingSwitchProps) => (
 )
 
 export default function PricingPage() {
+  const { user } = useUser()
   const [isYearly, setIsYearly] = useState(false)
   const togglePricingPeriod = (value: string) =>
     setIsYearly(parseInt(value) === 1)
@@ -51,7 +53,14 @@ export default function PricingPage() {
       <PricingSwitch onSwitch={togglePricingPeriod} />
       <section className="mt-8 flex flex-col justify-center gap-8 sm:flex-row sm:flex-wrap">
         {plans.map((plan) => {
-          return <PricingCard key={plan.title} {...plan} isYearly={isYearly} />
+          return (
+            <PricingCard
+              key={plan.title}
+              {...plan}
+              isYearly={isYearly}
+              userId={user?.id}
+            />
+          )
         })}
       </section>
     </div>

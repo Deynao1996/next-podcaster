@@ -30,5 +30,11 @@ export default defineSchema({
     blurhash: v.optional(v.string()),
     clerkId: v.string(),
     name: v.string()
-  }).searchIndex('search_name', { searchField: 'name' })
+  }).searchIndex('search_name', { searchField: 'name' }),
+  payments: defineTable({
+    userId: v.string(),
+    status: v.optional(v.union(v.literal('pending'), v.literal('paid'))),
+    stripeId: v.optional(v.string()),
+    message: v.optional(v.string())
+  })
 })
