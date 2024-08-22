@@ -55,7 +55,6 @@ export const plans = [
       { text: '500 podcast tokens per month' },
       { text: 'Access to all available voices' },
       { text: 'Higher priority support' },
-      { text: '500 podcast tokens per month' },
       { text: 'Moderate price tier', isDisadvantage: true }
     ],
     actionLabel: 'Upgrade to Pro',
@@ -77,6 +76,16 @@ export const plans = [
     exclusive: true
   }
 ]
+
+export const planMap: Record<
+  number,
+  { name: 'pro' | 'unlimited'; interval: 'month' | 'year'; tokens: number }
+> = {
+  25: { name: 'pro', interval: 'month', tokens: 500 },
+  250: { name: 'pro', interval: 'year', tokens: 1000 },
+  75: { name: 'unlimited', interval: 'month', tokens: 1000000 },
+  750: { name: 'unlimited', interval: 'year', tokens: 1000000 }
+}
 
 export const voiceCategories = [
   {

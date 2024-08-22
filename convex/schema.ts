@@ -36,5 +36,14 @@ export default defineSchema({
     status: v.optional(v.union(v.literal('pending'), v.literal('paid'))),
     stripeId: v.optional(v.string()),
     message: v.optional(v.string())
+  }),
+  plans: defineTable({
+    userId: v.string(),
+    tokens: v.number(),
+    name: v.union(v.literal('pro'), v.literal('unlimited')),
+    interval: v.union(v.literal('month'), v.literal('year')),
+    startTime: v.number(),
+    endTime: v.number(),
+    subscriptionId: v.optional(v.string())
   })
 })

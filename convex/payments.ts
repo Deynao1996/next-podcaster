@@ -34,6 +34,7 @@ export const fulfill = internalMutation({
       message: 'Your payment was successful. Enjoy your new plan!',
       status: 'paid'
     })
+    return payment.userId
   }
 })
 

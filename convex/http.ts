@@ -72,7 +72,6 @@ http.route({
       signature,
       payload: await request.text()
     })
-    console.log(result)
 
     if (result.success) {
       return new Response(null, {

@@ -19,6 +19,7 @@ import type * as files from "../files.js";
 import type * as gemini from "../gemini.js";
 import type * as http from "../http.js";
 import type * as payments from "../payments.js";
+import type * as plans from "../plans.js";
 import type * as playht from "../playht.js";
 import type * as podcasts from "../podcasts.js";
 import type * as stripe from "../stripe.js";
@@ -38,6 +39,7 @@ declare const fullApi: ApiFromModules<{
   gemini: typeof gemini;
   http: typeof http;
   payments: typeof payments;
+  plans: typeof plans;
   playht: typeof playht;
   podcasts: typeof podcasts;
   stripe: typeof stripe;
