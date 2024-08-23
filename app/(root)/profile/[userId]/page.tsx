@@ -1,5 +1,6 @@
 'use client'
 
+import CurrentUserPlan from '@/components/CurrentUserPlan'
 import CustomSkeleton from '@/components/CustomSkeleton'
 import EmptyState from '@/components/EmptyState'
 import PodcastList from '@/components/lists/PodcastList'
@@ -7,11 +8,9 @@ import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { api } from '@/convex/_generated/api'
 import { useAudio } from '@/providers/AudioProvider'
-import { AudioProps } from '@/types'
 import { useQuery } from 'convex/react'
 import { Play, Square, User } from 'lucide-react'
 import Image from 'next/image'
-import React, { useCallback, useState } from 'react'
 
 const ProfilePage = ({
   params: { userId }
@@ -25,6 +24,7 @@ const ProfilePage = ({
   const popularPodcast = useQuery(api.podcasts.getPopularPodcastByUserId, {
     userId
   })
+
   const { setAudio, isPlaying, audio } = useAudio()
 
   function handlePlayRandomPodcast() {
@@ -70,7 +70,7 @@ const ProfilePage = ({
               </div>
             )}
           </div>
-          <div className="flex flex-col justify-between py-4">
+          <div className="flex flex-col py-4">
             <div className="flex flex-col gap-5">
               <div className="flex items-center gap-1">
                 <Image
@@ -99,7 +99,7 @@ const ProfilePage = ({
             </div>
             <Button
               size={'lg'}
-              className="mt-4 gap-2 font-semibold"
+              className="mt-8 gap-2 font-semibold"
               onClick={handlePlayRandomPodcast}
             >
               {isPlaying && !!audio ? (
@@ -115,6 +115,7 @@ const ProfilePage = ({
               )}
             </Button>
           </div>
+          <CurrentUserPlan userId={userId} />
         </div>
       )}
       {currentUser?.clerkId && (

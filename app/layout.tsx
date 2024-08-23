@@ -3,6 +3,7 @@ import { Manrope } from 'next/font/google'
 import ConvexClerkProvider from '@/providers/ConvexClerkProvider'
 import './globals.css'
 import AudioProvider from '@/providers/AudioProvider'
+import { Toaster } from '@/components/ui/toaster'
 
 const manrope = Manrope({ subsets: ['latin'] })
 
@@ -25,6 +26,7 @@ export default function RootLayout({
         <ConvexClerkProvider>
           <AudioProvider>{children}</AudioProvider>
         </ConvexClerkProvider>
+        <Toaster />
       </body>
     </html>
   )

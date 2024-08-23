@@ -40,10 +40,10 @@ export default defineSchema({
   plans: defineTable({
     userId: v.string(),
     tokens: v.number(),
-    name: v.union(v.literal('pro'), v.literal('unlimited')),
-    interval: v.union(v.literal('month'), v.literal('year')),
+    name: v.union(v.literal('pro'), v.literal('unlimited'), v.literal('free')),
+    interval: v.union(v.literal('month'), v.literal('year'), v.literal('no')),
     startTime: v.number(),
     endTime: v.number(),
     subscriptionId: v.optional(v.string())
-  })
+  }).searchIndex('search_tokens', { searchField: 'tokens' })
 })

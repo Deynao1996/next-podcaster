@@ -1,9 +1,9 @@
 'use node'
 
-import { v } from 'convex/values'
+import { ConvexError, v } from 'convex/values'
 import { action, internalAction } from './_generated/server'
 import Stripe from 'stripe'
-import { internal } from './_generated/api'
+import { api, internal } from './_generated/api'
 import { planMap } from '@/constants'
 
 function checkCurrentPlan(amount: number) {
@@ -62,7 +62,17 @@ export const pay = action({
     const paymentId = await ctx.runMutation(internal.payments.create, {
       userId
     })
+    const userPlan = await ctx.runQuery(
+      internal.plans.getPlansByUserIdInternal,
+      {
+        userId
+      }
+    )
 
+    if (userPlan)
+      throw new ConvexError(
+        'You already have a plan. If you want to change it, please unsubscribe first.'
+      )
     const session = await createStripeSession({ paymentId, amount, interval })
     await ctx.runMutation(internal.payments.markPending, {
       paymentId,

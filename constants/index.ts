@@ -33,7 +33,7 @@ export const sidebarLinks = (currentUserId?: string) => {
 
 export const plans = [
   {
-    title: 'Basic',
+    title: 'Free',
     monthlyPrice: 0,
     yearlyPrice: 0,
     description: 'Essential features you need to get started',

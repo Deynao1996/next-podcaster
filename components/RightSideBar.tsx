@@ -6,9 +6,13 @@ import Link from 'next/link'
 import PopularPodcastList from './lists/PopularPodcastList'
 import { SignedIn, UserButton, useUser } from '@clerk/nextjs'
 import CustomSkeleton from './CustomSkeleton'
+import { useQuery } from 'convex/react'
+import { api } from '@/convex/_generated/api'
+import { Coins } from 'lucide-react'
 
 const RightSideBar = () => {
   const { user } = useUser()
+  const userTokens = useQuery(api.plans.getTokensByUserId, { userId: user?.id })
 
   return (
     <section className="sticky left-0 top-0 py-9">
@@ -26,13 +30,10 @@ const RightSideBar = () => {
                 {user?.firstName + ' ' + user?.lastName}
               </p>
             </div>
-            <Image
-              src={'/icons/right-arrow.svg'}
-              alt="dots"
-              width={22}
-              height={24}
-              className="h-[24px] w-[22px]"
-            />
+            <div className="flex items-center">
+              <span className="text-sm font-semibold">{userTokens}</span>
+              <Coins className="text-primary ml-2" size={16} />
+            </div>
           </Link>
         )}
       </SignedIn>

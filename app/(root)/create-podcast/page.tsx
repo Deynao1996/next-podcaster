@@ -27,6 +27,7 @@ import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAction, useMutation } from 'convex/react'
+import { ConvexError } from 'convex/values'
 import { Loader } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -73,10 +74,18 @@ const CreatePage = () => {
 
   function handleCreateErrorPodcast(error: unknown) {
     setIsSubmitting(false)
-    toast({
-      variant: 'destructive',
-      title: 'Error creating podcast'
-    })
+    if (error instanceof ConvexError) {
+      toast({
+        title: 'Error',
+        description: error.data,
+        variant: 'destructive'
+      })
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Error creating podcast'
+      })
+    }
   }
 
   function validateStateValues() {

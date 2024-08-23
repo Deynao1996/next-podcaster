@@ -40,6 +40,20 @@ export const createPodcast = mutation({
       throw new ConvexError('User not found')
     }
 
+    const currentPlan = await ctx.db
+      .query('plans')
+      .filter((q) => q.eq(q.field('userId'), user[0].clerkId))
+      .unique()
+
+    if (!currentPlan) throw new ConvexError('Not a plan user')
+    if (currentPlan.tokens < 1) {
+      throw new ConvexError('Not enough tokens. Please upgrade your plan.')
+    }
+
+    await ctx.db.patch(currentPlan._id, {
+      tokens: currentPlan.tokens - 1
+    })
+
     const podcast = await ctx.db.insert('podcasts', {
       ...args,
       user: user[0]._id,

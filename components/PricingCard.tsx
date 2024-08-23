@@ -14,6 +14,8 @@ import { useAction } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { useToast } from './ui/use-toast'
+import { ConvexError } from 'convex/values'
 
 const CheckItem = ({
   text,
@@ -44,9 +46,26 @@ const PricingCard = ({
   exclusive,
   userId
 }: PricingCardProps) => {
+  const { toast } = useToast()
   const startPayment = useAction(api.stripe.pay)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
+
+  function handleError(error: unknown) {
+    setIsSubmitting(false)
+    if (error instanceof ConvexError) {
+      toast({
+        title: 'Info',
+        description: error.data
+      })
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Something went wrong. Please try again later.'
+      })
+    }
+  }
 
   async function handleClick() {
     const amount = isYearly ? yearlyPrice : monthlyPrice
@@ -64,9 +83,7 @@ const PricingCard = ({
       setIsSubmitting(false)
       window.location.href = paymentUrl!
     } catch (error) {
-      setIsSubmitting(false)
-
-      console.log(error)
+      handleError(error)
     }
   }
 

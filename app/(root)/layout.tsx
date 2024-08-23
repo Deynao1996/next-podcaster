@@ -2,7 +2,6 @@ import LeftSideBar from '@/components/LeftSideBar'
 import MobileHeader from '@/components/MobileHeader'
 import MusicPlayer from '@/components/MusicPlayer'
 import RightSideBar from '@/components/RightSideBar'
-import { Toaster } from '@/components/ui/toaster'
 
 export default function RootLayout({
   children
@@ -24,7 +23,6 @@ export default function RootLayout({
         </div>
       </div>
       <MusicPlayer />
-      <Toaster />
     </div>
   )
 }
