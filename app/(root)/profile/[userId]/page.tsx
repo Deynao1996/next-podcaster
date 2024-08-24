@@ -54,7 +54,7 @@ const ProfilePage = ({
       {!currentUser ? (
         <CustomSkeleton type="profile" />
       ) : (
-        <div className="mt-5 flex flex-col gap-5 sm:flex-row">
+        <div className="mt-5 flex flex-col flex-wrap gap-5 sm:flex-row">
           <div className="relative aspect-square h-[250px]">
             {currentUser.imageUrl ? (
               <Image

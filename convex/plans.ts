@@ -1,7 +1,14 @@
 import { ConvexError, v } from 'convex/values'
-import { internalMutation, internalQuery, query } from './_generated/server'
+import {
+  action,
+  internalMutation,
+  internalQuery,
+  mutation,
+  query
+} from './_generated/server'
 import { GenericQueryCtx } from 'convex/server'
 import { DataModel } from './_generated/dataModel'
+import { internal } from './_generated/api'
 
 const getPlansByUserIdQuery = async (
   ctx: GenericQueryCtx<DataModel>,
@@ -52,5 +59,31 @@ export const getTokensByUserId = query({
       .unique()
     if (!currentPlan) throw new ConvexError('No plan found')
     return currentPlan.tokens
+  }
+})
+
+export const unsubscribePlan = mutation({
+  args: {
+    userId: v.string()
+  },
+  handler: async (ctx, args) => {
+    const currentPlan = await ctx.db
+      .query('plans')
+      .filter((q) => q.eq(q.field('userId'), args.userId))
+      .unique()
+    if (!currentPlan) throw new ConvexError('No plan found')
+    if (!currentPlan.subscriptionId)
+      throw new ConvexError('You can not unsubscribe from a free plan')
+    await ctx.scheduler.runAfter(0, internal.stripe.unsubscribe, {
+      subscriptionId: currentPlan.subscriptionId
+    })
+    await ctx.db.patch(currentPlan._id, {
+      subscriptionId: undefined,
+      endTime: 0,
+      tokens: 150,
+      name: 'free',
+      interval: 'no',
+      startTime: Date.now()
+    })
   }
 })

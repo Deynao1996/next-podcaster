@@ -52,36 +52,6 @@ async function createStripeSession({
   return session
 }
 
-export const pay = action({
-  args: {
-    userId: v.string(),
-    amount: v.number(),
-    interval: v.union(v.literal('month'), v.literal('year'))
-  },
-  handler: async (ctx, { userId, amount, interval }) => {
-    const paymentId = await ctx.runMutation(internal.payments.create, {
-      userId
-    })
-    const userPlan = await ctx.runQuery(
-      internal.plans.getPlansByUserIdInternal,
-      {
-        userId
-      }
-    )
-
-    if (userPlan)
-      throw new ConvexError(
-        'You already have a plan. If you want to change it, please unsubscribe first.'
-      )
-    const session = await createStripeSession({ paymentId, amount, interval })
-    await ctx.runMutation(internal.payments.markPending, {
-      paymentId,
-      stripeId: session.id
-    })
-    return session.url
-  }
-})
-
 async function handleSessionComplete({
   event,
   ctx,
@@ -121,6 +91,36 @@ async function handleSessionComplete({
   }
 }
 
+export const pay = action({
+  args: {
+    userId: v.string(),
+    amount: v.number(),
+    interval: v.union(v.literal('month'), v.literal('year'))
+  },
+  handler: async (ctx, { userId, amount, interval }) => {
+    const paymentId = await ctx.runMutation(internal.payments.create, {
+      userId
+    })
+    const userPlan = await ctx.runQuery(
+      internal.plans.getPlansByUserIdInternal,
+      {
+        userId
+      }
+    )
+
+    if (userPlan)
+      throw new ConvexError(
+        'You already have a plan. If you want to change it, please unsubscribe first.'
+      )
+    const session = await createStripeSession({ paymentId, amount, interval })
+    await ctx.runMutation(internal.payments.markPending, {
+      paymentId,
+      stripeId: session.id
+    })
+    return session.url
+  }
+})
+
 export const fulfill = internalAction({
   args: { signature: v.string(), payload: v.string() },
   handler: async (ctx, { signature, payload }) => {
@@ -151,5 +151,21 @@ export const fulfill = internalAction({
       console.error(err)
       return { success: false }
     }
+  }
+})
+
+export const unsubscribe = internalAction({
+  args: {
+    subscriptionId: v.string()
+  },
+  handler: async (_ctx, { subscriptionId }) => {
+    const stripe = new Stripe(process.env.STRIPE_KEY!, {
+      apiVersion: '2024-06-20',
+      typescript: true
+    })
+    const canceledSubscription =
+      await stripe.subscriptions.cancel(subscriptionId)
+    if (!canceledSubscription) throw new ConvexError('Subscription not found')
+    return canceledSubscription
   }
 })
