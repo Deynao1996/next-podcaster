@@ -35,6 +35,21 @@ export const create = internalMutation({
   }
 })
 
+export const updatePlan = internalMutation({
+  args: {
+    tokens: v.number(),
+    name: v.union(v.literal('pro'), v.literal('unlimited')),
+    interval: v.union(v.literal('month'), v.literal('year')),
+    startTime: v.number(),
+    endTime: v.number(),
+    subscriptionId: v.string(),
+    planId: v.id('plans')
+  },
+  handler: async (ctx, { planId, ...args }) => {
+    return await ctx.db.patch(planId, { ...args })
+  }
+})
+
 export const getPlansByUserIdInternal = internalQuery({
   args: { userId: v.string() },
   handler: async (ctx, args) => {

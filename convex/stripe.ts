@@ -5,6 +5,7 @@ import { action, internalAction } from './_generated/server'
 import Stripe from 'stripe'
 import { api, internal } from './_generated/api'
 import { planMap } from '@/constants'
+import { GenericActionCtx } from 'convex/server'
 
 function checkCurrentPlan(amount: number) {
   return planMap[amount]
@@ -58,7 +59,7 @@ async function handleSessionComplete({
   stripe
 }: {
   event: Stripe.Event
-  ctx: any
+  ctx: GenericActionCtx<any>
   stripe: Stripe
 }) {
   if (event.type === 'checkout.session.completed') {
@@ -66,27 +67,31 @@ async function handleSessionComplete({
     const userId = await ctx.runMutation(internal.payments.fulfill, {
       stripeId
     })
-
+    const currentPlan = await ctx.runQuery(
+      internal.plans.getPlansByUserIdInternal,
+      { userId }
+    )
     const subscriptionId = event.data.object.subscription?.toString()
-    if (!subscriptionId) return { success: false }
+    if (!currentPlan || !subscriptionId) return { success: false }
+
     const currentSubscription =
       await stripe.subscriptions.retrieve(subscriptionId)
     const amount = currentSubscription.items.data[0].plan.amount
     if (!amount) return { success: false }
-    const endTime = currentSubscription.current_period_end
-    const startTime = currentSubscription.current_period_start
+    const endTime = currentSubscription.current_period_end * 1000
+    const startTime = currentSubscription.current_period_start * 1000
 
     const exchangedAmount = amount / 100
     const { interval, name, tokens } = checkCurrentPlan(exchangedAmount)
 
-    await ctx.runMutation(internal.plans.create, {
-      userId,
+    await ctx.runMutation(internal.plans.updatePlan, {
       name,
       interval,
       endTime,
       startTime,
       tokens,
-      subscriptionId
+      subscriptionId,
+      planId: currentPlan._id
     })
   }
 }
@@ -108,7 +113,9 @@ export const pay = action({
       }
     )
 
-    if (userPlan)
+    if (!userPlan) throw new ConvexError('User plan not found.')
+
+    if (userPlan.name !== 'free')
       throw new ConvexError(
         'You already have a plan. If you want to change it, please unsubscribe first.'
       )

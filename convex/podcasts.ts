@@ -76,7 +76,7 @@ export const getTrendingPodcasts = query({
 export const getLatestPodcasts = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.query('podcasts').order('desc').take(10)
+    return await ctx.db.query('podcasts').order('desc').take(4)
   }
 })
 

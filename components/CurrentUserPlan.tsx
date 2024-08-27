@@ -1,17 +1,12 @@
 import { api } from '@/convex/_generated/api'
 import { useMutation, useQuery } from 'convex/react'
 import {
-  BellRing,
-  CalendarClock,
-  CalendarDays,
   CalendarPlus,
   CalendarX2,
-  Check,
   ChevronRight,
   Coins,
   History
 } from 'lucide-react'
-
 import {
   HoverCard,
   HoverCardContent,
@@ -27,8 +22,8 @@ import { useToast } from './ui/use-toast'
 
 function formatDate(startTime: number, endTime: number, creationTime: number) {
   return {
-    startDate: new Date(startTime * 1000),
-    endDate: new Date(endTime * 1000),
+    startDate: new Date(startTime),
+    endDate: new Date(endTime),
     createdDate: new Date(creationTime)
   }
 }
@@ -112,7 +107,8 @@ const CurrentUserPlan = ({ userId }: { userId: string }) => {
             <ul className="ml-4 text-sm capitalize">
               <li className="flex items-center">
                 <Coins className="mr-1 h-4 w-4 opacity-70" />
-                Tokens remaining: {currentPlan.tokens}
+                Tokens remaining:{' '}
+                {currentPlan.tokens > 1000 ? 'Unlimited' : currentPlan.tokens}
               </li>
               <li className="flex items-center">
                 <History className="mr-1 h-4 w-4 opacity-70" />
@@ -122,7 +118,7 @@ const CurrentUserPlan = ({ userId }: { userId: string }) => {
                 <CalendarPlus className="mr-1 h-4 w-4 opacity-70" />
                 Plan Start: {startDate.toLocaleDateString('en-US')}
               </li>
-              {!currentPlan.endTime ?? (
+              {currentPlan.endTime !== 0 && (
                 <li className="flex items-center">
                   <CalendarX2 className="mr-1 h-4 w-4 opacity-70" />
                   Plan End: {endDate.toLocaleDateString('en-US')}
@@ -137,6 +133,7 @@ const CurrentUserPlan = ({ userId }: { userId: string }) => {
             {currentPlan.name !== 'free' && (
               <Button
                 className="w-full"
+                disabled={isLoading}
                 size={'sm'}
                 onClick={handleUnsubscribe}
               >

@@ -8,11 +8,12 @@ import { SignedIn, UserButton, useUser } from '@clerk/nextjs'
 import CustomSkeleton from './CustomSkeleton'
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
-import { Coins } from 'lucide-react'
+import { Coins, Infinity } from 'lucide-react'
 
 const RightSideBar = () => {
   const { user } = useUser()
   const userTokens = useQuery(api.plans.getTokensByUserId, { userId: user?.id })
+  const isUnlimitedPlan = userTokens && userTokens > 1000
 
   return (
     <section className="sticky left-0 top-0 py-9">
@@ -31,8 +32,16 @@ const RightSideBar = () => {
               </p>
             </div>
             <div className="flex items-center">
-              <span className="text-sm font-semibold">{userTokens}</span>
-              <Coins className="text-primary ml-2" size={16} />
+              <span className="text-sm font-semibold">
+                {isUnlimitedPlan ? (
+                  <Infinity className="text-primary size-7" />
+                ) : (
+                  userTokens
+                )}
+              </span>
+              {!isUnlimitedPlan && (
+                <Coins className="text-primary ml-2" size={16} />
+              )}
             </div>
           </Link>
         )}
