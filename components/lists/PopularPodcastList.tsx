@@ -3,7 +3,7 @@
 import React from 'react'
 import { Button } from '../ui/button'
 import Link from 'next/link'
-import PopularPodcastSlider from '../PopularPodcastSlider'
+import PopularPodcastSlider from '../carouselUI/PopularPodcastSlider'
 import TopPodcastsList from './TopPodcastsList'
 import { useMutation, useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'

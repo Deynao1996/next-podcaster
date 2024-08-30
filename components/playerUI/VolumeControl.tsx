@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
-import { Slider } from './ui/slider'
+import { Slider } from '../ui/slider'
 
 const VolumeControl = ({
   audioRef

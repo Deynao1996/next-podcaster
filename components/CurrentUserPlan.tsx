@@ -5,7 +5,8 @@ import {
   CalendarX2,
   ChevronRight,
   Coins,
-  History
+  History,
+  Info
 } from 'lucide-react'
 import {
   HoverCard,
@@ -29,10 +30,10 @@ function formatDate(startTime: number, endTime: number, creationTime: number) {
 }
 
 const CurrentUserPlan = ({ userId }: { userId: string }) => {
-  const { user } = useUser()
   const currentPlan = useQuery(api.plans.getPlansByUserId, {
     userId
   })
+  const { user } = useUser()
   const { toast } = useToast()
   const unsubscribe = useMutation(api.plans.unsubscribePlan)
   const fallback = getFirstTwoLetters(user?.firstName || '')
@@ -86,11 +87,13 @@ const CurrentUserPlan = ({ userId }: { userId: string }) => {
     <HoverCard>
       <HoverCardTrigger asChild>
         <Button
-          variant="link"
-          className="ml-auto flex items-center font-semibold"
+          size={'icon'}
+          disabled={!currentPlan}
+          variant={'ghost'}
+          className="ml-auto h-6 w-6 rounded-full"
         >
-          User Plan Info{' '}
-          <ChevronRight className="ml-2 h-4 w-4 rotate-90 opacity-70" />
+          <Info className="h-6 w-6 text-blue-400" />
+          <p className="sr-only">Current Plan</p>
         </Button>
       </HoverCardTrigger>
       <HoverCardContent className="w-80">

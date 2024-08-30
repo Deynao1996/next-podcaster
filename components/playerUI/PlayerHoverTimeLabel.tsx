@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card } from './ui/card'
+import { Card } from '../ui/card'
 import { cn, formatTime } from '@/lib/utils'
 
 const PlayerHoverTimeLabel = React.forwardRef<

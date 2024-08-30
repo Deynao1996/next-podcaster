@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { useCarousel } from './ui/carousel'
+import { useCarousel } from '../ui/carousel'
 import { DotButton, useDotButton } from './CarouserDotButton'
 import { EmblaCarouselType } from 'embla-carousel'
 

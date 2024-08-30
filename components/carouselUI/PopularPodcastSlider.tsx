@@ -10,7 +10,7 @@ import DotActionButtons from './DotActionButtons'
 import Link from 'next/link'
 import Autoplay from 'embla-carousel-autoplay'
 import { PopularPodcastProps } from '@/types'
-import CustomSkeleton from './CustomSkeleton'
+import CustomSkeleton from '../CustomSkeleton'
 
 const PopularPodcastSlider = ({
   popularPodcasts

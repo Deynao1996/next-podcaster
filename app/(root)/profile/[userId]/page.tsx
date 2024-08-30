@@ -6,8 +6,10 @@ import EmptyState from '@/components/EmptyState'
 import PodcastList from '@/components/lists/PodcastList'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
+import UserSettings from '@/components/UserSettings'
 import { api } from '@/convex/_generated/api'
 import { useAudio } from '@/providers/AudioProvider'
+import { useUser } from '@clerk/nextjs'
 import { useQuery } from 'convex/react'
 import { Play, Square, User } from 'lucide-react'
 import Image from 'next/image'
@@ -50,7 +52,10 @@ const ProfilePage = ({
 
   return (
     <section className="bg-secondary text-secondary-foreground px-4 py-9 sm:px-8">
-      <h6 className="scroll-m-20 text-xl font-semibold">Podcaster Profile</h6>
+      <div className="flex items-center justify-between">
+        <h6 className="scroll-m-20 text-xl font-semibold">Podcaster Profile</h6>
+        <UserSettings userId={userId} />
+      </div>
       {!currentUser ? (
         <CustomSkeleton type="profile" />
       ) : (

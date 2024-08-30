@@ -1,6 +1,6 @@
 import LeftSideBar from '@/components/LeftSideBar'
 import MobileHeader from '@/components/MobileHeader'
-import MusicPlayer from '@/components/MusicPlayer'
+import MusicPlayer from '@/components/playerUI/MusicPlayer'
 import RightSideBar from '@/components/RightSideBar'
 
 export default function RootLayout({
