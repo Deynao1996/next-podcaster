@@ -1,5 +1,45 @@
 import { ConvexError, v } from 'convex/values'
-import { internalMutation, query } from './_generated/server'
+import { internalMutation, mutation, query } from './_generated/server'
+import { GenericMutationCtx } from 'convex/server'
+import { DataModel } from './_generated/dataModel'
+
+const updateUser = async (
+  ctx: GenericMutationCtx<DataModel>,
+  args: {
+    clerkId: string
+    imageUrl: string
+    email: string
+  }
+) => {
+  {
+    const user = await ctx.db
+      .query('users')
+      .filter((q) => q.eq(q.field('clerkId'), args.clerkId))
+      .unique()
+
+    if (!user) {
+      throw new ConvexError('User not found')
+    }
+
+    await ctx.db.patch(user._id, {
+      imageUrl: args.imageUrl,
+      email: args.email
+    })
+
+    const podcast = await ctx.db
+      .query('podcasts')
+      .filter((q) => q.eq(q.field('authorId'), args.clerkId))
+      .collect()
+
+    await Promise.all(
+      podcast.map(async (p) => {
+        await ctx.db.patch(p._id, {
+          authorImageUrl: args.imageUrl
+        })
+      })
+    )
+  }
+}
 
 export const getUserById = query({
   args: { clerkId: v.string() },
@@ -86,7 +126,7 @@ export const createUser = internalMutation({
   }
 })
 
-export const updateUser = internalMutation({
+export const updateUserInternal = internalMutation({
   args: {
     clerkId: v.string(),
     imageUrl: v.string(),
@@ -94,32 +134,19 @@ export const updateUser = internalMutation({
     blurhash: v.string()
   },
   async handler(ctx, args) {
-    const user = await ctx.db
-      .query('users')
-      .filter((q) => q.eq(q.field('clerkId'), args.clerkId))
-      .unique()
+    return await updateUser(ctx, args)
+  }
+})
 
-    if (!user) {
-      throw new ConvexError('User not found')
-    }
-
-    await ctx.db.patch(user._id, {
-      imageUrl: args.imageUrl,
-      email: args.email
-    })
-
-    const podcast = await ctx.db
-      .query('podcasts')
-      .filter((q) => q.eq(q.field('authorId'), args.clerkId))
-      .collect()
-
-    await Promise.all(
-      podcast.map(async (p) => {
-        await ctx.db.patch(p._id, {
-          authorImageUrl: args.imageUrl
-        })
-      })
-    )
+export const updateUserSettings = mutation({
+  args: {
+    clerkId: v.string(),
+    imageUrl: v.string(),
+    email: v.string(),
+    blurhash: v.string()
+  },
+  async handler(ctx, args) {
+    return await updateUser(ctx, args)
   }
 })
 

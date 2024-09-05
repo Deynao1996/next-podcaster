@@ -58,7 +58,7 @@ async function handleUserUpdate({ ctx, event }: UserUpdate) {
   if (event.type === 'user.updated') {
     const blurhash = await createBlurhash(event.data.image_url, ctx)
 
-    await ctx.runMutation(internal.users.updateUser, {
+    await ctx.runMutation(internal.users.updateUserInternal, {
       clerkId: event.data.id,
       imageUrl: event.data.image_url,
       blurhash,

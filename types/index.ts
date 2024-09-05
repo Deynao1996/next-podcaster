@@ -146,3 +146,10 @@ export interface PricingCardProps {
   exclusive?: boolean
   userId: string
 }
+
+export interface UserSettingsContentProps {
+  email?: string
+  name?: string
+  imageUrl?: string
+  clerkId: string
+}

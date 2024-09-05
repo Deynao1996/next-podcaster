@@ -2,13 +2,13 @@ import { cn } from '@/lib/utils'
 import { Loader } from 'lucide-react'
 import Image from 'next/image'
 import React, { useState } from 'react'
-import { useToast } from './ui/use-toast'
+import { useToast } from '../ui/use-toast'
 import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { useUploadFiles } from '@xixixao/uploadstuff/react'
 import { ImageUploaderProps } from '@/types'
 
-const ImageUploader = ({
+const CreateImageUploader = ({
   isThumbnailGenerating,
   setIsThumbnailGenerating,
   setImagePrompt,
@@ -174,4 +174,4 @@ const ImageUploader = ({
   )
 }
 
-export default ImageUploader
+export default CreateImageUploader

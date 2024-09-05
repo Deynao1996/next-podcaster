@@ -7,7 +7,7 @@ import { Button } from './ui/button'
 import { Loader } from 'lucide-react'
 import { useToast } from './ui/use-toast'
 import Image from 'next/image'
-import ImageUploader from './ImageUploader'
+import CreateImageUploader from './imageUploaderUI/CreateImageUploader'
 
 const GenerateThumbnail = ({
   setImageUrl,
@@ -60,7 +60,7 @@ const GenerateThumbnail = ({
         </Button>
       </TabsContent>
       <TabsContent value="image">
-        <ImageUploader
+        <CreateImageUploader
           {...{
             isThumbnailGenerating,
             setIsThumbnailGenerating,
