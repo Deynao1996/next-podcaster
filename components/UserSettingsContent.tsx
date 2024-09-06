@@ -17,17 +17,15 @@ import {
   FormMessage
 } from './ui/form'
 import { Input } from './ui/input'
-import { Label } from './ui/label'
-import { User } from 'lucide-react'
 import { Button } from './ui/button'
-import Image from 'next/image'
 import { UserSettingsContentProps } from '@/types'
-import { ChangeEvent, useState } from 'react'
+import { useState } from 'react'
 import UserAvatarUploader from './imageUploaderUI/UserAvatarUploader'
-import { useMutation } from 'convex/react'
+import { useAction, useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { ConvexError } from 'convex/values'
 import { useToast } from './ui/use-toast'
+import { useUploadImage } from '@/hooks/useUploadImage'
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -45,7 +43,11 @@ const UserSettingsContent = ({
   imageUrl,
   clerkId
 }: UserSettingsContentProps) => {
+  const { handleImage, isLoading } = useUploadImage()
+  const [selectedImage, setSelectedImage] = useState<File | undefined>()
   const { toast } = useToast()
+
+  const createBlurHash = useAction(api.blurhash.encodeImageToBlurhash)
   const updateUser = useMutation(api.users.updateUserSettings)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,31 +57,42 @@ const UserSettingsContent = ({
     }
   })
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
-    // const file = files[0]
-    //   const blob = await file.arrayBuffer().then((buffer) => {
-    //     return new Blob([buffer])
-    //   })
-    //   handleImage(blob, file.name)
-    try {
-      await updateUser({
-        blurhash: '213',
-        clerkId,
-        email: data.email,
-        imageUrl: '3'
+  function handleError(error: unknown) {
+    if (error instanceof ConvexError) {
+      toast({
+        title: error.data,
+        variant: 'destructive'
       })
-    } catch (error) {
-      if (error instanceof ConvexError) {
-        toast({
-          title: error.data,
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Something went wrong. Please try again later.'
+      })
+    }
+  }
+
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    if (!selectedImage) return toast({ title: 'Please select an image.' })
+    const blob = await selectedImage.arrayBuffer().then((buffer) => {
+      return new Blob([buffer])
+    })
+    try {
+      const imageUrl = await handleImage(blob, selectedImage.name)
+      if (!imageUrl)
+        return toast({
+          title: 'Error uploading image.',
           variant: 'destructive'
         })
-      } else {
-        toast({
-          variant: 'destructive',
-          title: 'Something went wrong. Please try again later.'
-        })
-      }
+
+      const blurhash = await createBlurHash({ imageUrl })
+      await updateUser({
+        blurhash,
+        clerkId,
+        email: data.email,
+        imageUrl
+      })
+    } catch (error) {
+      handleError(error)
     }
   }
 
@@ -130,16 +143,20 @@ const UserSettingsContent = ({
               </FormItem>
             )}
           />
-          <UserAvatarUploader imageUrl={imageUrl} />
+          <UserAvatarUploader
+            imageUrl={imageUrl}
+            selectedImage={selectedImage}
+            setSelectedImage={setSelectedImage}
+          />
           <DialogFooter>
-            <Button type="submit">Save changes</Button>
+            <Button type="submit" disabled={isLoading}>
+              Save changes
+            </Button>
           </DialogFooter>
         </form>
       </Form>
     </DialogContent>
   )
 }
-
-const ImagePreview = () => {}
 
 export default UserSettingsContent

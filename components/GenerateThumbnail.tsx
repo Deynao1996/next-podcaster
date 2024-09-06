@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Label } from '@/components/ui/label'
 import { GenerateThumbnailProps } from '@/types'
@@ -6,18 +5,16 @@ import { Textarea } from './ui/textarea'
 import { Button } from './ui/button'
 import { Loader } from 'lucide-react'
 import { useToast } from './ui/use-toast'
-import Image from 'next/image'
 import CreateImageUploader from './imageUploaderUI/CreateImageUploader'
 
 const GenerateThumbnail = ({
-  setImageUrl,
-  setImageStorageId,
   imageUrl,
   imagePrompt,
-  setImagePrompt
+  setImagePrompt,
+  isThumbnailGenerating,
+  handleImage
 }: GenerateThumbnailProps) => {
   const { toast } = useToast()
-  const [isThumbnailGenerating, setIsThumbnailGenerating] = useState(false)
 
   function generateImage() {
     //TODO Implement generate image from Stable Diffusion
@@ -63,12 +60,10 @@ const GenerateThumbnail = ({
         <CreateImageUploader
           {...{
             isThumbnailGenerating,
-            setIsThumbnailGenerating,
             setImagePrompt,
-            setImageStorageId,
-            setImageUrl,
             imageUrl,
-            imagePrompt
+            imagePrompt,
+            handleImage
           }}
         />
       </TabsContent>

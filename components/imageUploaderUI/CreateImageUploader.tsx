@@ -3,23 +3,15 @@ import { Loader } from 'lucide-react'
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { useToast } from '../ui/use-toast'
-import { useMutation } from 'convex/react'
-import { api } from '@/convex/_generated/api'
-import { useUploadFiles } from '@xixixao/uploadstuff/react'
 import { ImageUploaderProps } from '@/types'
 
 const CreateImageUploader = ({
   isThumbnailGenerating,
-  setIsThumbnailGenerating,
   setImagePrompt,
-  setImageStorageId,
-  setImageUrl,
-  imageUrl
+  imageUrl,
+  handleImage
 }: ImageUploaderProps) => {
   const { toast } = useToast()
-  const generateUploadUrl = useMutation(api.files.generateUploadUrl)
-  const { startUpload } = useUploadFiles(generateUploadUrl)
-  const getImageUrl = useMutation(api.podcasts.getUrl)
   const [fileEnter, setFileEnter] = useState(false)
 
   function handleDragOver(
@@ -37,6 +29,7 @@ const CreateImageUploader = ({
         const blob = await file.arrayBuffer().then((buffer) => {
           return new Blob([buffer])
         })
+        setImagePrompt('')
         await handleImage(blob, file.name)
       }
     }
@@ -50,32 +43,6 @@ const CreateImageUploader = ({
     }
   }
 
-  async function handleImage(blob: Blob, fileName: string) {
-    setIsThumbnailGenerating(true)
-    setImagePrompt('')
-
-    try {
-      const file = new File([blob], fileName, {
-        type: 'image/png'
-      })
-      const uploaded = await startUpload([file])
-      const storageId = (uploaded[0].response as any).storageId
-      setImageStorageId(storageId)
-
-      const imageUrl = await getImageUrl({ storageId })
-      setImageUrl(imageUrl!)
-      toast({ title: 'Thumbnail generated successfully' })
-    } catch (error) {
-      console.log(error)
-      toast({
-        variant: 'destructive',
-        title: 'Error generating thumbnail'
-      })
-    } finally {
-      setIsThumbnailGenerating(false)
-    }
-  }
-
   async function uploadImage(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault()
     try {
@@ -86,6 +53,7 @@ const CreateImageUploader = ({
       const blob = await file.arrayBuffer().then((buffer) => {
         return new Blob([buffer])
       })
+      setImagePrompt('')
       handleImage(blob, file.name)
     } catch (error) {
       console.log(error)

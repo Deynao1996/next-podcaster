@@ -23,11 +23,11 @@ export interface GeneratePodcastProps {
 }
 
 export interface GenerateThumbnailProps {
-  setImageUrl: Dispatch<SetStateAction<string>>
   imageUrl: string
-  setImageStorageId: Dispatch<SetStateAction<Id<'_storage'> | null>>
   imagePrompt: string
   setImagePrompt: Dispatch<SetStateAction<string>>
+  isThumbnailGenerating: boolean
+  handleImage: (blob: Blob, fileName: string) => Promise<string | null | undefined>
 }
 
 export interface PodcastListProps {
@@ -115,7 +115,6 @@ export interface SearchBarProps {
 
 export interface ImageUploaderProps extends GenerateThumbnailProps {
   isThumbnailGenerating: boolean
-  setIsThumbnailGenerating: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 type SkeletonType =
@@ -152,4 +151,10 @@ export interface UserSettingsContentProps {
   name?: string
   imageUrl?: string
   clerkId: string
+}
+
+export interface UserAvatarUploaderProps {
+  imageUrl?: string
+  selectedImage?: File
+  setSelectedImage: Dispatch<SetStateAction<File | undefined>>
 }

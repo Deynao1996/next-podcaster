@@ -25,6 +25,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { voiceCategories } from '@/constants'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
+import { useUploadImage } from '@/hooks/useUploadImage'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAction, useMutation } from 'convex/react'
 import { ConvexError } from 'convex/values'
@@ -49,11 +50,8 @@ const CreatePage = () => {
   const createPodcast = useMutation(api.podcasts.createPodcast)
   const createBlurHash = useAction(api.blurhash.encodeImageToBlurhash)
 
+  const { handleImage, imageStorageId, imageUrl, isLoading } = useUploadImage()
   const [imagePrompt, setImagePrompt] = useState('')
-  const [imageStorageId, setImageStorageId] = useState<Id<'_storage'> | null>(
-    null
-  )
-  const [imageUrl, setImageUrl] = useState('')
   const [audioUrl, setAudioUrl] = useState('')
   const [audioStorageId, setAudioStorageId] = useState<Id<'_storage'> | null>(
     null
@@ -214,11 +212,11 @@ const CreatePage = () => {
             transcription={transcription}
           />
           <GenerateThumbnail
-            setImageUrl={setImageUrl}
             imageUrl={imageUrl}
             imagePrompt={imagePrompt}
-            setImageStorageId={setImageStorageId}
             setImagePrompt={setImagePrompt}
+            handleImage={handleImage}
+            isThumbnailGenerating={isLoading}
           />
           <Button
             className="w-full"

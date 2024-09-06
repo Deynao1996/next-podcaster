@@ -1,5 +1,4 @@
-import React from 'react'
-import { Settings, User } from 'lucide-react'
+import { Settings } from 'lucide-react'
 import { useUser } from '@clerk/nextjs'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
