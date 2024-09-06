@@ -1,20 +1,13 @@
 'use client'
 
 import React from 'react'
-import Logo from './Logo'
+import Logo from '../Logo'
 import Image from 'next/image'
-import { Button } from './ui/button'
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetHeader,
-  SheetTrigger
-} from './ui/sheet'
-import NavLinks from './NavLinks'
+import { Button } from '../ui/button'
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from '../ui/sheet'
+import NavLinks from '../NavLinks'
 import Link from 'next/link'
 import { SignedIn, SignedOut, useClerk } from '@clerk/nextjs'
-import { LogInIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 const MobileHeader = () => {

@@ -1,5 +1,5 @@
+import MobileHeader from '@/components/headerUI/MobileHeader'
 import LeftSideBar from '@/components/LeftSideBar'
-import MobileHeader from '@/components/MobileHeader'
 import MusicPlayer from '@/components/playerUI/MusicPlayer'
 import RightSideBar from '@/components/RightSideBar'
 
