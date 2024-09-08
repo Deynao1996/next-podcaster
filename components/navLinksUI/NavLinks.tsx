@@ -7,7 +7,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
-import { SheetClose } from './ui/sheet'
+import { SheetClose } from '../ui/sheet'
 
 const NavLinks = ({ withSheetClose }: { withSheetClose?: boolean }) => {
   const [SheetCloseWrapper, shetCloseWrapperProps] = withSheetClose
@@ -15,7 +15,7 @@ const NavLinks = ({ withSheetClose }: { withSheetClose?: boolean }) => {
     : [React.Fragment, {}]
   const { user } = useUser()
   const pathname = usePathname()
-  const navLinks = sidebarLinks(user?.id)
+  const navLinks = sidebarLinks(user?.id, true)
 
   return (
     <div className="flex flex-col gap-3">

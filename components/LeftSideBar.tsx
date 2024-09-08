@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Logo from './Logo'
-import NavLinks from './NavLinks'
+import NavLinks from './navLinksUI/NavLinks'
 import { Button } from './ui/button'
 import Link from 'next/link'
 import { LogInIcon } from 'lucide-react'

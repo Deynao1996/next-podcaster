@@ -1,8 +1,8 @@
 export const DEFAULT_VOICE_ID =
   's3://voice-cloning-zero-shot/f6594c50-e59b-492c-bac2-047d57f8bdd8/susanadvertisingsaad/manifest.json'
 
-export const sidebarLinks = (currentUserId?: string) => {
-  return [
+export const sidebarLinks = (currentUserId?: string, isAdmin?: boolean) => {
+  const links = [
     {
       imgURL: '/icons/home.svg',
       route: '/',
@@ -29,7 +29,39 @@ export const sidebarLinks = (currentUserId?: string) => {
       label: 'Prices'
     }
   ]
+
+  if (isAdmin) {
+    links.push({
+      imgURL: '/icons/dashboard.svg',
+      route: '/dashboard',
+      label: 'Dashboard'
+    })
+  }
+  return links
 }
+
+export const dashboardLinks = [
+  {
+    route: '/dashboard',
+    label: 'Dashboard'
+  },
+  {
+    route: '/dashboard/subscriptions',
+    label: 'Subscriptions'
+  },
+  {
+    route: '/dashboard/podcasts',
+    label: 'Podcasts'
+  },
+  {
+    route: '/dashboard/customers',
+    label: 'Customers'
+  },
+  {
+    route: '/dashboard/analytics',
+    label: 'Analytics'
+  }
+]
 
 export const plans = [
   {

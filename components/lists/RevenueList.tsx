@@ -8,7 +8,7 @@ const RevenueList = () => {
       <Card x-chunk="dashboard-01-chunk-0">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-          <DollarSign className="text-muted-foreground h-4 w-4" />
+          <DollarSign className="text-primary h-4 w-4" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">$45,231.89</div>
@@ -20,7 +20,7 @@ const RevenueList = () => {
       <Card x-chunk="dashboard-01-chunk-1">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Subscriptions</CardTitle>
-          <Users className="text-muted-foreground h-4 w-4" />
+          <Users className="text-primary h-4 w-4" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">+2350</div>
@@ -32,7 +32,7 @@ const RevenueList = () => {
       <Card x-chunk="dashboard-01-chunk-2">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Sales</CardTitle>
-          <CreditCard className="text-muted-foreground h-4 w-4" />
+          <CreditCard className="text-primary h-4 w-4" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">+12,234</div>
@@ -42,7 +42,7 @@ const RevenueList = () => {
       <Card x-chunk="dashboard-01-chunk-3">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Active Now</CardTitle>
-          <Activity className="text-muted-foreground h-4 w-4" />
+          <Activity className="text-primary h-4 w-4" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">+573</div>
