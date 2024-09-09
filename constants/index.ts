@@ -56,10 +56,6 @@ export const dashboardLinks = [
   {
     route: '/dashboard/customers',
     label: 'Customers'
-  },
-  {
-    route: '/dashboard/analytics',
-    label: 'Analytics'
   }
 ]
 
