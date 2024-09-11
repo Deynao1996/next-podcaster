@@ -72,7 +72,7 @@ export const getTokensByUserId = query({
       .query('plans')
       .filter((q) => q.eq(q.field('userId'), args.userId))
       .unique()
-    if (!currentPlan) throw new ConvexError('No plan found')
+    if (!currentPlan) return 0
     return currentPlan.tokens
   }
 })

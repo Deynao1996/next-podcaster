@@ -5,6 +5,7 @@
 import type { WebhookEvent } from '@clerk/nextjs/server'
 import { GenericActionCtx, httpRouter } from 'convex/server'
 import { Webhook } from 'svix'
+import { clerkClient } from '@clerk/clerk-sdk-node'
 
 import { internal } from './_generated/api'
 import { httpAction } from './_generated/server'
@@ -67,6 +68,14 @@ async function handleUserUpdate({ ctx, event }: UserUpdate) {
   }
 }
 
+async function addUserToOrganization(userId: string) {
+  await clerkClient.organizations.createOrganizationMembership({
+    organizationId: process.env.ORGANIZATION_ID as string,
+    userId: userId,
+    role: 'member'
+  })
+}
+
 const handleClerkWebhook = httpAction(async (ctx, request) => {
   const event = await validateRequest(request)
   if (!event) {
@@ -78,6 +87,7 @@ const handleClerkWebhook = httpAction(async (ctx, request) => {
 
       await handleUserCreated({ userId, ctx, event })
       await createDefaultPlan(userId, ctx)
+      await addUserToOrganization(userId)
       break
     case 'user.updated':
       await handleUserUpdate({ ctx, event })
