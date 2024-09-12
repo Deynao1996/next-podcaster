@@ -9,8 +9,6 @@ import { api } from '@/convex/_generated/api'
 const RevenueList = () => {
   const test = useQuery(api.dashboard.testQuery, {})
 
-  console.log(test)
-
   return (
     <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
       <Card x-chunk="dashboard-01-chunk-0">

@@ -1,4 +1,5 @@
 import { Id } from '@/convex/_generated/dataModel'
+import { UserIdentity } from 'convex/server'
 import { Dispatch, SetStateAction } from 'react'
 import { EmptyObject } from 'react-hook-form'
 
@@ -27,7 +28,10 @@ export interface GenerateThumbnailProps {
   imagePrompt: string
   setImagePrompt: Dispatch<SetStateAction<string>>
   isThumbnailGenerating: boolean
-  handleImage: (blob: Blob, fileName: string) => Promise<string | null | undefined>
+  handleImage: (
+    blob: Blob,
+    fileName: string
+  ) => Promise<string | null | undefined>
 }
 
 export interface PodcastListProps {
@@ -157,4 +161,8 @@ export interface UserAvatarUploaderProps {
   imageUrl?: string
   selectedImage?: File
   setSelectedImage: Dispatch<SetStateAction<File | undefined>>
+}
+
+export interface CustomIdentity extends UserIdentity {
+  membership_permission: string[]
 }

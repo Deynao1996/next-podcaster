@@ -147,3 +147,5 @@ export const voiceCategories = [
       's3://voice-cloning-zero-shot/b41d1a8c-2c99-4403-8262-5808bc67c3e0/bentonsaad/manifest.json'
   }
 ]
+
+export const DASHBOARD_PERMISSION = 'org:dashboard:view'

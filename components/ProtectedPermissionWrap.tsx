@@ -1,3 +1,4 @@
+import { DASHBOARD_PERMISSION } from '@/constants'
 import { Protect } from '@clerk/nextjs'
 import React from 'react'
 
@@ -10,7 +11,7 @@ const ProtectedPermissionWrap = ({
   children: React.ReactNode
 }) =>
   condition ? (
-    <Protect permission="org:dashboard:view" {...props}>
+    <Protect permission={DASHBOARD_PERMISSION} {...props}>
       {children}
     </Protect>
   ) : (
