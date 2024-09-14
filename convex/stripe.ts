@@ -104,7 +104,8 @@ export const pay = action({
   },
   handler: async (ctx, { userId, amount, interval }) => {
     const paymentId = await ctx.runMutation(internal.payments.create, {
-      userId
+      userId,
+      amount
     })
     const userPlan = await ctx.runQuery(
       internal.plans.getPlansByUserIdInternal,

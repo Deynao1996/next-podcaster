@@ -2,10 +2,11 @@ import { ConvexError, v } from 'convex/values'
 import { internalMutation, query } from './_generated/server'
 
 export const create = internalMutation({
-  args: { userId: v.string() },
-  handler: async (ctx, { userId }) => {
+  args: { userId: v.string(), amount: v.number() },
+  handler: async (ctx, { userId, amount }) => {
     return await ctx.db.insert('payments', {
-      userId
+      userId,
+      amount
     })
   }
 })

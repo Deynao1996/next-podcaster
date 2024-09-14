@@ -35,7 +35,8 @@ export default defineSchema({
     userId: v.string(),
     status: v.optional(v.union(v.literal('pending'), v.literal('paid'))),
     stripeId: v.optional(v.string()),
-    message: v.optional(v.string())
+    message: v.optional(v.string()),
+    amount: v.number()
   }),
   plans: defineTable({
     userId: v.string(),

@@ -128,6 +128,7 @@ type SkeletonType =
   | 'slider'
   | 'top-podcasters'
   | 'profile'
+  | 'stats'
 
 export interface CustomSkeletonProps {
   type: SkeletonType

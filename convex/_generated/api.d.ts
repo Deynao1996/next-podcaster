@@ -15,7 +15,6 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as blurhash from "../blurhash.js";
-import type * as dashboard from "../dashboard.js";
 import type * as files from "../files.js";
 import type * as gemini from "../gemini.js";
 import type * as http from "../http.js";
@@ -23,6 +22,7 @@ import type * as payments from "../payments.js";
 import type * as plans from "../plans.js";
 import type * as playht from "../playht.js";
 import type * as podcasts from "../podcasts.js";
+import type * as stats from "../stats.js";
 import type * as stripe from "../stripe.js";
 import type * as users from "../users.js";
 
@@ -36,7 +36,6 @@ import type * as users from "../users.js";
  */
 declare const fullApi: ApiFromModules<{
   blurhash: typeof blurhash;
-  dashboard: typeof dashboard;
   files: typeof files;
   gemini: typeof gemini;
   http: typeof http;
@@ -44,6 +43,7 @@ declare const fullApi: ApiFromModules<{
   plans: typeof plans;
   playht: typeof playht;
   podcasts: typeof podcasts;
+  stats: typeof stats;
   stripe: typeof stripe;
   users: typeof users;
 }>;

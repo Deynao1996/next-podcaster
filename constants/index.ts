@@ -1,3 +1,5 @@
+import { CreditCard, DollarSign, Users } from 'lucide-react'
+
 export const DEFAULT_VOICE_ID =
   's3://voice-cloning-zero-shot/f6594c50-e59b-492c-bac2-047d57f8bdd8/susanadvertisingsaad/manifest.json'
 
@@ -147,5 +149,24 @@ export const voiceCategories = [
       's3://voice-cloning-zero-shot/b41d1a8c-2c99-4403-8262-5808bc67c3e0/bentonsaad/manifest.json'
   }
 ]
+
+export const statListInfo = {
+  revenue: {
+    title: 'Total Revenue',
+    Icon: DollarSign
+  },
+  subscriptions: {
+    title: 'Subscriptions',
+    Icon: CreditCard
+  },
+  podcasts: {
+    title: 'Podcasts',
+    Icon: CreditCard
+  },
+  users: {
+    title: 'Users',
+    Icon: Users
+  }
+}
 
 export const DASHBOARD_PERMISSION = 'org:dashboard:view'

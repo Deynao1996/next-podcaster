@@ -1,5 +1,6 @@
 import { CustomSkeletonProps } from '@/types'
 import { Skeleton } from './ui/skeleton'
+import { Card, CardContent, CardHeader } from './ui/card'
 
 const CustomSkeleton = ({ type, count = 1 }: CustomSkeletonProps) => {
   const PodcastsListSkeleton = () => {
@@ -96,6 +97,25 @@ const CustomSkeleton = ({ type, count = 1 }: CustomSkeletonProps) => {
     )
   }
 
+  const StatSkeleton = () => {
+    return (
+      <ul className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+        {[...Array(count)].map((_, i) => {
+          return (
+            <Card>
+              <CardHeader className="space-y-0 pb-2">
+                <Skeleton className="h-6 rounded-sm" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-14 rounded-sm" />
+              </CardContent>
+            </Card>
+          )
+        })}
+      </ul>
+    )
+  }
+
   switch (type) {
     case 'podcasts':
       return <PodcastsListSkeleton />
@@ -109,6 +129,8 @@ const CustomSkeleton = ({ type, count = 1 }: CustomSkeletonProps) => {
       return <TopPodcastersSkeleton />
     case 'profile':
       return <ProfileSkeleton />
+    case 'stats':
+      return <StatSkeleton />
     default:
       break
   }
