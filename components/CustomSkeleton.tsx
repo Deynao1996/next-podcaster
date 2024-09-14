@@ -116,6 +116,21 @@ const CustomSkeleton = ({ type, count = 1 }: CustomSkeletonProps) => {
     )
   }
 
+  const SubscriptionsListSkeleton = () => {
+    return (
+      <Card x-chunk="dashboard-01-chunk-5" className="xl:col-span-2">
+        <CardHeader>
+          <Skeleton className="h-10 w-[250px] rounded-sm" />
+        </CardHeader>
+        <CardContent className="grid gap-6">
+          {[...Array(count)].map((_, i) => {
+            return <Skeleton className="h-12 rounded-sm" />
+          })}
+        </CardContent>
+      </Card>
+    )
+  }
+
   switch (type) {
     case 'podcasts':
       return <PodcastsListSkeleton />
@@ -131,6 +146,8 @@ const CustomSkeleton = ({ type, count = 1 }: CustomSkeletonProps) => {
       return <ProfileSkeleton />
     case 'stats':
       return <StatSkeleton />
+    case 'subscriptions':
+      return <SubscriptionsListSkeleton />
     default:
       break
   }

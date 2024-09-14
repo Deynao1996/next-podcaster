@@ -1,4 +1,4 @@
-import { ConvexError } from 'convex/values'
+import { ConvexError, v } from 'convex/values'
 import { query } from './_generated/server'
 import { GenericQueryCtx } from 'convex/server'
 import { CustomIdentity } from '@/types'
@@ -295,5 +295,35 @@ export const getStats = query({
         label: 'users' as const
       }
     ]
+  }
+})
+
+export const getRecentSubscriptions = query({
+  args: { num: v.optional(v.number()) },
+  async handler(ctx, args) {
+    const plans = await ctx.db
+      .query('plans')
+      .order('desc')
+      .take(args.num || 5)
+    const subscriptions = await Promise.all(
+      plans.map(async (plan) => {
+        const user = await ctx.db
+          .query('users')
+          .filter((q) => q.eq(q.field('clerkId'), plan.userId))
+          .unique()
+        if (!user) {
+          throw new ConvexError('User not found')
+        }
+
+        return {
+          name: plan.name,
+          userName: user.name,
+          userId: user.clerkId,
+          userImageUrl: user.imageUrl,
+          userEmail: user.email
+        }
+      })
+    )
+    return subscriptions
   }
 })

@@ -156,15 +156,15 @@ export const statListInfo = {
     Icon: DollarSign
   },
   subscriptions: {
-    title: 'Subscriptions',
+    title: 'Total Subscriptions',
     Icon: CreditCard
   },
   podcasts: {
-    title: 'Podcasts',
+    title: 'Total Podcasts',
     Icon: CreditCard
   },
   users: {
-    title: 'Users',
+    title: 'Total Users',
     Icon: Users
   }
 }

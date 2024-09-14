@@ -129,6 +129,7 @@ type SkeletonType =
   | 'top-podcasters'
   | 'profile'
   | 'stats'
+  | 'subscriptions'
 
 export interface CustomSkeletonProps {
   type: SkeletonType
