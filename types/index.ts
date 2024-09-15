@@ -130,6 +130,7 @@ type SkeletonType =
   | 'profile'
   | 'stats'
   | 'subscriptions'
+  | 'radial-chart'
 
 export interface CustomSkeletonProps {
   type: SkeletonType

@@ -2,7 +2,7 @@ import { ConvexError, v } from 'convex/values'
 import { query } from './_generated/server'
 import { GenericQueryCtx } from 'convex/server'
 import { CustomIdentity } from '@/types'
-import { DASHBOARD_PERMISSION } from '@/constants'
+import { DAILY_GOAL_SALES, DASHBOARD_PERMISSION } from '@/constants'
 
 type FormStats = {
   ctx: GenericQueryCtx<any>
@@ -23,16 +23,13 @@ async function checkDashboardViewPermission(ctx: GenericQueryCtx<any>) {
   if (!isValid) throw new ConvexError('Unauthorized')
 }
 
-function calcPercentageChange(
-  previousMonthTotal: number,
-  currentMonthTotal: number
-) {
+function calcPercentageChange(prevTotal: number, currTotal: number) {
   const percentChange =
-    previousMonthTotal === 0
-      ? currentMonthTotal > 0
+    prevTotal === 0
+      ? currTotal > 0
         ? 100
         : 0
-      : ((currentMonthTotal - previousMonthTotal) / previousMonthTotal) * 100
+      : ((currTotal - prevTotal) / prevTotal) * 100
   return Math.round(percentChange)
 }
 
@@ -325,5 +322,47 @@ export const getRecentSubscriptions = query({
       })
     )
     return subscriptions
+  }
+})
+
+export const getDailySales = query({
+  args: {},
+  async handler(ctx, args) {
+    const now = new Date()
+    const startOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    ).getTime()
+
+    const startOfTomorrow = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() + 1
+    ).getTime()
+
+    const year = now.getFullYear()
+    const month = now.toLocaleString('default', { month: 'long' })
+    const day = now.getDate()
+    const currentDay = `${month} ${day}, ${year}`
+
+    const todaysPayments = await ctx.db
+      .query('payments')
+      .filter((q) =>
+        q.and(
+          q.gte(q.field('_creationTime'), startOfToday),
+          q.lt(q.field('_creationTime'), startOfTomorrow),
+          q.eq(q.field('status'), 'paid')
+        )
+      )
+      .collect()
+
+    const todaysSalesTotal = todaysPayments.reduce(
+      (sum, payment) => sum + payment.amount,
+      0
+    )
+    const percentageDailyChange = (todaysSalesTotal * 100) / DAILY_GOAL_SALES
+
+    return { todaysSalesTotal, percentageDailyChange, currentDay }
   }
 })

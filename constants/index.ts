@@ -170,3 +170,4 @@ export const statListInfo = {
 }
 
 export const DASHBOARD_PERMISSION = 'org:dashboard:view'
+export const DAILY_GOAL_SALES = 1000

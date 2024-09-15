@@ -1,6 +1,6 @@
 import { CustomSkeletonProps } from '@/types'
 import { Skeleton } from './ui/skeleton'
-import { Card, CardContent, CardHeader } from './ui/card'
+import { Card, CardContent, CardFooter, CardHeader } from './ui/card'
 
 const CustomSkeleton = ({ type, count = 1 }: CustomSkeletonProps) => {
   const PodcastsListSkeleton = () => {
@@ -131,6 +131,24 @@ const CustomSkeleton = ({ type, count = 1 }: CustomSkeletonProps) => {
     )
   }
 
+  const RadialChartSkeleton = () => {
+    return (
+      <Card className="flex flex-col">
+        <CardHeader className="items-center pb-0">
+          <Skeleton className="h-10 w-[150px] rounded-sm" />
+          <Skeleton className="h-6 w-[170px] rounded-sm" />
+        </CardHeader>
+        <CardContent className="mt-7 flex flex-1 items-center justify-center pb-0">
+          <Skeleton className="h-[180px] w-[180px] rounded-full" />
+        </CardContent>
+        <CardFooter className="flex-col gap-2 text-sm">
+          <Skeleton className="mt-5 h-6 w-[180px] rounded-sm" />
+          <Skeleton className="h-4 w-[160px] rounded-sm" />
+        </CardFooter>
+      </Card>
+    )
+  }
+
   switch (type) {
     case 'podcasts':
       return <PodcastsListSkeleton />
@@ -148,6 +166,8 @@ const CustomSkeleton = ({ type, count = 1 }: CustomSkeletonProps) => {
       return <StatSkeleton />
     case 'subscriptions':
       return <SubscriptionsListSkeleton />
+    case 'radial-chart':
+      return <RadialChartSkeleton />
     default:
       break
   }
