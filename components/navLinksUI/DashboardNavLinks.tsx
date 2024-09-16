@@ -11,7 +11,8 @@ const DashboardNavLinks = () => {
   const pathname = usePathname()
 
   function renderLinks(link: { label: string; route: string }) {
-    const isActive = pathname === link.route
+    const isActive =
+      pathname === link.route || pathname.startsWith(`${link.route}/`)
     return (
       <Link
         key={link.label}

@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import {
   Card,
@@ -18,8 +20,28 @@ import {
   TableRow
 } from '../ui/table'
 import { Badge } from '../ui/badge'
+import { useQuery } from 'convex/react'
+import { api } from '@/convex/_generated/api'
+import { cn } from '@/lib/utils'
+import { TransactionsListProps } from '@/types'
 
-const TransactionsList = () => {
+//TODO ADD loading state
+//TODO ADD empty state
+//TODO Add smooth scroll after changing tabs
+//TODO Check isActive nav link
+
+const TransactionsList = ({
+  showActionBtn,
+  num,
+  dateFilter
+}: TransactionsListProps) => {
+  const transactions = useQuery(api.payments.getLatestTransactions, {
+    num,
+    dateFilter
+  })
+
+  if (!transactions) return
+
   return (
     <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
       <CardHeader className="flex flex-row items-center">
@@ -29,81 +51,63 @@ const TransactionsList = () => {
             Recent transactions from your store.
           </CardDescription>
         </div>
-        <Button asChild size="sm" className="ml-auto gap-1">
-          <Link href="#">
-            View All
-            <ArrowUpRight className="h-4 w-4" />
-          </Link>
-        </Button>
+        {showActionBtn && (
+          <Button asChild size="sm" className="ml-auto gap-1">
+            <Link href="/dashboard/subscriptions?dateFilter=week">
+              View All
+              <ArrowUpRight className="h-4 w-4" />
+            </Link>
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Customer</TableHead>
-              <TableHead className="hidden xl:table-column">Type</TableHead>
-              <TableHead className="hidden xl:table-column">Status</TableHead>
-              <TableHead className="hidden xl:table-column">Date</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Date</TableHead>
               <TableHead className="text-right">Amount</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>
-                <div className="font-medium">Liam Johnson</div>
-                <div className="text-muted-foreground hidden text-sm md:inline">
-                  liam@example.com
-                </div>
-              </TableCell>
-              <TableCell className="hidden xl:table-column">Sale</TableCell>
-              <TableCell className="hidden xl:table-column">
-                <Badge className="text-xs" variant="outline">
-                  Approved
-                </Badge>
-              </TableCell>
-              <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                2023-06-23
-              </TableCell>
-              <TableCell className="text-right">$250.00</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <div className="font-medium">Olivia Smith</div>
-                <div className="text-muted-foreground hidden text-sm md:inline">
-                  olivia@example.com
-                </div>
-              </TableCell>
-              <TableCell className="hidden xl:table-column">Refund</TableCell>
-              <TableCell className="hidden xl:table-column">
-                <Badge className="text-xs" variant="outline">
-                  Declined
-                </Badge>
-              </TableCell>
-              <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                2023-06-24
-              </TableCell>
-              <TableCell className="text-right">$150.00</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <div className="font-medium">Noah Williams</div>
-                <div className="text-muted-foreground hidden text-sm md:inline">
-                  noah@example.com
-                </div>
-              </TableCell>
-              <TableCell className="hidden xl:table-column">
-                Subscription
-              </TableCell>
-              <TableCell className="hidden xl:table-column">
-                <Badge className="text-xs" variant="outline">
-                  Approved
-                </Badge>
-              </TableCell>
-              <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                2023-06-25
-              </TableCell>
-              <TableCell className="text-right">$350.00</TableCell>
-            </TableRow>
+            {transactions.map(
+              ({
+                amount,
+                creationTime,
+                status,
+                userEmail,
+                userId,
+                userName
+              }) => {
+                const isPending = status === 'pending' || status === undefined
+
+                return (
+                  <TableRow key={userId}>
+                    <TableCell>
+                      <div className="font-medium">{userName}</div>
+                      <div className="text-muted-foreground hidden text-sm md:inline">
+                        {userEmail}
+                      </div>
+                    </TableCell>
+                    <TableCell className="table-cell">
+                      <Badge
+                        className={cn('border-green-500 text-xs capitalize', {
+                          'border-primary': isPending
+                        })}
+                        variant="outline"
+                      >
+                        {isPending ? 'pending' : status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="table-cell">
+                      {new Date(creationTime).toLocaleDateString('en-US')}
+                    </TableCell>
+                    <TableCell className="text-right">${amount}</TableCell>
+                  </TableRow>
+                )
+              }
+            )}
           </TableBody>
         </Table>
       </CardContent>

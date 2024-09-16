@@ -12,7 +12,7 @@ const DashboardPage = () => {
         <RadialChart />
       </div>
       <footer>
-        <TransactionsList />
+        <TransactionsList num={5} />
       </footer>
     </main>
   )

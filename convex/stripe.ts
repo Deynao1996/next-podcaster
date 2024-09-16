@@ -3,7 +3,7 @@
 import { ConvexError, v } from 'convex/values'
 import { action, internalAction } from './_generated/server'
 import Stripe from 'stripe'
-import { api, internal } from './_generated/api'
+import { internal } from './_generated/api'
 import { planMap } from '@/constants'
 import { GenericActionCtx } from 'convex/server'
 
@@ -53,7 +53,7 @@ async function createStripeSession({
   return session
 }
 
-async function handleSessionComplete({
+async function handleSubscriptionComplete({
   event,
   ctx,
   stripe
@@ -62,38 +62,36 @@ async function handleSessionComplete({
   ctx: GenericActionCtx<any>
   stripe: Stripe
 }) {
-  if (event.type === 'checkout.session.completed') {
-    const stripeId = (event.data.object as { id: string }).id
-    const userId = await ctx.runMutation(internal.payments.fulfill, {
-      stripeId
-    })
-    const currentPlan = await ctx.runQuery(
-      internal.plans.getPlansByUserIdInternal,
-      { userId }
-    )
-    const subscriptionId = event.data.object.subscription?.toString()
-    if (!currentPlan || !subscriptionId) return { success: false }
+  const stripeId = (event.data.object as { id: string }).id
+  const userId = await ctx.runMutation(internal.payments.fulfill, {
+    stripeId
+  })
+  const currentPlan = await ctx.runQuery(
+    internal.plans.getPlansByUserIdInternal,
+    { userId }
+  )
+  const subscriptionId = (event.data.object as any).subscription?.toString()
+  if (!currentPlan || !subscriptionId) return { success: false }
 
-    const currentSubscription =
-      await stripe.subscriptions.retrieve(subscriptionId)
-    const amount = currentSubscription.items.data[0].plan.amount
-    if (!amount) return { success: false }
-    const endTime = currentSubscription.current_period_end * 1000
-    const startTime = currentSubscription.current_period_start * 1000
+  const currentSubscription =
+    await stripe.subscriptions.retrieve(subscriptionId)
+  const amount = currentSubscription.items.data[0].plan.amount
+  if (!amount) return { success: false }
+  const endTime = currentSubscription.current_period_end * 1000
+  const startTime = currentSubscription.current_period_start * 1000
 
-    const exchangedAmount = amount / 100
-    const { interval, name, tokens } = checkCurrentPlan(exchangedAmount)
+  const exchangedAmount = amount / 100
+  const { interval, name, tokens } = checkCurrentPlan(exchangedAmount)
 
-    await ctx.runMutation(internal.plans.updatePlan, {
-      name,
-      interval,
-      endTime,
-      startTime,
-      tokens,
-      subscriptionId,
-      planId: currentPlan._id
-    })
-  }
+  await ctx.runMutation(internal.plans.updatePlan, {
+    name,
+    interval,
+    endTime,
+    startTime,
+    tokens,
+    subscriptionId,
+    planId: currentPlan._id
+  })
 }
 
 export const pay = action({
@@ -143,15 +141,19 @@ export const fulfill = internalAction({
         signature,
         webhookSecret
       )
-      await handleSessionComplete({
-        event,
-        ctx,
-        stripe
-      })
+      if (
+        event.type === 'subscription_schedule.completed' ||
+        event.type === 'checkout.session.completed'
+      ) {
+        await handleSubscriptionComplete({
+          event,
+          ctx,
+          stripe
+        })
+      }
 
       if (event.type === 'checkout.session.async_payment_failed') {
         return { success: false }
-        //TODO handle payment failed
       }
 
       return { success: true }

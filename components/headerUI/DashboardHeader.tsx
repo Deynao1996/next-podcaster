@@ -1,4 +1,6 @@
-import { CircleUser, Menu, Search } from 'lucide-react'
+'use client'
+
+import { Menu, Search } from 'lucide-react'
 import React from 'react'
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet'
 import { Button } from '../ui/button'
@@ -12,6 +14,10 @@ import {
   DropdownMenuTrigger
 } from '../ui/dropdown-menu'
 import DashboardNavLinks from '../navLinksUI/DashboardNavLinks'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { useClerk, useUser } from '@clerk/nextjs'
+import { Skeleton } from '../ui/skeleton'
+import { useRouter } from 'next/navigation'
 
 const DashboardHeader = () => {
   return (
@@ -43,24 +49,40 @@ const DashboardHeader = () => {
             />
           </div>
         </form>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="secondary" size="icon" className="rounded-full">
-              <CircleUser className="h-5 w-5" />
-              <span className="sr-only">Toggle user menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>Support</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Logout</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <UserButton />
       </div>
     </header>
+  )
+}
+
+const UserButton = () => {
+  const { user } = useUser()
+  const { signOut } = useClerk()
+  const router = useRouter()
+
+  if (!user) return <Skeleton className="size-[40px] rounded-full" />
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="secondary" size="icon" className="rounded-full">
+          <Avatar>
+            <AvatarImage src={user.imageUrl} />
+            <AvatarFallback>
+              {user.fullName?.substring(0, 2).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <span className="sr-only">Toggle user menu</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => signOut(() => router.push('/'))}>
+          Logout
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 

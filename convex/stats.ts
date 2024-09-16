@@ -3,9 +3,10 @@ import { query } from './_generated/server'
 import { GenericQueryCtx } from 'convex/server'
 import { CustomIdentity } from '@/types'
 import { DAILY_GOAL_SALES, DASHBOARD_PERMISSION } from '@/constants'
+import { DataModel } from './_generated/dataModel'
 
 type FormStats = {
-  ctx: GenericQueryCtx<any>
+  ctx: GenericQueryCtx<DataModel>
   dates: {
     startOfCurrentMonth: number
     startOfNextMonth: number
@@ -14,7 +15,9 @@ type FormStats = {
   }
 }
 
-async function checkDashboardViewPermission(ctx: GenericQueryCtx<any>) {
+export async function checkDashboardViewPermission(
+  ctx: GenericQueryCtx<DataModel>
+) {
   const identity = await ctx.auth.getUserIdentity()
   if (!identity) throw new ConvexError('Unauthorized')
   const customIdentity = identity as CustomIdentity

@@ -11,6 +11,8 @@ type PodcastParams = {
 
 type PodcastQueryParams = EmptyObject | 'skip' | undefined | PodcastParams
 
+export type DateFilter = 'week' | 'month' | 'year'
+
 export interface GeneratePodcastProps {
   voiceType: string
   setAudio: Dispatch<SetStateAction<string>>
@@ -168,4 +170,10 @@ export interface UserAvatarUploaderProps {
 
 export interface CustomIdentity extends UserIdentity {
   membership_permission: string[]
+}
+
+export interface TransactionsListProps {
+  showActionBtn?: boolean
+  num?: number
+  dateFilter?: DateFilter
 }
