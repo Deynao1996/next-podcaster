@@ -1,7 +1,7 @@
 'use client'
 
-import EmptyState from '@/components/EmptyState'
 import SearchBar from '@/components/SearchBar'
+import EmptyPodcastList from '@/components/emptyStateUI/EmptyPodcastList'
 import PodcastList from '@/components/lists/PodcastList'
 
 const CreatePodcastPage = ({
@@ -16,7 +16,7 @@ const CreatePodcastPage = ({
         label="discover"
         queryParams={{ search: search || '' }}
         renderEmptyState={() => (
-          <EmptyState
+          <EmptyPodcastList
             title="No results found"
             subtitle="Try adjusting your search to find what you are looking for"
           />

@@ -1,6 +1,7 @@
 import { CustomSkeletonProps } from '@/types'
 import { Skeleton } from './ui/skeleton'
 import { Card, CardContent, CardFooter, CardHeader } from './ui/card'
+import { TableBody, TableCell, TableRow } from './ui/table'
 
 const CustomSkeleton = ({ type, count = 1 }: CustomSkeletonProps) => {
   const PodcastsListSkeleton = () => {
@@ -102,7 +103,7 @@ const CustomSkeleton = ({ type, count = 1 }: CustomSkeletonProps) => {
       <ul className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
         {[...Array(count)].map((_, i) => {
           return (
-            <Card>
+            <Card key={i}>
               <CardHeader className="space-y-0 pb-2">
                 <Skeleton className="h-6 rounded-sm" />
               </CardHeader>
@@ -124,7 +125,7 @@ const CustomSkeleton = ({ type, count = 1 }: CustomSkeletonProps) => {
         </CardHeader>
         <CardContent className="grid gap-6">
           {[...Array(count)].map((_, i) => {
-            return <Skeleton className="h-12 rounded-sm" />
+            return <Skeleton className="h-12 rounded-sm" key={i} />
           })}
         </CardContent>
       </Card>
@@ -149,6 +150,31 @@ const CustomSkeleton = ({ type, count = 1 }: CustomSkeletonProps) => {
     )
   }
 
+  const TransactionsListSkeleton = () => {
+    return (
+      <>
+        {[...Array(count)].map((_, i) => {
+          return (
+            <TableRow key={i}>
+              <TableCell>
+                <Skeleton className="h-6 rounded-sm" />
+              </TableCell>
+              <TableCell className="table-cell">
+                <Skeleton className="h-6 rounded-sm" />
+              </TableCell>
+              <TableCell className="table-cell">
+                <Skeleton className="h-6 rounded-sm" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="ml-auto h-6 rounded-sm" />
+              </TableCell>
+            </TableRow>
+          )
+        })}
+      </>
+    )
+  }
+
   switch (type) {
     case 'podcasts':
       return <PodcastsListSkeleton />
@@ -168,6 +194,8 @@ const CustomSkeleton = ({ type, count = 1 }: CustomSkeletonProps) => {
       return <SubscriptionsListSkeleton />
     case 'radial-chart':
       return <RadialChartSkeleton />
+    case 'transactions-list':
+      return <TransactionsListSkeleton />
     default:
       break
   }

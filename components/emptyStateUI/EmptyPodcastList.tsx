@@ -1,13 +1,12 @@
+import { EmptyPodcastListProps } from '@/types'
 import Image from 'next/image'
 import React from 'react'
 
-type EmptyStateProps = {
-  children?: React.ReactNode
-  title: string
-  subtitle?: string
-}
-
-const EmptyState = ({ children, title, subtitle }: EmptyStateProps) => {
+const EmptyPodcastList = ({
+  children,
+  title,
+  subtitle
+}: EmptyPodcastListProps) => {
   return (
     <div className="mx-auto mt-5 max-w-sm sm:mt-10">
       <div className="flex flex-col items-center justify-center gap-2 text-center">
@@ -27,4 +26,4 @@ const EmptyState = ({ children, title, subtitle }: EmptyStateProps) => {
   )
 }
 
-export default EmptyState
+export default EmptyPodcastList

@@ -12,11 +12,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ListFilter } from 'lucide-react'
 import { Button } from './ui/button'
 import TransactionsList from './lists/TransactionsList'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { DateFilter } from '@/types'
 
 const TabsDataTable = () => {
   const [dateFilter, setDateFilter] = useState<DateFilter>('week')
+  const bottomRef = useRef<HTMLDivElement>(null)
+
+  function handleFilterChange(date: DateFilter) {
+    setDateFilter(date)
+    setTimeout(() => {
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }, 300)
+  }
 
   return (
     <Tabs defaultValue="week">
@@ -25,21 +33,21 @@ const TabsDataTable = () => {
           <TabsTrigger
             className="data-[state=active]:bg-background"
             value="week"
-            onClick={() => setDateFilter('week')}
+            onClick={() => handleFilterChange('week')}
           >
             Week
           </TabsTrigger>
           <TabsTrigger
             className="data-[state=active]:bg-background"
             value="month"
-            onClick={() => setDateFilter('month')}
+            onClick={() => handleFilterChange('month')}
           >
             Month
           </TabsTrigger>
           <TabsTrigger
             className="data-[state=active]:bg-background"
             value="year"
-            onClick={() => setDateFilter('year')}
+            onClick={() => handleFilterChange('year')}
           >
             Year
           </TabsTrigger>
@@ -58,8 +66,8 @@ const TabsDataTable = () => {
               <DropdownMenuCheckboxItem checked>
                 Fulfilled
               </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>Declined</DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>Refunded</DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem>Oldest</DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem>Paid</DropdownMenuCheckboxItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -73,6 +81,7 @@ const TabsDataTable = () => {
       <TabsContent value="year">
         <TransactionsList dateFilter={dateFilter} />
       </TabsContent>
+      <div ref={bottomRef} />
     </Tabs>
   )
 }

@@ -2,7 +2,7 @@
 
 import CurrentUserPlan from '@/components/CurrentUserPlan'
 import CustomSkeleton from '@/components/CustomSkeleton'
-import EmptyState from '@/components/EmptyState'
+import EmptyPodcastList from '@/components/emptyStateUI/EmptyPodcastList'
 import PodcastList from '@/components/lists/PodcastList'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
@@ -128,7 +128,7 @@ const ProfilePage = ({
           label="user"
           queryParams={{ userId: currentUser.clerkId }}
           renderEmptyState={() => (
-            <EmptyState title="User doesn't create any podcasts yet" />
+            <EmptyPodcastList title="User doesn't create any podcasts yet" />
           )}
           renderTitle={() => (
             <div className="flex items-center justify-between">

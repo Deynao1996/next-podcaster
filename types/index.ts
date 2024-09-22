@@ -133,6 +133,7 @@ type SkeletonType =
   | 'stats'
   | 'subscriptions'
   | 'radial-chart'
+  | 'transactions-list'
 
 export interface CustomSkeletonProps {
   type: SkeletonType
@@ -176,4 +177,18 @@ export interface TransactionsListProps {
   showActionBtn?: boolean
   num?: number
   dateFilter?: DateFilter
+}
+
+export interface TransactionsRowProps {
+  userName: string
+  userEmail: string
+  status?: 'pending' | 'paid'
+  creationTime: number
+  amount: number
+}
+
+export interface EmptyPodcastListProps {
+  children?: React.ReactNode
+  title: string
+  subtitle?: string
 }

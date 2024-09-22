@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import {
   Card,
   CardContent,
@@ -11,23 +10,14 @@ import {
 import { Button } from '../ui/button'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '../ui/table'
-import { Badge } from '../ui/badge'
+import { Table, TableBody, TableHead, TableHeader, TableRow } from '../ui/table'
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
-import { cn } from '@/lib/utils'
 import { TransactionsListProps } from '@/types'
+import TransactionsRow from '../tableUI/TransactionsRow'
+import EmptyTransactionsRow from '../emptyStateUI/EmptyTransactionsRow'
+import CustomSkeleton from '../CustomSkeleton'
 
-//TODO ADD loading state
-//TODO ADD empty state
-//TODO Add smooth scroll after changing tabs
 //TODO Check isActive nav link
 
 const TransactionsList = ({
@@ -40,7 +30,14 @@ const TransactionsList = ({
     dateFilter
   })
 
-  if (!transactions) return
+  function renderTransactionsView() {
+    if (!transactions)
+      return <CustomSkeleton type="transactions-list" count={4} />
+    if (transactions.length === 0) return <EmptyTransactionsRow />
+    return transactions.map(({ userId, ...props }, i) => (
+      <TransactionsRow {...{ ...props }} key={`${i}${userId}`} />
+    ))
+  }
 
   return (
     <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
@@ -70,45 +67,7 @@ const TransactionsList = ({
               <TableHead className="text-right">Amount</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {transactions.map(
-              ({
-                amount,
-                creationTime,
-                status,
-                userEmail,
-                userId,
-                userName
-              }) => {
-                const isPending = status === 'pending' || status === undefined
-
-                return (
-                  <TableRow key={userId}>
-                    <TableCell>
-                      <div className="font-medium">{userName}</div>
-                      <div className="text-muted-foreground hidden text-sm md:inline">
-                        {userEmail}
-                      </div>
-                    </TableCell>
-                    <TableCell className="table-cell">
-                      <Badge
-                        className={cn('border-green-500 text-xs capitalize', {
-                          'border-primary': isPending
-                        })}
-                        variant="outline"
-                      >
-                        {isPending ? 'pending' : status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="table-cell">
-                      {new Date(creationTime).toLocaleDateString('en-US')}
-                    </TableCell>
-                    <TableCell className="text-right">${amount}</TableCell>
-                  </TableRow>
-                )
-              }
-            )}
-          </TableBody>
+          <TableBody>{renderTransactionsView()}</TableBody>
         </Table>
       </CardContent>
     </Card>

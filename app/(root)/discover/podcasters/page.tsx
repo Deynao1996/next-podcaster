@@ -1,12 +1,12 @@
 'use client'
 
-import EmptyState from '@/components/EmptyState'
 import SearchBar from '@/components/SearchBar'
 import { api } from '@/convex/_generated/api'
 import { useQuery } from 'convex/react'
 import { ExternalLink, Headphones, Loader, User } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import EmptyPodcastList from '@/components/emptyStateUI/EmptyPodcastList'
 
 const PodcastersPage = ({
   searchParams: { search }
@@ -31,7 +31,7 @@ const PodcastersPage = ({
         )}
       </h6>
       {users?.length === 0 && (
-        <EmptyState
+        <EmptyPodcastList
           title="No results found"
           subtitle="Try adjusting your search to find what you are looking for"
         />
