@@ -18,16 +18,16 @@ import TransactionsRow from '../tableUI/TransactionsRow'
 import EmptyTransactionsRow from '../emptyStateUI/EmptyTransactionsRow'
 import CustomSkeleton from '../CustomSkeleton'
 
-//TODO Check isActive nav link
-
 const TransactionsList = ({
   showActionBtn,
   num,
-  dateFilter
+  dateFilter,
+  sort
 }: TransactionsListProps) => {
   const transactions = useQuery(api.payments.getLatestTransactions, {
     num,
-    dateFilter
+    dateFilter,
+    sort
   })
 
   function renderTransactionsView() {

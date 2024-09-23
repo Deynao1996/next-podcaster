@@ -1,15 +1,16 @@
 import { ConvexError, v } from 'convex/values'
-import { internalMutation, query, QueryCtx } from './_generated/server'
+import { internalMutation, query } from './_generated/server'
 import { checkDashboardViewPermission } from './stats'
 import { GenericQueryCtx } from 'convex/server'
-import { DataModel } from './_generated/dataModel'
+import { DataModel, Id } from './_generated/dataModel'
 
 function isDateFilterValid(dateFilter?: string) {
   if (!dateFilter) return
   if (
     dateFilter === 'week' ||
     dateFilter === 'month' ||
-    dateFilter === 'year'
+    dateFilter === 'year' ||
+    'all'
   ) {
     return true
   } else {
@@ -60,7 +61,7 @@ async function filterPaymentsByDate(
         q.lt(q.field('_creationTime'), endRange)
       )
     )
-    .take(num ? num : 100)
+    .take(num ? num : 1000)
 }
 
 export const create = internalMutation({
@@ -116,18 +117,47 @@ export const getMessageByPaymentId = query({
 export const getLatestTransactions = query({
   args: {
     num: v.optional(v.number()),
-    dateFilter: v.optional(v.string())
+    dateFilter: v.optional(v.string()),
+    sort: v.optional(
+      v.union(v.literal('fulfilled'), v.literal('paid'), v.literal('oldest'))
+    )
   },
-  handler: async (ctx, { num, dateFilter }) => {
+  handler: async (ctx, { num, dateFilter, sort }) => {
     // await checkDashboardViewPermission(ctx)
-    let payments
-    if (!dateFilter || !isDateFilterValid(dateFilter)) {
+    //Filter by date filter
+    let payments: {
+      _id: Id<'payments'>
+      _creationTime: number
+      status?: 'pending' | 'paid' | undefined
+      stripeId?: string | undefined
+      message?: string | undefined
+      userId: string
+      amount: number
+    }[]
+    if (!dateFilter || !isDateFilterValid(dateFilter) || dateFilter === 'all') {
       payments = await ctx.db
         .query('payments')
         .order('desc')
-        .take(num ? num : 100)
+        .take(num ? num : 1000)
     } else {
       payments = await filterPaymentsByDate(ctx, dateFilter, num)
+    }
+
+    //Sort by query params
+    if (sort === 'oldest') {
+      payments = payments.sort((a, b) => {
+        if (a._creationTime > b._creationTime) return -1
+        if (a._creationTime < b._creationTime) return 1
+        return 0
+      })
+    } else if (sort === 'paid') {
+      payments = payments.sort((a, b) => {
+        if (a.status === 'paid' && b.status === 'pending') return -1
+        if (a.status === 'pending' && b.status === 'paid') return 1
+        return 0
+      })
+    } else {
+      payments = payments
     }
 
     const transactions = await Promise.all(

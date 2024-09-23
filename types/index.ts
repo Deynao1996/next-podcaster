@@ -1,3 +1,4 @@
+import { dropdownTransactionListFilters } from '@/constants'
 import { Id } from '@/convex/_generated/dataModel'
 import { UserIdentity } from 'convex/server'
 import { Dispatch, SetStateAction } from 'react'
@@ -11,7 +12,7 @@ type PodcastParams = {
 
 type PodcastQueryParams = EmptyObject | 'skip' | undefined | PodcastParams
 
-export type DateFilter = 'week' | 'month' | 'year'
+export type DateFilter = 'week' | 'month' | 'year' | 'all'
 
 export interface GeneratePodcastProps {
   voiceType: string
@@ -177,6 +178,7 @@ export interface TransactionsListProps {
   showActionBtn?: boolean
   num?: number
   dateFilter?: DateFilter
+  sort?: (typeof dropdownTransactionListFilters)[number]
 }
 
 export interface TransactionsRowProps {

@@ -2,9 +2,10 @@
 
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
@@ -14,43 +15,53 @@ import { Button } from './ui/button'
 import TransactionsList from './lists/TransactionsList'
 import { useRef, useState } from 'react'
 import { DateFilter } from '@/types'
+import { parseAsStringLiteral, useQueryState } from 'nuqs'
+import {
+  dateTransactionListFilters,
+  dropdownTransactionListFilters
+} from '@/constants'
 
 const TabsDataTable = () => {
   const [dateFilter, setDateFilter] = useState<DateFilter>('week')
+  const [dropdownFilter, setDropdownFilter] = useQueryState(
+    'filter',
+    parseAsStringLiteral(dropdownTransactionListFilters).withDefault(
+      'fulfilled'
+    )
+  )
   const bottomRef = useRef<HTMLDivElement>(null)
 
-  function handleFilterChange(date: DateFilter) {
-    setDateFilter(date)
+  function scrollToBottom() {
     setTimeout(() => {
       bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
     }, 300)
+  }
+
+  function handleDateFilterChange(date: DateFilter) {
+    setDateFilter(date)
+    setDropdownFilter('fulfilled')
+    scrollToBottom()
+  }
+
+  function handleValueChange(value: typeof dropdownFilter) {
+    setDropdownFilter(value)
+    scrollToBottom()
   }
 
   return (
     <Tabs defaultValue="week">
       <div className="flex items-center">
         <TabsList>
-          <TabsTrigger
-            className="data-[state=active]:bg-background"
-            value="week"
-            onClick={() => handleFilterChange('week')}
-          >
-            Week
-          </TabsTrigger>
-          <TabsTrigger
-            className="data-[state=active]:bg-background"
-            value="month"
-            onClick={() => handleFilterChange('month')}
-          >
-            Month
-          </TabsTrigger>
-          <TabsTrigger
-            className="data-[state=active]:bg-background"
-            value="year"
-            onClick={() => handleFilterChange('year')}
-          >
-            Year
-          </TabsTrigger>
+          {dateTransactionListFilters.map((d) => (
+            <TabsTrigger
+              key={d}
+              className="data-[state=active]:bg-background capitalize"
+              value={d}
+              onClick={() => handleDateFilterChange(d)}
+            >
+              {d}
+            </TabsTrigger>
+          ))}
         </TabsList>
         <div className="ml-auto flex items-center gap-2">
           <DropdownMenu>
@@ -63,24 +74,32 @@ const TabsDataTable = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Filter by</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuCheckboxItem checked>
-                Fulfilled
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>Oldest</DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>Paid</DropdownMenuCheckboxItem>
+              <DropdownMenuRadioGroup
+                value={dropdownFilter}
+                onValueChange={(v) =>
+                  handleValueChange(v as typeof dropdownFilter)
+                }
+              >
+                {dropdownTransactionListFilters.map((f) => (
+                  <DropdownMenuRadioItem
+                    value={f}
+                    key={f}
+                    className="capitalize"
+                  >
+                    {f}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
-      <TabsContent value="week">
-        <TransactionsList dateFilter={dateFilter} />
-      </TabsContent>
-      <TabsContent value="month">
-        <TransactionsList dateFilter={dateFilter} />
-      </TabsContent>
-      <TabsContent value="year">
-        <TransactionsList dateFilter={dateFilter} />
-      </TabsContent>
+      {dateTransactionListFilters.map((d) => (
+        <TabsContent value={d} key={d}>
+          <TransactionsList dateFilter={dateFilter} sort={dropdownFilter} />
+        </TabsContent>
+      ))}
+
       <div ref={bottomRef} />
     </Tabs>
   )

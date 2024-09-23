@@ -169,5 +169,17 @@ export const statListInfo = {
   }
 }
 
+export const dropdownTransactionListFilters = [
+  'fulfilled',
+  'oldest',
+  'paid'
+] as const
+export const dateTransactionListFilters = [
+  'week',
+  'month',
+  'year',
+  'all'
+] as const
+
 export const DASHBOARD_PERMISSION = 'org:dashboard:view'
 export const DAILY_GOAL_SALES = 1000
