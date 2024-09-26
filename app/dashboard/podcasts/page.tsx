@@ -1,4 +1,4 @@
-import AreaGradientChart from '@/components/chartsUI/AreaGradientChart'
+import PieStatChart from '@/components/chartsUI/PieStatChart'
 import DashboardStats from '@/components/DashboardStats'
 import TabsDataTable from '@/components/TabsDataTable'
 
@@ -9,7 +9,7 @@ const PodcastsPage = () => {
         <DashboardStats />
       </div>
       <div className="max-lg:col-span-3">
-        <AreaGradientChart />
+        <PieStatChart />
       </div>
       <div className="col-span-3">
         <TabsDataTable />

@@ -2,7 +2,11 @@ import { ConvexError, v } from 'convex/values'
 import { query } from './_generated/server'
 import { GenericQueryCtx } from 'convex/server'
 import { CustomIdentity } from '@/types'
-import { DAILY_GOAL_SALES, DASHBOARD_PERMISSION } from '@/constants'
+import {
+  DAILY_GOAL_SALES,
+  DASHBOARD_PERMISSION,
+  MONTH_GOAL_SUBSCRIPTIONS
+} from '@/constants'
 import { DataModel } from './_generated/dataModel'
 
 type FormStats = {
@@ -42,6 +46,32 @@ function calcTotalAmount(
   }[]
 ) {
   return monthPayments.reduce((sum, payment) => sum + payment.amount, 0)
+}
+
+function generateCurrPrevMonthRange() {
+  const now = new Date()
+  const startOfCurrentMonth = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    1
+  ).getTime()
+  const startOfNextMonth = new Date(
+    now.getFullYear(),
+    now.getMonth() + 1,
+    1
+  ).getTime()
+  const startOfPreviousMonth = new Date(
+    now.getFullYear(),
+    now.getMonth() - 1,
+    1
+  ).getTime()
+  const endOfPreviousMonth = startOfCurrentMonth
+  return {
+    startOfCurrentMonth,
+    startOfNextMonth,
+    startOfPreviousMonth,
+    endOfPreviousMonth
+  }
 }
 
 async function formRevenueStats({
@@ -134,7 +164,9 @@ async function formSubscriptionsStats({
   const plansTotalAmount = plans.length
   return {
     plansTotalAmount,
-    plansPercentChange
+    plansPercentChange,
+    currentSubscriptionsMonthTotal,
+    previousSubscriptionsMonthTotal
   }
 }
 
@@ -228,29 +260,7 @@ export const getStats = query({
   args: {},
   async handler(ctx, args) {
     // await checkDashboardViewPermission(ctx)
-    const now = new Date()
-    const startOfCurrentMonth = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      1
-    ).getTime()
-    const startOfNextMonth = new Date(
-      now.getFullYear(),
-      now.getMonth() + 1,
-      1
-    ).getTime()
-    const startOfPreviousMonth = new Date(
-      now.getFullYear(),
-      now.getMonth() - 1,
-      1
-    ).getTime()
-    const endOfPreviousMonth = startOfCurrentMonth
-    const dates = {
-      startOfCurrentMonth,
-      startOfNextMonth,
-      startOfPreviousMonth,
-      endOfPreviousMonth
-    }
+    const dates = generateCurrPrevMonthRange()
 
     const { revenuePercentChange, revenueTotalAmount } = await formRevenueStats(
       {
@@ -367,5 +377,29 @@ export const getDailySales = query({
     const percentageDailyChange = (todaysSalesTotal * 100) / DAILY_GOAL_SALES
 
     return { todaysSalesTotal, percentageDailyChange, currentDay }
+  }
+})
+
+export const getCurrPrevSubscriptionStats = query({
+  args: {},
+  async handler(ctx, args) {
+    // await checkDashboardViewPermission(ctx)
+    const dates = generateCurrPrevMonthRange()
+    const { currentSubscriptionsMonthTotal, previousSubscriptionsMonthTotal } =
+      await formSubscriptionsStats({ ctx, dates })
+    const currentMonthGoalCompare = calcPercentageChange(
+      MONTH_GOAL_SUBSCRIPTIONS,
+      currentSubscriptionsMonthTotal
+    )
+    const prevMonthGoalCompare = calcPercentageChange(
+      MONTH_GOAL_SUBSCRIPTIONS,
+      previousSubscriptionsMonthTotal
+    )
+    return {
+      currentSubscriptionsMonthTotal,
+      previousSubscriptionsMonthTotal,
+      currentMonthGoalCompare: Math.abs(currentMonthGoalCompare),
+      prevMonthGoalCompare: Math.abs(prevMonthGoalCompare)
+    }
   }
 })

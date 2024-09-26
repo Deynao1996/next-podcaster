@@ -183,3 +183,4 @@ export const dateTransactionListFilters = [
 
 export const DASHBOARD_PERMISSION = 'org:dashboard:view'
 export const DAILY_GOAL_SALES = 1000
+export const MONTH_GOAL_SUBSCRIPTIONS = 10

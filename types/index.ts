@@ -135,6 +135,8 @@ type SkeletonType =
   | 'subscriptions'
   | 'radial-chart'
   | 'transactions-list'
+  | 'separate-stats'
+  | 'pie-chart'
 
 export interface CustomSkeletonProps {
   type: SkeletonType
@@ -193,4 +195,24 @@ export interface EmptyPodcastListProps {
   children?: React.ReactNode
   title: string
   subtitle?: string
+}
+
+export interface SeparatePieChartStatsProps {
+  currentSubscriptionsMonthTotal: number
+  previousSubscriptionsMonthTotal: number
+}
+
+export interface SeparateStatsProps extends SeparatePieChartStatsProps {
+  currentMonthGoalCompare: number
+  prevMonthGoalCompare: number
+}
+
+export interface DashboardStatsProps {
+  title: string
+  description: string
+  actionHref: string
+  actionTitle: string
+  currentMonthValue?: number
+  previousMonthValue?: number
+  stats?: SeparateStatsProps
 }
