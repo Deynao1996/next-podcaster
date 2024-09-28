@@ -3,6 +3,7 @@ import { TableCell, TableRow } from '../ui/table'
 import { Badge } from '../ui/badge'
 import { cn } from '@/lib/utils'
 import { TransactionsRowProps } from '@/types'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 
 const TransactionsRow = ({
   userName,

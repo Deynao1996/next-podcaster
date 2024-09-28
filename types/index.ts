@@ -1,4 +1,7 @@
-import { dropdownTransactionListFilters } from '@/constants'
+import {
+  dropdownPodcastsListFilters,
+  dropdownTransactionListFilters
+} from '@/constants'
 import { Id } from '@/convex/_generated/dataModel'
 import { UserIdentity } from 'convex/server'
 import { Dispatch, SetStateAction } from 'react'
@@ -11,6 +14,16 @@ type PodcastParams = {
 }
 
 type PodcastQueryParams = EmptyObject | 'skip' | undefined | PodcastParams
+
+export type DropdownTransactionsListFilter =
+  (typeof dropdownTransactionListFilters)[number]
+
+export type DropdownPodcastsListFilter =
+  (typeof dropdownPodcastsListFilters)[number]
+
+type DropdownListFilter =
+  | DropdownTransactionsListFilter
+  | DropdownPodcastsListFilter
 
 export type DateFilter = 'week' | 'month' | 'year' | 'all'
 
@@ -176,11 +189,18 @@ export interface CustomIdentity extends UserIdentity {
   membership_permission: string[]
 }
 
-export interface TransactionsListProps {
+interface DashboardListProps {
   showActionBtn?: boolean
   num?: number
   dateFilter?: DateFilter
-  sort?: (typeof dropdownTransactionListFilters)[number]
+}
+
+export interface TransactionsListProps extends DashboardListProps {
+  sort?: DropdownTransactionsListFilter
+}
+
+export interface PodcastsDashboardListProps extends DashboardListProps {
+  sort?: DropdownPodcastsListFilter
 }
 
 export interface TransactionsRowProps {
@@ -191,6 +211,15 @@ export interface TransactionsRowProps {
   amount: number
 }
 
+export interface PodcastsRowProps {
+  author: string
+  creationTime: number
+  imageUrl: string
+  podcastTitle: string
+  views: number
+  authorEmail: string
+}
+
 export interface EmptyPodcastListProps {
   children?: React.ReactNode
   title: string
@@ -198,8 +227,8 @@ export interface EmptyPodcastListProps {
 }
 
 export interface SeparatePieChartStatsProps {
-  currentSubscriptionsMonthTotal: number
-  previousSubscriptionsMonthTotal: number
+  currentMonthTotal: number
+  previousMonthTotal: number
 }
 
 export interface SeparateStatsProps extends SeparatePieChartStatsProps {
@@ -215,4 +244,17 @@ export interface DashboardStatsProps {
   currentMonthValue?: number
   previousMonthValue?: number
   stats?: SeparateStatsProps
+}
+
+export interface PieStatChartProps {
+  stats?: SeparatePieChartStatsProps
+  title: string
+  description: string
+  chartLabel: string
+}
+
+export interface TabsDataTableProps<T> {
+  renderTabsContentList: (dateFilter: DateFilter) => React.ReactNode
+  dropdownFilter: T
+  setDropdownFilter: Dispatch<SetStateAction<T>>
 }

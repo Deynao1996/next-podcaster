@@ -4,7 +4,7 @@ import { checkDashboardViewPermission } from './stats'
 import { GenericQueryCtx } from 'convex/server'
 import { DataModel, Id } from './_generated/dataModel'
 
-function isDateFilterValid(dateFilter?: string) {
+export function isDateFilterValid(dateFilter?: string) {
   if (!dateFilter) return
   if (
     dateFilter === 'week' ||
@@ -18,7 +18,7 @@ function isDateFilterValid(dateFilter?: string) {
   }
 }
 
-function setDateFilterRange(dateFilter: string) {
+export function setDateFilterRange(dateFilter: string) {
   const now = new Date()
   let startRange, endRange
   if (dateFilter === 'week') {
@@ -176,7 +176,8 @@ export const getLatestTransactions = query({
           userEmail: user.email,
           amount: p.amount,
           status: p.status,
-          creationTime: p._creationTime
+          creationTime: p._creationTime,
+          imageUrl: user.imageUrl
         }
       })
     )

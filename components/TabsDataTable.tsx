@@ -12,23 +12,22 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ListFilter } from 'lucide-react'
 import { Button } from './ui/button'
-import TransactionsList from './lists/TransactionsList'
 import { useRef, useState } from 'react'
-import { DateFilter } from '@/types'
-import { parseAsStringLiteral, useQueryState } from 'nuqs'
+import { DateFilter, TabsDataTableProps } from '@/types'
 import {
   dateTransactionListFilters,
   dropdownTransactionListFilters
 } from '@/constants'
 
-const TabsDataTable = () => {
+//TODO Check relative filters
+//TODO Fix date podcasts filters
+
+const TabsDataTable = <T,>({
+  renderTabsContentList,
+  dropdownFilter,
+  setDropdownFilter
+}: TabsDataTableProps<T>) => {
   const [dateFilter, setDateFilter] = useState<DateFilter>('week')
-  const [dropdownFilter, setDropdownFilter] = useQueryState(
-    'filter',
-    parseAsStringLiteral(dropdownTransactionListFilters).withDefault(
-      'fulfilled'
-    )
-  )
   const bottomRef = useRef<HTMLDivElement>(null)
 
   function scrollToBottom() {
@@ -39,7 +38,7 @@ const TabsDataTable = () => {
 
   function handleDateFilterChange(date: DateFilter) {
     setDateFilter(date)
-    setDropdownFilter('fulfilled')
+    setDropdownFilter('fulfilled' as T)
     scrollToBottom()
   }
 
@@ -75,10 +74,8 @@ const TabsDataTable = () => {
               <DropdownMenuLabel>Filter by</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuRadioGroup
-                value={dropdownFilter}
-                onValueChange={(v) =>
-                  handleValueChange(v as typeof dropdownFilter)
-                }
+                value={dropdownFilter as string}
+                onValueChange={(v) => handleValueChange(v as T)}
               >
                 {dropdownTransactionListFilters.map((f) => (
                   <DropdownMenuRadioItem
@@ -96,10 +93,9 @@ const TabsDataTable = () => {
       </div>
       {dateTransactionListFilters.map((d) => (
         <TabsContent value={d} key={d}>
-          <TransactionsList dateFilter={dateFilter} sort={dropdownFilter} />
+          {renderTabsContentList(dateFilter)}
         </TabsContent>
       ))}
-
       <div ref={bottomRef} />
     </Tabs>
   )

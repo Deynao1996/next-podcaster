@@ -5,6 +5,7 @@ import { CustomIdentity } from '@/types'
 import {
   DAILY_GOAL_SALES,
   DASHBOARD_PERMISSION,
+  MONTH_GOAL_PODCASTS,
   MONTH_GOAL_SUBSCRIPTIONS
 } from '@/constants'
 import { DataModel } from './_generated/dataModel'
@@ -209,7 +210,9 @@ async function formPodcastsStats({
   const podcastsTotalAmount = podcasts.length
   return {
     podcastsTotalAmount,
-    podcastsPercentChange
+    podcastsPercentChange,
+    currentPodcastsMonthTotal,
+    previousPodcastsMonthTotal
   }
 }
 
@@ -396,8 +399,32 @@ export const getCurrPrevSubscriptionStats = query({
       previousSubscriptionsMonthTotal
     )
     return {
-      currentSubscriptionsMonthTotal,
-      previousSubscriptionsMonthTotal,
+      currentMonthTotal: currentSubscriptionsMonthTotal,
+      previousMonthTotal: previousSubscriptionsMonthTotal,
+      currentMonthGoalCompare: Math.abs(currentMonthGoalCompare),
+      prevMonthGoalCompare: Math.abs(prevMonthGoalCompare)
+    }
+  }
+})
+
+export const getCurrPrevPodcastStats = query({
+  args: {},
+  async handler(ctx, args) {
+    // await checkDashboardViewPermission(ctx)
+    const dates = generateCurrPrevMonthRange()
+    const { currentPodcastsMonthTotal, previousPodcastsMonthTotal } =
+      await formPodcastsStats({ ctx, dates })
+    const currentMonthGoalCompare = calcPercentageChange(
+      MONTH_GOAL_PODCASTS,
+      currentPodcastsMonthTotal
+    )
+    const prevMonthGoalCompare = calcPercentageChange(
+      MONTH_GOAL_PODCASTS,
+      previousPodcastsMonthTotal
+    )
+    return {
+      currentMonthTotal: currentPodcastsMonthTotal,
+      previousMonthTotal: previousPodcastsMonthTotal,
       currentMonthGoalCompare: Math.abs(currentMonthGoalCompare),
       prevMonthGoalCompare: Math.abs(prevMonthGoalCompare)
     }

@@ -23,9 +23,9 @@ const DashboardStats = ({
   if (!stats) return <CustomSkeleton type="separate-stats" count={2} />
   const {
     currentMonthGoalCompare,
-    currentSubscriptionsMonthTotal,
+    currentMonthTotal,
     prevMonthGoalCompare,
-    previousSubscriptionsMonthTotal
+    previousMonthTotal
   } = stats
 
   return (
@@ -46,9 +46,7 @@ const DashboardStats = ({
       <Card x-chunk="dashboard-05-chunk-1">
         <CardHeader className="pb-2">
           <CardDescription>This Month</CardDescription>
-          <CardTitle className="text-4xl">
-            {currentSubscriptionsMonthTotal}
-          </CardTitle>
+          <CardTitle className="text-4xl">{currentMonthTotal}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-muted-foreground text-xs">
@@ -65,9 +63,7 @@ const DashboardStats = ({
       <Card x-chunk="dashboard-05-chunk-2">
         <CardHeader className="pb-2">
           <CardDescription>Previous Month</CardDescription>
-          <CardTitle className="text-4xl">
-            {previousSubscriptionsMonthTotal}
-          </CardTitle>
+          <CardTitle className="text-4xl">{previousMonthTotal}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-muted-foreground text-xs">

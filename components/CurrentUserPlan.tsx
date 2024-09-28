@@ -20,6 +20,7 @@ import { plans } from '@/constants'
 import { useState } from 'react'
 import { ConvexError } from 'convex/values'
 import { useToast } from './ui/use-toast'
+import { getFirstTwoLetters } from '@/lib/utils'
 
 function formatDate(startTime: number, endTime: number, creationTime: number) {
   return {
@@ -38,10 +39,6 @@ const CurrentUserPlan = ({ userId }: { userId: string }) => {
   const unsubscribe = useMutation(api.plans.unsubscribePlan)
   const fallback = getFirstTwoLetters(user?.firstName || '')
   const [isLoading, setIsLoading] = useState(false)
-
-  function getFirstTwoLetters(str: string) {
-    return str.substring(0, 2).toUpperCase()
-  }
 
   if (!user || !userId || user.id !== userId || !currentPlan) {
     return null

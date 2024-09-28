@@ -11,3 +11,7 @@ export function formatTime(seconds: number) {
   const remainingSeconds = Math.floor(seconds % 60)
   return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`
 }
+
+export function getFirstTwoLetters(str: string) {
+  return str.substring(0, 2).toUpperCase()
+}

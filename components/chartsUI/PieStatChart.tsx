@@ -18,7 +18,7 @@ import {
   ChartTooltip,
   ChartTooltipContent
 } from '@/components/ui/chart'
-import { SeparatePieChartStatsProps } from '@/types'
+import { PieStatChartProps, SeparatePieChartStatsProps } from '@/types'
 import CustomSkeleton from '../CustomSkeleton'
 
 export const description = 'A donut chart with text'
@@ -37,11 +37,10 @@ const chartConfig = {
   }
 } satisfies ChartConfig
 
-const PieStatChart = ({ stats }: { stats?: SeparatePieChartStatsProps }) => {
+const PieStatChart = ({ stats, description, title, chartLabel }: PieStatChartProps) => {
   if (!stats) return <CustomSkeleton type="pie-chart" />
 
-  const { currentSubscriptionsMonthTotal, previousSubscriptionsMonthTotal } =
-    stats
+  const { currentMonthTotal, previousMonthTotal } = stats
 
   const currentMonthName = new Date().toLocaleString('default', {
     month: 'long'
@@ -55,12 +54,12 @@ const PieStatChart = ({ stats }: { stats?: SeparatePieChartStatsProps }) => {
   const chartData = [
     {
       browser: prevMonthName,
-      visitors: previousSubscriptionsMonthTotal,
+      visitors: previousMonthTotal,
       fill: 'var(--color-safari)'
     },
     {
       browser: currentMonthName,
-      visitors: currentSubscriptionsMonthTotal,
+      visitors: currentMonthTotal,
       fill: 'var(--color-chrome)'
     }
   ]
@@ -73,7 +72,7 @@ const PieStatChart = ({ stats }: { stats?: SeparatePieChartStatsProps }) => {
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle className="capitalize">
-          Total Subscribers for last months
+          {title}
         </CardTitle>
         <CardDescription>{cardDescription}</CardDescription>
       </CardHeader>
@@ -116,7 +115,7 @@ const PieStatChart = ({ stats }: { stats?: SeparatePieChartStatsProps }) => {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Subscribers
+                          {chartLabel}
                         </tspan>
                       </text>
                     )
@@ -128,11 +127,8 @@ const PieStatChart = ({ stats }: { stats?: SeparatePieChartStatsProps }) => {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
         <div className="text-muted-foreground leading-none">
-          Showing total subscriptions for the last 2 months
+          {description}
         </div>
       </CardFooter>
     </Card>
