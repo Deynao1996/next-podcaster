@@ -257,4 +257,5 @@ export interface TabsDataTableProps<T> {
   renderTabsContentList: (dateFilter: DateFilter) => React.ReactNode
   dropdownFilter: T
   setDropdownFilter: Dispatch<SetStateAction<T>>
+  filterType: 'podcasts' | 'transactions'
 }

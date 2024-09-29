@@ -50,7 +50,7 @@ const TransactionsList = ({
         </div>
         {showActionBtn && (
           <Button asChild size="sm" className="ml-auto gap-1">
-            <Link href="/dashboard/subscriptions?dateFilter=week">
+            <Link href="/dashboard/subscriptions">
               View All
               <ArrowUpRight className="h-4 w-4" />
             </Link>

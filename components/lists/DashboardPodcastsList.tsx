@@ -24,7 +24,7 @@ const DashboardPodcastsList = ({
   dateFilter,
   sort
 }: PodcastsDashboardListProps) => {
-  const transactions = useQuery(api.podcasts.getTransactionsList, {
+  const transactions = useQuery(api.podcasts.getPodcastsList, {
     num,
     dateFilter,
     sort

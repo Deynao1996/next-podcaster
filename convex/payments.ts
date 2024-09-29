@@ -146,8 +146,8 @@ export const getLatestTransactions = query({
     //Sort by query params
     if (sort === 'oldest') {
       payments = payments.sort((a, b) => {
-        if (a._creationTime > b._creationTime) return -1
-        if (a._creationTime < b._creationTime) return 1
+        if (a._creationTime > b._creationTime) return 1
+        if (a._creationTime < b._creationTime) return -1
         return 0
       })
     } else if (sort === 'paid') {

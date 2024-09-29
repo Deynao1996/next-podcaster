@@ -47,6 +47,7 @@ const PodcastsPage = () => {
           renderTabsContentList={renderTabsContentList}
           dropdownFilter={dropdownFilter}
           setDropdownFilter={setDropdownFilter}
+          filterType="podcasts"
         />
       </div>
     </main>

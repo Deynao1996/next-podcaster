@@ -33,7 +33,7 @@ const SubscriptionsPage = () => {
           actionTitle="Create Subscription"
           title="Your Subscriptions"
           description="View and manage all active, pending, and canceled subscriptions. Easily track user payments, monitor subscription statuses, and check renewal dates."
-          actionHref="/dashboard/subscriptions/create"
+          actionHref="/coming-soon"
           stats={prevCurrSubscriptionStats}
         />
       </div>
@@ -50,6 +50,7 @@ const SubscriptionsPage = () => {
           renderTabsContentList={renderTabsContentList}
           dropdownFilter={dropdownFilter}
           setDropdownFilter={setDropdownFilter}
+          filterType="transactions"
         />
       </div>
     </main>

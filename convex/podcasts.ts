@@ -227,7 +227,7 @@ export const increaseViews = mutation({
   }
 })
 
-export const getTransactionsList = query({
+export const getPodcastsList = query({
   args: {
     num: v.optional(v.number()),
     dateFilter: v.optional(v.string()),
@@ -248,8 +248,14 @@ export const getTransactionsList = query({
     //Sort by query params
     if (sort === 'oldest') {
       podcasts = podcasts.sort((a, b) => {
-        if (a._creationTime > b._creationTime) return -1
-        if (a._creationTime < b._creationTime) return 1
+        if (a._creationTime > b._creationTime) return 1
+        if (a._creationTime < b._creationTime) return -1
+        return 0
+      })
+    } else if (sort === 'views') {
+      podcasts = podcasts.sort((a, b) => {
+        if (a.views > b.views) return -1
+        if (a.views < b.views) return 1
         return 0
       })
     } else {

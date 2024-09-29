@@ -16,19 +16,24 @@ import { useRef, useState } from 'react'
 import { DateFilter, TabsDataTableProps } from '@/types'
 import {
   dateTransactionListFilters,
+  dropdownPodcastsListFilters,
   dropdownTransactionListFilters
 } from '@/constants'
 
-//TODO Check relative filters
-//TODO Fix date podcasts filters
+const dropdownFilterCfg = {
+  transactions: dropdownTransactionListFilters,
+  podcasts: dropdownPodcastsListFilters
+}
 
 const TabsDataTable = <T,>({
   renderTabsContentList,
   dropdownFilter,
-  setDropdownFilter
+  setDropdownFilter,
+  filterType
 }: TabsDataTableProps<T>) => {
   const [dateFilter, setDateFilter] = useState<DateFilter>('week')
   const bottomRef = useRef<HTMLDivElement>(null)
+  const dropdownFilterOptions = dropdownFilterCfg[filterType]
 
   function scrollToBottom() {
     setTimeout(() => {
@@ -77,7 +82,7 @@ const TabsDataTable = <T,>({
                 value={dropdownFilter as string}
                 onValueChange={(v) => handleValueChange(v as T)}
               >
-                {dropdownTransactionListFilters.map((f) => (
+                {dropdownFilterOptions.map((f) => (
                   <DropdownMenuRadioItem
                     value={f}
                     key={f}
