@@ -1,7 +1,26 @@
 import { ConvexError, v } from 'convex/values'
 import { internalMutation, mutation, query } from './_generated/server'
-import { GenericMutationCtx } from 'convex/server'
+import { GenericMutationCtx, GenericQueryCtx } from 'convex/server'
 import { DataModel } from './_generated/dataModel'
+import { isDateFilterValid, setDateFilterRange } from './payments'
+
+async function filterUsersByDate(
+  ctx: GenericQueryCtx<DataModel>,
+  dateFilter: string,
+  num?: number
+) {
+  const { startRange, endRange } = setDateFilterRange(dateFilter)
+  return await ctx.db
+    .query('users')
+    .order('desc')
+    .filter((q) =>
+      q.and(
+        q.gte(q.field('_creationTime'), startRange),
+        q.lt(q.field('_creationTime'), endRange)
+      )
+    )
+    .take(num ? num : 1000)
+}
 
 const updateUser = async (
   ctx: GenericMutationCtx<DataModel>,
@@ -185,5 +204,45 @@ export const getUserBySearch = query({
     } else {
       return []
     }
+  }
+})
+
+export const getUsersList = query({
+  args: {
+    num: v.optional(v.number()),
+    dateFilter: v.optional(v.string()),
+    sort: v.optional(v.union(v.literal('fulfilled'), v.literal('oldest')))
+  },
+  handler: async (ctx, { num, dateFilter, sort }) => {
+    // await checkDashboardViewPermission(ctx)
+
+    let users = await ctx.db.query('users').take(1)
+    if (!dateFilter || !isDateFilterValid(dateFilter) || dateFilter === 'all') {
+      users = await ctx.db.query('users').order('desc').collect()
+    } else {
+      users = await filterUsersByDate(ctx, dateFilter, num)
+    }
+
+    //Sort by query params
+    if (sort === 'oldest') {
+      users = users.sort((a, b) => {
+        if (a._creationTime > b._creationTime) return 1
+        if (a._creationTime < b._creationTime) return -1
+        return 0
+      })
+    } else {
+      users = users
+    }
+
+    const verifiedUsers = users.map(({_creationTime, _id, clerkId, email, name, imageUrl}) => ({
+      creationTime: _creationTime,
+      _id,
+      clerkId,
+      email,
+      name,
+      imageUrl,
+      isVerified: true
+    }))
+    return verifiedUsers
   }
 })

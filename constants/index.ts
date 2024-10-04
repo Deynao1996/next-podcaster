@@ -179,6 +179,7 @@ export const dropdownPodcastsListFilters = [
   'oldest',
   'views'
 ] as const
+export const dropdownUsersListFilters = ['fulfilled', 'oldest'] as const
 export const dateTransactionListFilters = [
   'week',
   'month',

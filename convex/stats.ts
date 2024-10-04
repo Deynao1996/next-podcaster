@@ -255,7 +255,9 @@ async function formUsersStats({
   const usersTotalAmount = users.length
   return {
     usersTotalAmount,
-    usersPercentChange
+    usersPercentChange,
+    currentUsersMonthTotal,
+    previousUsersMonthTotal
   }
 }
 
@@ -425,6 +427,30 @@ export const getCurrPrevPodcastStats = query({
     return {
       currentMonthTotal: currentPodcastsMonthTotal,
       previousMonthTotal: previousPodcastsMonthTotal,
+      currentMonthGoalCompare: Math.abs(currentMonthGoalCompare),
+      prevMonthGoalCompare: Math.abs(prevMonthGoalCompare)
+    }
+  }
+})
+
+export const getCurrPrevUsersStats = query({
+  args: {},
+  async handler(ctx, args) {
+    // await checkDashboardViewPermission(ctx)
+    const dates = generateCurrPrevMonthRange()
+    const { currentUsersMonthTotal, previousUsersMonthTotal } =
+      await formUsersStats({ ctx, dates })
+    const currentMonthGoalCompare = calcPercentageChange(
+      MONTH_GOAL_PODCASTS,
+      currentUsersMonthTotal
+    )
+    const prevMonthGoalCompare = calcPercentageChange(
+      MONTH_GOAL_PODCASTS,
+      previousUsersMonthTotal
+    )
+    return {
+      currentMonthTotal: currentUsersMonthTotal,
+      previousMonthTotal: previousUsersMonthTotal,
       currentMonthGoalCompare: Math.abs(currentMonthGoalCompare),
       prevMonthGoalCompare: Math.abs(prevMonthGoalCompare)
     }

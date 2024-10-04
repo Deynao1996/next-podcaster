@@ -17,12 +17,14 @@ import { DateFilter, TabsDataTableProps } from '@/types'
 import {
   dateTransactionListFilters,
   dropdownPodcastsListFilters,
-  dropdownTransactionListFilters
+  dropdownTransactionListFilters,
+  dropdownUsersListFilters
 } from '@/constants'
 
 const dropdownFilterCfg = {
   transactions: dropdownTransactionListFilters,
-  podcasts: dropdownPodcastsListFilters
+  podcasts: dropdownPodcastsListFilters,
+  users: dropdownUsersListFilters
 }
 
 const TabsDataTable = <T,>({

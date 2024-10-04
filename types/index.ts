@@ -1,6 +1,7 @@
 import {
   dropdownPodcastsListFilters,
-  dropdownTransactionListFilters
+  dropdownTransactionListFilters,
+  dropdownUsersListFilters
 } from '@/constants'
 import { Id } from '@/convex/_generated/dataModel'
 import { UserIdentity } from 'convex/server'
@@ -20,6 +21,8 @@ export type DropdownTransactionsListFilter =
 
 export type DropdownPodcastsListFilter =
   (typeof dropdownPodcastsListFilters)[number]
+
+export type DropdownUsersListFilter = (typeof dropdownUsersListFilters)[number]
 
 type DropdownListFilter =
   | DropdownTransactionsListFilter
@@ -203,6 +206,10 @@ export interface PodcastsDashboardListProps extends DashboardListProps {
   sort?: DropdownPodcastsListFilter
 }
 
+export interface UsersDashboardListProps extends DashboardListProps {
+  sort?: DropdownUsersListFilter
+}
+
 export interface TransactionsRowProps {
   userName: string
   userEmail: string
@@ -218,6 +225,16 @@ export interface PodcastsRowProps {
   podcastTitle: string
   views: number
   authorEmail: string
+}
+
+export interface UsersRowProps {
+  creationTime: number
+  blurhash?: string
+  imageUrl?: string
+  email: string
+  clerkId: string
+  name: string
+  isVerified: boolean
 }
 
 export interface EmptyPodcastListProps {
@@ -257,5 +274,5 @@ export interface TabsDataTableProps<T> {
   renderTabsContentList: (dateFilter: DateFilter) => React.ReactNode
   dropdownFilter: T
   setDropdownFilter: Dispatch<SetStateAction<T>>
-  filterType: 'podcasts' | 'transactions'
+  filterType: 'podcasts' | 'transactions' | 'users'
 }
